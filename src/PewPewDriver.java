@@ -12,8 +12,13 @@ public class PewPewDriver {
         PewPanel panel = new PewPanel();
         f.add(panel);
 
+        // fullscreen
+        f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        f.setUndecorated(true);
+
         f.pack();
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
         f.setVisible(true);
     }
 }
