@@ -1,10 +1,13 @@
 import java.awt.*;
 
-public abstract class Entity {
+public abstract class Entity implements Shooter{
     protected double x;
     protected double y;
     protected double size;
     protected Color c;
+
+    protected int health;
+    protected int armor;
 
     Entity(double x, double y, double size, Color c) {
         this.x = x;

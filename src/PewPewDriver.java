@@ -2,6 +2,8 @@ import javax.swing.*;
 
 public class PewPewDriver {
 
+    public static boolean FULLSCREEN = true;
+
     public static void main(String args[]) {
         launchDesigner();
     }
@@ -13,8 +15,10 @@ public class PewPewDriver {
         f.add(panel);
 
         // fullscreen
-        f.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        f.setUndecorated(true);
+        if(FULLSCREEN) {
+            f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            f.setUndecorated(true);
+        }
 
         f.pack();
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

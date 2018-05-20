@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
@@ -22,8 +23,21 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     private int numPlayers = 1;
 
     ArrayList<Player> players = new ArrayList<Player>();
+    ArrayList<Entity> enemies = new ArrayList<Entity>();
+    ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
     private boolean simulateProjectorAspectRatio = true;
+
+    private HashMap<Player, int[]> playersToKeys = new HashMap<>();
+    private HashMap<Integer, Boolean> keysToPressed = new HashMap<>();
+
+    // These are the default controls for each player
+    // I guess right now the order is shoot, swap, left, right
+    private int[][] defaultControls = {
+            {KeyEvent.VK_Q, KeyEvent.VK_W, KeyEvent.VK_E, KeyEvent.VK_R},
+            {KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, KeyEvent.VK_F},
+            {KeyEvent.VK_Z, KeyEvent.VK_X, KeyEvent.VK_C, KeyEvent.VK_V},
+    };
 
     PewPanel () {
         Color[] playerColors = {Color.red, Color.blue, Color.white, Color.yellow, Color.green, Color.orange, Color.gray};
@@ -37,14 +51,24 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
             double rads = 6.28 / numPlayers * i;
             double size = sWidth / 32;
 
-            players.add(new Player(rads, sWidth / 32, playerColors[i], railRadius));
+            Player p = new Player(rads, sWidth / 32, playerColors[i], railRadius);
+
+            players.add(p);
+            playersToKeys.put(p, defaultControls[i]);
         }
 
         addKeyListener(this);
-//        setPreferredSize(new Dimension(sWidth, sHeight));
 
-        timer = new Timer(1000, this);
-        timer.setInitialDelay(4000);
+        if(!PewPewDriver.FULLSCREEN) {
+            setPreferredSize(new Dimension(sWidth, sHeight));
+            sMargin = 0;
+        }
+
+        Projectile test = new BasicBullet(0,0,10,0,Color.green, players.get(0));
+        projectiles.add(test);
+
+        timer = new Timer(50, this);
+        timer.setInitialDelay(1000);
         timer.start();
 
         setFocusable(true);
@@ -79,6 +103,11 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
             p.draw(g);
         }
 
+        // Draw bullets
+        for(Projectile p : projectiles) {
+            p.draw(g);
+        }
+
 
 /*
         for(int i = 0; i < numPlayers; i++) {
@@ -93,31 +122,102 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     }
 
     public void actionPerformed(ActionEvent ev) {
-        repaint();
-    }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        switch(e.getKeyCode()) {
-            case KeyEvent.VK_W:
-                break;
-            case KeyEvent.VK_A:
-                players.get(0).move(true);
-                break;
-            case KeyEvent.VK_S:
-                break;
-            case KeyEvent.VK_D:
-                players.get(0).move(false);
-                break;
-            case KeyEvent.VK_SPACE:
-                break;
+        // Take player input
+        for(Player p : players) {
+            int leftMoveKey = playersToKeys.get(p)[2];
+            boolean shouldMoveLeft = false;
+
+            if(keysToPressed.containsKey(leftMoveKey)) {
+                shouldMoveLeft = keysToPressed.get(leftMoveKey);
+            }
+
+            int rightMoveKey = playersToKeys.get(p)[3];
+            boolean shouldMoveRight = false;
+
+            if(keysToPressed.containsKey(rightMoveKey)) {
+                shouldMoveRight = keysToPressed.get(rightMoveKey);
+            }
+
+            int fireKey = playersToKeys.get(p)[0];
+            boolean shouldFire = false;
+
+            if(keysToPressed.containsKey(fireKey)) {
+                shouldFire = keysToPressed.get(fireKey);
+            }
+
+            if(shouldMoveLeft && !shouldMoveRight) {
+                p.move(false);
+            }
+            if(!shouldMoveLeft && shouldMoveRight) {
+                p.move(true);
+            }
+
+            if(shouldFire) {
+                Projectile newP = p.fire();
+                System.out.println("Firing");
+
+                if(newP != null) {
+                    projectiles.add(newP);
+                    System.out.println("Fired");
+                }
+            }
+
+            p.update();
+        }
+
+        // update projectiles
+        ArrayList<Projectile> projToRemove = new ArrayList<>();
+        for(Projectile proj : projectiles) {
+            for(Player player : players) {
+                if (player.collides(proj)) {
+                    proj.onCollide(player);
+                }
+            }
+
+            proj.update();
+
+            if(!proj.onScreen(sWidth, sHeight)) {
+                projToRemove.add(proj);
+                continue;
+            }
+        }
+
+        // remove any projectiles that have left the screen
+        for(Projectile deleteMe : projToRemove) {
+            projectiles.remove(deleteMe);
         }
 
         repaint();
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyPressed(KeyEvent e) {
+        keysToPressed.put(e.getKeyCode(), true);
+/*
+        switch(e.getKeyCode()) {
+            case KeyEvent.VK_Q:
+                break;
+            case KeyEvent.VK_W:
+                players.get(0).move(true);
+                break;
+            case KeyEvent.VK_E:
+                break;
+            case KeyEvent.VK_R:
+                players.get(0).move(false);
+                break;
+            case KeyEvent.VK_SPACE:
+                break;
+        }
+*/
+
+        repaint();
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        keysToPressed.put(e.getKeyCode(), false);
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {}
