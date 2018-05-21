@@ -106,7 +106,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
         projectiles.add(test);
 */
 
-        BasicEnemy enemyTest = new BasicEnemy(10, 10);
+        BasicEnemy enemyTest = new BasicEnemy(10, 10, escapeRadius);
         enemies.add(enemyTest);
 
         timer = new Timer(50, this);
@@ -275,7 +275,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
         double radius = (Math.random() * 0.9 + 0.1) * spawnRadius;
 
         GameUtils.Position p = GameUtils.radialLocation(radius, theta);
-        BasicEnemy newEnemy = new BasicEnemy(p.x, p.y);
+        BasicEnemy newEnemy = new BasicEnemy(p.x, p.y, escapeRadius);
 
         enemies.add(newEnemy);
     }
