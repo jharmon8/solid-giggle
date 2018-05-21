@@ -1,6 +1,7 @@
 package entity;
 
 import entity.projectile.Projectile;
+import graphics.GraphicsWrapper;
 
 import java.awt.Graphics;
 
@@ -18,7 +19,7 @@ public interface Entity {
     public boolean collides(Projectile p);
 
     // graphics
-    public void draw(Graphics g);
+    public void draw(GraphicsWrapper gw);
 
     // engine
     public void update();

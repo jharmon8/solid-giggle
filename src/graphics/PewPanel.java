@@ -1,3 +1,5 @@
+package graphics;
+
 import entity.Entity;
 import entity.Player;
 import entity.projectile.Projectile;
@@ -15,15 +17,30 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     private Timer timer;
 
-    private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    /*
+     * There are two vector spaces in play here.
+     * The graphics space is in units of pixels, and is defined by the screen size (and sWidth/sHeight) below
+     * The game space is always the same size, defined by gameWidth, below
+     *
+     * To make the two play nice, wrapper methods for all graphics are defined in util.GraphicsWrappers
+     *
+     * EVERY draw command from a gameplay element should be done through GraphicsWrappers.
+     */
+    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    // I finally gave up and just made these static
-    public static int sHeight = screenSize.height;
-    public static int sWidth = screenSize.width;
-    public static int sMargin = 0;
+    public int sHeight = screenSize.height;
+    public int sWidth = screenSize.width;
+    public int sMargin = 0;
 
-    private int railRadius = sHeight * 4 / 10;
-    private int spawnRadius = railRadius * 3 / 5;
+    public int gameWidth = 100;
+    public int gameHeight = 100;
+
+    public GraphicsWrapper graphicsWrapper;
+
+    // nothing has to be scaled to screen size anymore
+    // graphics wrapper handles all of that for us
+    private int railRadius = 32;
+    private int spawnRadius = railRadius / 2;
 
     private int numPlayers = 3;
 
@@ -62,9 +79,8 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
         for(int i = 0; i < numPlayers; i++) {
             double rads = 6.28 / numPlayers * i;
-            double size = sWidth / 32;
 
-            Player p = new Player(rads, sWidth / 64, playerColors[i], railRadius);
+            Player p = new Player(rads, playerColors[i], railRadius);
 
             players.add(p);
             playersToKeys.put(p, defaultControls[i]);
@@ -76,6 +92,8 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
             setPreferredSize(new Dimension(sWidth, sHeight));
             sMargin = 0;
         }
+
+        graphicsWrapper = new GraphicsWrapper(sWidth, sHeight, gameWidth, gameHeight);
 
 /*
         Projectile test = new BasicBullet(0,0,10,0,Color.green, players.get(0));
@@ -111,31 +129,23 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
         g.fillRect(sMargin + sWidth - sidePanelWidth, sidePanelYOffset, sidePanelWidth, sidePanelHeight);
 
         // from now on, (0,0) is the middle of the screen
+        // and we'll use graphics wrappers
         g.translate(sWidth/2 + sMargin, sHeight/2);
+
+        graphicsWrapper.setGraphics(g);
 
         // Draw Player
         for(Player p : players) {
-            p.draw(g);
+            p.draw(graphicsWrapper);
         }
 
         // Draw bullets
         for(Projectile p : projectiles) {
-            p.draw(g);
+            p.draw(graphicsWrapper);
         }
-
-
-/*
-        for(int i = 0; i < numPlayers; i++) {
-            int playerX = (int)playerLocation(i).x;
-            int playerY = (int)playerLocation(i).y;
-            int playerSize = sWidth / 32;
-
-            g.setColor(playerColors[i]);
-            g.fillOval(sMargin + playerX - playerSize / 2 + sWidth / 2, playerY - playerSize / 2 + sHeight / 2, playerSize, playerSize);
-        }
-*/
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
 
         // Take player input
@@ -207,22 +217,6 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     @Override
     public void keyPressed(KeyEvent e) {
         keysToPressed.put(e.getKeyCode(), true);
-/*
-        switch(e.getKeyCode()) {
-            case KeyEvent.VK_Q:
-                break;
-            case KeyEvent.VK_W:
-                players.get(0).move(true);
-                break;
-            case KeyEvent.VK_E:
-                break;
-            case KeyEvent.VK_R:
-                players.get(0).move(false);
-                break;
-            case KeyEvent.VK_SPACE:
-                break;
-        }
-*/
 
         repaint();
     }

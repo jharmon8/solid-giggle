@@ -3,6 +3,7 @@ package entity.projectile;
 import entity.Entity;
 import entity.EntityCartesian;
 import entity.Player;
+import graphics.GraphicsWrapper;
 import util.GameUtils;
 
 import java.awt.*;
@@ -29,8 +30,10 @@ public abstract class Projectile extends EntityCartesian {
         this.vy = vy;
 
         this.parent = parent;
+        this.ignoreList.add(parent);
     }
 
+    @Override
     public void update() {
         x += vx;
         y += vy;
@@ -51,8 +54,9 @@ public abstract class Projectile extends EntityCartesian {
         return true;
     }
 
-    public void draw(Graphics g) {
-        g.setColor(color);
-        g.fillOval((int)(x - size), (int)(y - size), (int)(size * 2), (int)(size * 2));
+    @Override
+    public void draw(GraphicsWrapper gw) {
+        gw.setColor(color);
+        gw.fillCircle(x - size, y - size, size * 2);
     }
 }

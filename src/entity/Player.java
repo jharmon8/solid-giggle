@@ -2,6 +2,7 @@ package entity;
 
 import entity.projectile.LightBullet;
 import entity.projectile.Projectile;
+import graphics.GraphicsWrapper;
 import util.GameUtils;
 
 import java.awt.*;
@@ -16,11 +17,11 @@ public class Player extends EntityPolar {
 
     private double angularVelocity = 0.075;
 
-    public Player(double theta, double size, Color color, double radius) {
+    public Player(double theta, Color color, double radius) {
         this.theta = theta;
         this.radius = radius;
 
-        this.size = size;
+        this.size = 2.0;
 
         this.color = color;
 
@@ -28,6 +29,7 @@ public class Player extends EntityPolar {
         this.health = maxHealth;
     }
 
+    @Override
     public void update() {
         if(health <= 0) {
             dead = true;
@@ -73,6 +75,7 @@ public class Player extends EntityPolar {
         }
     }
 
+    @Override
     public boolean collides(Projectile proj) {
         if(proj.ignoreList.contains(this)) {
             return false;
@@ -81,7 +84,7 @@ public class Player extends EntityPolar {
         return collides(proj.getX(), proj.getY());
     }
 
-    public boolean collides(double x, double y) {
+    private boolean collides(double x, double y) {
         double dx = getX() - x;
         double dy = getY() - y;
 
@@ -89,13 +92,14 @@ public class Player extends EntityPolar {
         return Math.sqrt(dx * dx + dy * dy) < size * 0.9;
     }
 
-    public void draw(Graphics g) {
+    @Override
+    public void draw(GraphicsWrapper gw) {
         if(dead) {
-            g.setColor(Color.white);
+            gw.setColor(Color.white);
         } else {
-            g.setColor(color);
+            gw.setColor(color);
         }
-        g.fillOval((int)(getX() - size), (int)(getY() - size), (int)(size*2), (int)(size*2));
+        gw.drawCircle(getX() - size, getY() - size, size*2);
     }
 
     public void takeDamage(int dmg) {

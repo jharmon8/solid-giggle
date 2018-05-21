@@ -1,4 +1,6 @@
-import util.PewPanel;
+package graphics;
+
+import graphics.PewPanel;
 
 import javax.swing.*;
 

@@ -1,6 +1,7 @@
 package entity;
 
 import entity.projectile.Projectile;
+import graphics.GraphicsWrapper;
 import util.GameUtils;
 
 import java.awt.Color;
@@ -48,8 +49,8 @@ public abstract class EntityPolar implements Entity {
     }
 
     @Override
-    public void draw(Graphics g) {
-        g.setColor(color);
-        g.drawOval((int)(getX() - size/2), (int)(getY() - size/2), (int) size, (int) size);
+    public void draw(GraphicsWrapper gw) {
+        gw.setColor(color);
+        gw.fillCircle(getX() - size, getY() - size, size * 2);
     }
 }
