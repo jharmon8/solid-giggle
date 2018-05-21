@@ -1,3 +1,7 @@
+import entity.Entity;
+import entity.Player;
+import entity.projectile.Projectile;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,11 +15,12 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     private Timer timer;
 
-    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    private int sHeight = screenSize.height;
-    private int sWidth = screenSize.width;
-    private int sMargin = 0;
+    // I finally gave up and just made these static
+    public static int sHeight = screenSize.height;
+    public static int sWidth = screenSize.width;
+    public static int sMargin = 0;
 
     private int railRadius = sHeight * 4 / 10;
     private int spawnRadius = railRadius * 3 / 5;
@@ -39,7 +44,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
             {KeyEvent.VK_Z, KeyEvent.VK_X, KeyEvent.VK_C, KeyEvent.VK_V}, // etc
     };
 
-    PewPanel () {
+    public PewPanel () {
         Color[] playerColors = {
                 Color.red,      // player 1
                 Color.green,    // player 2
@@ -59,7 +64,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
             double rads = 6.28 / numPlayers * i;
             double size = sWidth / 32;
 
-            Player p = new Player(rads, sWidth / 32, playerColors[i], railRadius);
+            Player p = new Player(rads, sWidth / 64, playerColors[i], railRadius);
 
             players.add(p);
             playersToKeys.put(p, defaultControls[i]);
