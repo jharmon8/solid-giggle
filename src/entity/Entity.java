@@ -1,9 +1,7 @@
 package entity;
 
 import entity.projectile.Projectile;
-import graphics.GraphicsWrapper;
-
-import java.awt.Graphics;
+import engine.GraphicsWrapper;
 
 public interface Entity {
     // cartesian position

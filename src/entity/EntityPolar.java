@@ -1,11 +1,10 @@
 package entity;
 
 import entity.projectile.Projectile;
-import graphics.GraphicsWrapper;
+import engine.GraphicsWrapper;
 import util.GameUtils;
 
 import java.awt.Color;
-import java.awt.Graphics;
 
 public abstract class EntityPolar implements Entity {
     protected double theta;

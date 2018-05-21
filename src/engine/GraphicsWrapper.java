@@ -1,8 +1,7 @@
-package graphics;
+package engine;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Polygon;
 
 /*
  * Making a game that scales to resolution in this way is a huge pain.

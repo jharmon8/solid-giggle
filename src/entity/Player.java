@@ -2,13 +2,13 @@ package entity;
 
 import entity.projectile.LightBullet;
 import entity.projectile.Projectile;
-import graphics.GraphicsWrapper;
+import engine.GraphicsWrapper;
 import util.GameUtils;
 
 import java.awt.*;
 
 public class Player extends EntityPolar {
-    private int fireDelay = 10;
+    private int fireDelay = 5;
     private int fireDelayTimer = 0;
 
     private int bulletDamage = 4;

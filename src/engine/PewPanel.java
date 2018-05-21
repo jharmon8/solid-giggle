@@ -1,4 +1,4 @@
-package graphics;
+package engine;
 
 import entity.Entity;
 import entity.Player;
@@ -12,13 +12,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/*
+ * I don't have any way to switch between panels, so all the stuff is gonna go in here.
+ *
+ * It should be quite the God Class by the time we're done.
+ */
 public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     private Timer timer;
+
+    enum PanelState {MENU, GAME, WIN, LOSE};
+    PanelState state = PanelState.MENU;
 
     /*
      * There are two vector spaces in play here.
@@ -46,7 +53,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     private int spawnRadius = railRadius / 2;
     private int escapeRadius = railRadius * 3 / 2;
 
-    private int numPlayers = 3;
+    private int numPlayers;
 
     ArrayList<Player> players = new ArrayList<Player>();
     ArrayList<Entity> enemies = new ArrayList<Entity>();
@@ -59,37 +66,10 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     private int frame = 0;
 
-    // These are the default controls for each player
-    // I guess right now the order is shoot, swap, left, right
-    private int[][] defaultControls = {
-            {KeyEvent.VK_Q, KeyEvent.VK_W, KeyEvent.VK_E, KeyEvent.VK_R}, // player 1
-            {KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, KeyEvent.VK_F}, // player 2
-            {KeyEvent.VK_Z, KeyEvent.VK_X, KeyEvent.VK_C, KeyEvent.VK_V}, // etc
-    };
-
-    public PewPanel () {
-        Color[] playerColors = {
-                Color.red,      // player 1
-                Color.green,    // player 2
-                Color.blue,     // etc
-                Color.yellow,
-                Color.pink,
-                Color.orange,
-                Color.gray
-        };
-
+    public PewPanel (int numPlayers) {
         if(simulateProjectorAspectRatio) {
             sWidth = screenSize.height * 4 / 3;
             sMargin = (screenSize.width - sWidth) / 2;
-        }
-
-        for(int i = 0; i < numPlayers; i++) {
-            double rads = 6.28 / numPlayers * i;
-
-            Player p = new Player(rads, playerColors[i], railRadius);
-
-            players.add(p);
-            playersToKeys.put(p, defaultControls[i]);
         }
 
         addKeyListener(this);
@@ -101,17 +81,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
         graphicsWrapper = new GraphicsWrapper(sWidth, sHeight, gameWidth, gameHeight);
 
-/*
-        Projectile test = new BasicBullet(0,0,10,0,Color.green, players.get(0));
-        projectiles.add(test);
-*/
-
-        BasicEnemy enemyTest = new BasicEnemy(10, 10, escapeRadius);
-        enemies.add(enemyTest);
-
-        timer = new Timer(50, this);
-        timer.setInitialDelay(1000);
-        timer.start();
+        initMenu();
 
         setFocusable(true);
         requestFocus();
@@ -119,8 +89,66 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
         repaint();
     }
 
+    private void initGame(int numPlayers) {
+        this.numPlayers = numPlayers;
+
+        players = new ArrayList<Player>();
+        enemies = new ArrayList<Entity>();
+        projectiles = new ArrayList<Projectile>();
+
+        playersToKeys = new HashMap<>();
+        keysToPressed = new HashMap<>();
+
+        for(int i = 0; i < numPlayers; i++) {
+            double rads = 6.28 / numPlayers * i;
+
+            Player p = new Player(rads, GameUtils.playerColors[i], railRadius);
+
+            players.add(p);
+            playersToKeys.put(p, GameUtils.defaultControls[i]);
+        }
+
+        timer = new Timer(50, this);
+        timer.setInitialDelay(1000);
+        timer.start();
+    }
+
+    private void initMenu() {
+        SoundPlayer.playSound("res/song.wav");
+    }
+
     @Override
     public void paintComponent(Graphics g) {
+        switch(state) {
+            case MENU:
+                paintMenu(g);
+                break;
+            case GAME:
+                paintGame(g);
+                break;
+            case WIN:
+                paintVictory(g);
+                break;
+            case LOSE:
+                paintGameOver(g);
+                break;
+        }
+    }
+
+    public void paintMenu(Graphics g) {
+        Image img = Toolkit.getDefaultToolkit().getImage("res/main_menu.jpg");
+        g.drawImage(img, 0, 0, screenSize.width, screenSize.height, this);
+    }
+
+    public void paintVictory(Graphics g) {
+
+    }
+
+    public void paintGameOver(Graphics g) {
+
+    }
+
+    public void paintGame(Graphics g) {
         // margins
         g.setColor(Color.gray);
         g.fillRect(0, 0, screenSize.width, screenSize.height);
@@ -174,11 +202,24 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
         g.fillRect(sMargin + sWidth - sidePanelWidth, sidePanelYOffset, sidePanelWidth, sidePanelHeight);
     }
 
+    private static int UUID;
+
     @Override
     public void actionPerformed(ActionEvent ev) {
         frame++;
         if(frame % 100 == 0) {
             spawn();
+        }
+
+        try {
+            if(frame % 200 == 0) {
+                UUID = SoundPlayer.playSound("res/short_song.wav");
+            }
+            if(frame % 200 == 100) {
+                SoundPlayer.stopSound(UUID);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         // Take player input
@@ -255,9 +296,18 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        keysToPressed.put(e.getKeyCode(), true);
-
-        repaint();
+        switch(state) {
+            case MENU:
+                changeState(PanelState.GAME);
+                break;
+            case GAME:
+                keysToPressed.put(e.getKeyCode(), true);
+                break;
+            case WIN:
+                break;
+            case LOSE:
+                break;
+        }
     }
 
     @Override
@@ -267,6 +317,29 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void keyTyped(KeyEvent e) {}
+
+    private void changeState(PanelState nextState) {
+        SoundPlayer.stopAllSounds();
+
+        if(timer != null) {
+            timer.stop();
+        }
+
+        switch(nextState) {
+            case MENU:
+                initMenu();
+                break;
+            case GAME:
+                initGame(numPlayers);
+                break;
+            case WIN:
+                break;
+            case LOSE:
+                break;
+        }
+
+        state = nextState;
+    }
 
     private void spawn() {
         // at a random angle

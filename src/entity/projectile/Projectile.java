@@ -3,8 +3,7 @@ package entity.projectile;
 import entity.Entity;
 import entity.EntityCartesian;
 import entity.Player;
-import graphics.GraphicsWrapper;
-import util.GameUtils;
+import engine.GraphicsWrapper;
 
 import java.awt.*;
 import java.util.ArrayList;

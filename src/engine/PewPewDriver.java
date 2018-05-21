@@ -1,6 +1,4 @@
-package graphics;
-
-import graphics.PewPanel;
+package engine;
 
 import javax.swing.*;
 
@@ -15,7 +13,7 @@ public class PewPewDriver {
     private static void launchDesigner() {
         JFrame f = new JFrame("Pew Pew");
 
-        PewPanel panel = new PewPanel();
+        PewPanel panel = new PewPanel(3);
         f.add(panel);
 
         // fullscreen

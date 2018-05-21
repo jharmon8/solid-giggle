@@ -1,9 +1,7 @@
 package entity.enemy;
 
 import entity.EntityCartesian;
-import entity.projectile.Projectile;
-import graphics.GraphicsWrapper;
-import util.GameUtils;
+import engine.GraphicsWrapper;
 
 import java.awt.Color;
 
