@@ -20,7 +20,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     private int railRadius = sHeight * 4 / 10;
     private int spawnRadius = railRadius * 3 / 5;
 
-    private int numPlayers = 1;
+    private int numPlayers = 3;
 
     ArrayList<Player> players = new ArrayList<Player>();
     ArrayList<Entity> enemies = new ArrayList<Entity>();
@@ -34,13 +34,21 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     // These are the default controls for each player
     // I guess right now the order is shoot, swap, left, right
     private int[][] defaultControls = {
-            {KeyEvent.VK_Q, KeyEvent.VK_W, KeyEvent.VK_E, KeyEvent.VK_R},
-            {KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, KeyEvent.VK_F},
-            {KeyEvent.VK_Z, KeyEvent.VK_X, KeyEvent.VK_C, KeyEvent.VK_V},
+            {KeyEvent.VK_Q, KeyEvent.VK_W, KeyEvent.VK_E, KeyEvent.VK_R}, // player 1
+            {KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, KeyEvent.VK_F}, // player 2
+            {KeyEvent.VK_Z, KeyEvent.VK_X, KeyEvent.VK_C, KeyEvent.VK_V}, // etc
     };
 
     PewPanel () {
-        Color[] playerColors = {Color.red, Color.blue, Color.white, Color.yellow, Color.green, Color.orange, Color.gray};
+        Color[] playerColors = {
+                Color.red,      // player 1
+                Color.green,    // player 2
+                Color.blue,     // etc
+                Color.yellow,
+                Color.pink,
+                Color.orange,
+                Color.gray
+        };
 
         if(simulateProjectorAspectRatio) {
             sWidth = screenSize.height * 4 / 3;
@@ -64,8 +72,10 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
             sMargin = 0;
         }
 
+/*
         Projectile test = new BasicBullet(0,0,10,0,Color.green, players.get(0));
         projectiles.add(test);
+*/
 
         timer = new Timer(50, this);
         timer.setInitialDelay(1000);
@@ -155,11 +165,9 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
             if(shouldFire) {
                 Projectile newP = p.fire();
-                System.out.println("Firing");
 
                 if(newP != null) {
                     projectiles.add(newP);
-                    System.out.println("Fired");
                 }
             }
 

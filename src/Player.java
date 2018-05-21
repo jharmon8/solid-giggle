@@ -10,6 +10,13 @@ public class Player implements Shooter {
     private int fireDelay = 10;
     private int fireDelayTimer = 0;
 
+    private int bulletDamage = 4;
+
+    private int maxHealth = 10;
+    private int health = 10;
+
+    private boolean dead = false;
+
     Player(double radians, double size, Color c, double railRadius) {
         this.radians = radians;
         this.radius = railRadius;
@@ -19,6 +26,10 @@ public class Player implements Shooter {
     }
 
     public void update() {
+        if(health <= 0) {
+            dead = true;
+        }
+
         fireDelayTimer--;
     }
 
@@ -26,8 +37,24 @@ public class Player implements Shooter {
     // null if I can't fire
     public Projectile fire() {
         if(fireDelayTimer < 0) {
-            Projectile p = new BasicBullet(0, 0, 0, 14, color, this);
+            double bulletSpeed = 20;
 
+            GameUtils.BulletVector vec = GameUtils.bulletVector(
+                    radius * .95,
+                    radians,
+                    bulletSpeed
+            );
+
+/*
+            System.out.println("PX: " + vec.px + ", PY: " + vec.py);
+            System.out.println("VX: " + vec.vx + ", VY: " + vec.vy);
+*/
+
+            Projectile p = new BasicBullet(
+                    vec.px, vec.py,
+                    vec.vx, vec.vy,
+                    color, this,
+                    bulletDamage);
             fireDelayTimer = fireDelay;
 
             return p;
@@ -53,6 +80,10 @@ public class Player implements Shooter {
             return false;
         }
 
+        if(proj.hasHit.contains(this)) {
+            return false;
+        }
+
         return collides(proj.px, proj.py);
     }
 
@@ -69,7 +100,15 @@ public class Player implements Shooter {
     public void draw(Graphics g) {
         GameUtils.Position p = GameUtils.radialLocation(radius, radians);
 
-        g.setColor(color);
+        if(dead) {
+            g.setColor(Color.white);
+        } else {
+            g.setColor(color);
+        }
         g.fillOval((int)(p.x - size/2), (int)(p.y - size/2), (int)size, (int)size);
+    }
+
+    public void doDamage(int dmg) {
+        health -= dmg;
     }
 }

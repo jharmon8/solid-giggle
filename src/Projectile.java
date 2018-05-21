@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.ArrayList;
 
 public abstract class Projectile {
     double px, py, vx, vy;
@@ -6,6 +7,7 @@ public abstract class Projectile {
 
     // The thing that fired this bullet
     Shooter parent;
+    ArrayList<Shooter> hasHit = new ArrayList<Shooter>();
 
     int size = 16;
 
@@ -24,7 +26,10 @@ public abstract class Projectile {
     }
 
     public void onCollide(Player p) {
-        System.exit(0);
+        // prevents us from hitting p on every tick
+        hasHit.add(p);
+
+        p.doDamage(1);
     }
 
     public boolean onScreen(int sWidth, int sHeight) {
