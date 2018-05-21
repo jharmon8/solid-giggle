@@ -21,7 +21,9 @@ public class BasicEnemy extends EntityCartesian {
 
     private Color highlite;
 
-    public BasicEnemy(double x, double y) {
+    private int escapeRadius;
+
+    public BasicEnemy(double x, double y, int escapeRadius) {
         this.x = x;
         this.y = y;
 
@@ -36,18 +38,17 @@ public class BasicEnemy extends EntityCartesian {
 
         // calculate trajectory
         double thetaOffset = (Math.random() - 0.5) * initialThetaRange;
-        double thetaCenter = GameUtils.flipAngle(Math.atan(y / x));
-
+        double thetaCenter = Math.atan2(-y, -x);
         direction = thetaCenter + thetaOffset;
 
         if(Double.isNaN(direction)) {
-            vx = 1;
-            vy = 1;
-        } else {
-            vx = Math.cos(direction) * speed;
-            vy = Math.sin(direction) * speed;
+            System.err.println("NaN angle in enemy constructor!");
         }
 
+        vx = Math.cos(direction) * speed;
+        vy = Math.sin(direction) * speed;
+
+        this.escapeRadius = escapeRadius;
     }
 
     @Override
@@ -67,7 +68,7 @@ public class BasicEnemy extends EntityCartesian {
 
         if(!Double.isNaN(direction)) {
             gw.setColor(highlite);
-            gw.drawTriangle(x, y, direction, size);
+            gw.fillTriangle(x, y, direction, size);
         }
     }
 }

@@ -25,7 +25,7 @@ public class GameUtils {
     }
 
     public static class Position {
-        double x, y;
+        public double x, y;
 
         public Position(double x, double y) {
             this.x = x;

@@ -4,6 +4,7 @@ import entity.Entity;
 import entity.Player;
 import entity.enemy.BasicEnemy;
 import entity.projectile.Projectile;
+import util.GameUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,6 +44,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     // graphics wrapper handles all of that for us
     private int railRadius = 32;
     private int spawnRadius = railRadius / 2;
+    private int escapeRadius = railRadius * 3 / 2;
 
     private int numPlayers = 3;
 
@@ -54,6 +56,8 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     private HashMap<Player, int[]> playersToKeys = new HashMap<>();
     private HashMap<Integer, Boolean> keysToPressed = new HashMap<>();
+
+    private int frame = 0;
 
     // These are the default controls for each player
     // I guess right now the order is shoot, swap, left, right
@@ -117,27 +121,30 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void paintComponent(Graphics g) {
-        // margins and game area
+        // margins
         g.setColor(Color.gray);
         g.fillRect(0, 0, screenSize.width, screenSize.height);
 
+        // black background
         g.setColor(Color.black);
         g.fillRect(0 + sMargin, 0, sWidth, sHeight);
-
-        // side panels
-        g.setColor(Color.blue);
-        int sidePanelWidth = sWidth / 8;
-        int sidePanelHeight = sidePanelWidth * 3;
-        int sidePanelYOffset = (sHeight - sidePanelHeight) / 2;
-
-        g.fillRect(sMargin, sidePanelYOffset, sidePanelWidth, sidePanelHeight);
-        g.fillRect(sMargin + sWidth - sidePanelWidth, sidePanelYOffset, sidePanelWidth, sidePanelHeight);
 
         // from now on, (0,0) is the middle of the screen
         // and we'll use graphics wrappers
         g.translate(sWidth/2 + sMargin, sHeight/2);
-
         graphicsWrapper.setGraphics(g);
+
+        // draw the player rail outline first
+        g.setColor(Color.darkGray);
+        graphicsWrapper.drawCircle(-railRadius, -railRadius, railRadius * 2);
+
+        // draw spawn area (probably just for testing)
+        g.setColor(Color.darkGray);
+        graphicsWrapper.drawCircle(-spawnRadius, -spawnRadius, spawnRadius * 2);
+
+        // draw spawn area (probably just for testing)
+        g.setColor(Color.darkGray);
+        graphicsWrapper.drawCircle(-escapeRadius, -escapeRadius, escapeRadius * 2);
 
         // Draw Player
         for(Player p : players) {
@@ -153,10 +160,26 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
         for(Entity e : enemies) {
             e.draw(graphicsWrapper);
         }
+
+        // side panels
+        g.setColor(Color.blue);
+        int sidePanelWidth = sWidth / 8;
+        int sidePanelHeight = sidePanelWidth * 3;
+        int sidePanelYOffset = (sHeight - sidePanelHeight) / 2;
+
+        // translate back for the side panels
+        g.translate(-sWidth/2 - sMargin, -sHeight/2);
+
+        g.fillRect(sMargin, sidePanelYOffset, sidePanelWidth, sidePanelHeight);
+        g.fillRect(sMargin + sWidth - sidePanelWidth, sidePanelYOffset, sidePanelWidth, sidePanelHeight);
     }
 
     @Override
     public void actionPerformed(ActionEvent ev) {
+        frame++;
+        if(frame % 100 == 0) {
+            spawn();
+        }
 
         // Take player input
         for(Player p : players) {
@@ -216,7 +239,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
             proj.update();
 
-            if(!proj.onScreen(sWidth, sHeight)) {
+            if(!proj.onScreen(gameWidth, gameHeight)) {
                 projToRemove.add(proj);
                 continue;
             }
@@ -245,4 +268,15 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     @Override
     public void keyTyped(KeyEvent e) {}
 
+    private void spawn() {
+        // at a random angle
+        double theta = Math.random() * 2 * Math.PI;
+        // pick a random point from 10% spawn radius to 100% spawn radius
+        double radius = (Math.random() * 0.9 + 0.1) * spawnRadius;
+
+        GameUtils.Position p = GameUtils.radialLocation(radius, theta);
+        BasicEnemy newEnemy = new BasicEnemy(p.x, p.y);
+
+        enemies.add(newEnemy);
+    }
 }

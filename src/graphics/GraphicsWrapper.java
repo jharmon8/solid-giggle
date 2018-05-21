@@ -52,7 +52,7 @@ public class GraphicsWrapper {
         g.drawOval((int)(x * rWidth), (int)(y * rHeight), (int)(size * rWidth), (int)(size * rHeight));
     }
 
-    public void drawTriangle(double x, double y, double centerTheta, double radius) {
+    public void fillTriangle(double x, double y, double centerTheta, double radius) {
         double leftTheta = centerTheta - 0.67 * Math.PI;
         double rightTheta = centerTheta + 0.67 * Math.PI;
 

@@ -46,8 +46,8 @@ public abstract class Projectile extends EntityCartesian {
         p.takeDamage(damage);
     }
 
-    public boolean onScreen(int sWidth, int sHeight) {
-        if(Math.abs(x) > sWidth/2 || Math.abs(y) > sHeight / 2) {
+    public boolean onScreen(int gameWidth, int gameHeight) {
+        if(Math.abs(x) > gameWidth/2 || Math.abs(y) > gameHeight/2) {
             return false;
         }
 

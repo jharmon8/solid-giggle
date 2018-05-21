@@ -15,7 +15,9 @@ public class Player extends EntityPolar {
 
     private boolean dead = false;
 
-    private double angularVelocity = 0.075;
+    private double speed = 0.06;
+
+    private Color shieldColor;
 
     public Player(double theta, Color color, double radius) {
         this.theta = theta;
@@ -27,6 +29,8 @@ public class Player extends EntityPolar {
 
         this.maxHealth = 5;
         this.health = maxHealth;
+
+        this.shieldColor = new Color(180,200,255);
     }
 
     @Override
@@ -69,9 +73,9 @@ public class Player extends EntityPolar {
 
     public void move(boolean clockwise) {
         if(clockwise) {
-            this.theta += angularVelocity;
+            this.theta += speed;
         } else {
-            this.theta -= angularVelocity;
+            this.theta -= speed;
         }
     }
 
@@ -94,12 +98,18 @@ public class Player extends EntityPolar {
 
     @Override
     public void draw(GraphicsWrapper gw) {
+        double x = getX();
+        double y = getY();
+
         if(dead) {
             gw.setColor(Color.white);
         } else {
             gw.setColor(color);
         }
-        gw.drawCircle(getX() - size, getY() - size, size*2);
+        gw.fillTriangle(x, y, GameUtils.flipAngle(theta), size * 0.9);
+
+        gw.setColor(shieldColor);
+        gw.drawCircle(x - size, y - size, size*2);
     }
 
     public void takeDamage(int dmg) {
