@@ -2,6 +2,7 @@ package graphics;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 
 /*
  * Making a game that scales to resolution in this way is a huge pain.
@@ -49,5 +50,24 @@ public class GraphicsWrapper {
 
     public void drawCircle(double x, double y, double size) {
         g.drawOval((int)(x * rWidth), (int)(y * rHeight), (int)(size * rWidth), (int)(size * rHeight));
+    }
+
+    public void drawTriangle(double x, double y, double centerTheta, double radius) {
+        double leftTheta = centerTheta - 0.67 * Math.PI;
+        double rightTheta = centerTheta + 0.67 * Math.PI;
+
+        int[] xVals = {
+                (int)((Math.cos(leftTheta) * radius + x) * rWidth),
+                (int)((Math.cos(centerTheta) * radius + x) * rWidth),
+                (int)((Math.cos(rightTheta) * radius + x) * rWidth)
+        };
+        int[] yVals = {
+                (int)((Math.sin(leftTheta) * radius + y) * rHeight),
+                (int)((Math.sin(centerTheta) * radius + y) * rHeight),
+                (int)((Math.sin(rightTheta) * radius + y) * rHeight)
+        };
+
+//        Polygon p = new Polygon(xVals, yVals, xVals.length);
+        g.fillPolygon(xVals, yVals, xVals.length);
     }
 }

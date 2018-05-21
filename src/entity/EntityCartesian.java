@@ -31,7 +31,7 @@ public abstract class EntityCartesian implements Entity {
 
     @Override
     public double getTheta() {
-        return Math.tan(y / x);
+        return Math.atan(y / x);
     }
     @Override
     public double getR() {

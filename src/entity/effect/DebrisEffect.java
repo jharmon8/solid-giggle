@@ -1,4 +1,4 @@
-package entity;
+package entity.effect;
 
 /*
  * This might be something that spawns in an entity's place after it dies

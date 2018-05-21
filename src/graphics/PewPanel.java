@@ -2,6 +2,7 @@ package graphics;
 
 import entity.Entity;
 import entity.Player;
+import entity.enemy.BasicEnemy;
 import entity.projectile.Projectile;
 
 import javax.swing.*;
@@ -10,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -100,6 +102,9 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
         projectiles.add(test);
 */
 
+        BasicEnemy enemyTest = new BasicEnemy(10, 10);
+        enemies.add(enemyTest);
+
         timer = new Timer(50, this);
         timer.setInitialDelay(1000);
         timer.start();
@@ -142,6 +147,11 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
         // Draw bullets
         for(Projectile p : projectiles) {
             p.draw(graphicsWrapper);
+        }
+
+        // Draw enemies
+        for(Entity e : enemies) {
+            e.draw(graphicsWrapper);
         }
     }
 
@@ -187,6 +197,12 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
             }
 
             p.update();
+        }
+
+        // update enemies
+        ArrayList<Entity> entitiesToRemove = new ArrayList<>();
+        for(Entity e : enemies) {
+            e.update();
         }
 
         // update projectiles

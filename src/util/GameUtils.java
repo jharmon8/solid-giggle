@@ -1,5 +1,8 @@
 package util;
 
+/*
+ * this class is a collection of random bullshit
+ */
 public class GameUtils {
     public static Position radialLocation(double radius, double radians) {
         double x = Math.cos(radians) * radius;
@@ -51,5 +54,9 @@ public class GameUtils {
     // this is a magnitude function
     public static double distance(double x1, double y1) {
         return Math.sqrt(x1 * x1 + y1 * y1);
+    }
+
+    public static double flipAngle(double theta) {
+        return theta + Math.PI;
     }
 }
