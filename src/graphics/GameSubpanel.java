@@ -42,6 +42,8 @@ public class GameSubpanel implements Subpanel {
     public int gameWidth = 100;
     public int gameHeight = 75;
 
+    public int scoreboard = 0;
+
     private PewPanel parent;
 
     public GameSubpanel(int sWidth, int sHeight, PewPanel parent) {
@@ -105,8 +107,17 @@ public class GameSubpanel implements Subpanel {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        // check enemy collision with players
+        for (BasicEnemy enemy : enemies) {
+            for (Player p : players) {
+                if (enemy.collides(p)) {
+                    enemy.onCollide(p);
+                }
+            }
+        }
+
         frame++;
-        if(frame % 100 == 0) {
+        if(frame % 50 == 0) {
             spawn();
         }
 
@@ -160,7 +171,6 @@ public class GameSubpanel implements Subpanel {
         // update projectiles
         ArrayList<Projectile> projToRemove = new ArrayList<>();
         ArrayList<BasicEnemy> enemyToRemove = new ArrayList<>();
-
         for(Projectile proj : projectiles) {
             for(Player player : players) {
                 if (player.collides(proj)) {
@@ -171,10 +181,6 @@ public class GameSubpanel implements Subpanel {
             for(BasicEnemy enemy : enemies) {
                 if (enemy.collides(proj)) {
                     proj.onCollide(enemy);
-                }
-
-                if (enemy.dead) {
-                    enemyToRemove.add(enemy);
                 }
             }
 
@@ -188,6 +194,19 @@ public class GameSubpanel implements Subpanel {
                 projToRemove.add(proj);
             }
         }
+        //check for dead enemies
+        for (BasicEnemy enemy : enemies) {
+            if (enemy.dead) {
+                enemyToRemove.add(enemy);
+            }
+
+            if (!enemy.inPlayfield(escapeRadius)) {
+                enemyToRemove.add(enemy);
+                for (Player player: players) {
+                    player.enemyPassed();
+                }
+            }
+        }
 
         // remove any projectiles that have left the screen
         for(Projectile deleteMe : projToRemove) {
@@ -196,6 +215,7 @@ public class GameSubpanel implements Subpanel {
 
         for(BasicEnemy deleteMe : enemyToRemove) {
             enemies.remove(deleteMe);
+            scoreboard = scoreboard + 100;
         }
 
         parent.repaint();

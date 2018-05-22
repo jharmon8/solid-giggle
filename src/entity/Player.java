@@ -19,9 +19,15 @@ public class Player extends EntityPolar {
 
     private Color shieldColor;
 
+    private int enemySurvivedDamage;
+
+    public int countTick;
+
     public Player(double theta, Color color, double radius) {
         this.theta = theta;
         this.radius = radius;
+        this.countTick = 8;
+        this.enemySurvivedDamage = 2;
 
         this.size = 2.0;
 
@@ -38,6 +44,8 @@ public class Player extends EntityPolar {
         if(health <= 0) {
             dead = true;
         }
+
+        countTick++;
 
         fireDelayTimer--;
     }
@@ -85,15 +93,15 @@ public class Player extends EntityPolar {
             return false;
         }
 
-        return collides(proj.getX(), proj.getY());
+        return collides(proj.getX(), proj.getY(), proj.getSize());
     }
 
-    private boolean collides(double x, double y) {
+    private boolean collides(double x, double y, double targetSize) {
         double dx = getX() - x;
         double dy = getY() - y;
 
         // We give a leeway on player size because we are generous gods
-        return Math.sqrt(dx * dx + dy * dy) < size * 0.9;
+        return Math.sqrt(dx * dx + dy * dy) < (size + targetSize) * 0.9;
     }
 
     @Override
@@ -101,15 +109,32 @@ public class Player extends EntityPolar {
         double x = getX();
         double y = getY();
 
-        if(dead) {
-            gw.setColor(Color.white);
-        } else {
-            gw.setColor(color);
-        }
-        gw.fillTriangle(x, y, GameUtils.flipAngle(theta), size * 0.9);
+        if (Math.ceil(countTick / 3) == 0 || Math.ceil(countTick / 3) == 2) {
+            if (dead) {
+                gw.setColor(Color.white);
+            } else {
+                gw.setColor(color.darker().darker());
+            }
+            gw.fillTriangle(x, y, GameUtils.flipAngle(theta), size * 0.9);
 
-        gw.setColor(shieldColor);
-        gw.drawCircle(x - size, y - size, size*2);
+            gw.setColor(shieldColor.darker().darker());
+            gw.drawCircle(x - size, y - size, size * 2);
+        }
+        else {
+            if (dead) {
+                gw.setColor(Color.white);
+            } else {
+                gw.setColor(color);
+            }
+            gw.fillTriangle(x, y, GameUtils.flipAngle(theta), size * 0.9);
+
+            gw.setColor(shieldColor);
+            gw.drawCircle(x - size, y - size, size * 2);
+        }
+    }
+
+    public void enemyPassed() {
+        takeDamage(enemySurvivedDamage);
     }
 
     public void takeDamage(int dmg) {

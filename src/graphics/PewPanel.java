@@ -63,7 +63,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
         repaint();
 
-        timer = new Timer(40, this);
+        timer = new Timer(15, this);
         timer.setInitialDelay(1000);
         timer.start();
     }
