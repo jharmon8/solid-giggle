@@ -2,8 +2,7 @@ package graphics;
 
 import entity.Entity;
 import entity.Player;
-import entity.enemy.BasicEnemy;
-import entity.enemy.Enemy;
+import entity.enemy.*;
 import entity.projectile.Projectile;
 import util.GameUtils;
 
@@ -44,6 +43,8 @@ public class GameSubpanel implements Subpanel {
     public int gameHeight = 75;
 
     public int scoreboard = 0;
+
+    private int numEnemy = 4;
 
     private PewPanel parent;
 
@@ -119,7 +120,7 @@ public class GameSubpanel implements Subpanel {
 
         frame++;
         if(frame % 50 == 0) {
-            spawn();
+            spawn((int)(Math.random()*numEnemy)+1);
         }
 
         // Take player input
@@ -165,12 +166,20 @@ public class GameSubpanel implements Subpanel {
 
         // update enemies
         ArrayList<Enemy> entitiesToRemove = new ArrayList<>();
-        for(Entity enemy : enemies) {
+        ArrayList<Projectile> projToAdd = new ArrayList<>();
+        for(Enemy enemy : enemies) {
             enemy.update();
+            projToAdd = enemy.attemptShoot(players);
+            if (projToAdd != null) {
+                for (Projectile projAdded : projToAdd) {
+                    projectiles.add(projAdded);
+                }
+            }
         }
 
         // update projectiles
         ArrayList<Projectile> projToRemove = new ArrayList<>();
+        projToAdd = new ArrayList<>();
         ArrayList<Enemy> enemyToRemove = new ArrayList<>();
         for(Projectile proj : projectiles) {
             for(Player player : players) {
@@ -186,6 +195,11 @@ public class GameSubpanel implements Subpanel {
             }
 
             proj.update();
+            ArrayList<Projectile> projTemp = proj.attemptExplode(proj.getX(), proj.getY(), proj.vx, proj.vy);
+            if (projTemp != null) {
+                projToAdd.addAll(projTemp);
+                projToRemove.add(proj);
+            }
 
             if(!proj.onScreen(gameWidth, gameHeight)) {
                 projToRemove.add(proj);
@@ -211,6 +225,9 @@ public class GameSubpanel implements Subpanel {
 
         // remove any projectiles that have left the screen
         projectiles.removeAll(projToRemove);
+        if (projToAdd != null){
+            projectiles.addAll(projToAdd);
+        }
 
         // hopefully we can move score somewhere else
         for(Enemy deleteMe : enemyToRemove) {
@@ -221,14 +238,25 @@ public class GameSubpanel implements Subpanel {
         parent.repaint();
     }
 
-    private void spawn() {
+    private void spawn(int enemyToSpawn) {
         // at a random angle
         double theta = Math.random() * 2 * Math.PI;
         // pick a random point from 10% spawn radius to 100% spawn radius
         double radius = (Math.random() * 0.9 + 0.1) * spawnRadius;
 
         GameUtils.Position p = GameUtils.radialLocation(radius, theta);
-        BasicEnemy newEnemy = new BasicEnemy(p.x, p.y, escapeRadius);
+        //BasicEnemy newEnemy = new BasicEnemy(p.x, p.y, escapeRadius);
+
+        Enemy newEnemy;
+        if (enemyToSpawn == 1) {
+            newEnemy = new BasicEnemy(p.x, p.y, escapeRadius);
+        } else if (enemyToSpawn == 2) {
+            newEnemy = new ShootEnemy(p.x, p.y, escapeRadius);
+        } else if (enemyToSpawn == 3) {
+            newEnemy = new LaserEnemy(p.x, p.y, escapeRadius);
+        } else {
+            newEnemy = new BombEnemy(p.x, p.y, escapeRadius);
+        }
 
         enemies.add(newEnemy);
     }

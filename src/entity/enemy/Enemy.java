@@ -2,6 +2,11 @@ package entity.enemy;
 
 import entity.EntityCartesian;
 import entity.Player;
+import entity.projectile.LightBullet;
+import entity.projectile.Projectile;
+import util.GameUtils;
+
+import java.util.ArrayList;
 
 public abstract class Enemy extends EntityCartesian {
     protected int scoreValue;
@@ -44,5 +49,9 @@ public abstract class Enemy extends EntityCartesian {
 
     public void takeDamage(int dmg) {
         health -= dmg;
+    }
+
+    public ArrayList<Projectile> attemptShoot(ArrayList<Player> players) {
+        return null;
     }
 }

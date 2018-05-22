@@ -5,15 +5,15 @@ import util.GameUtils;
 
 import java.awt.Color;
 
-public class LightLaser extends Projectile {
+public class SlowBullet extends Projectile {
 
-    public LightLaser(double px, double py, double vx, double vy, Entity parent) {
+    public SlowBullet(double px, double py, double vx, double vy, Entity parent) {
         super(px, py, vx, vy, parent);
 
-        this.color = Color.red;
+        this.color = new Color(200,200,200);
         this.damage = 1;
-        this.size = 0.4;
-        this.speed = 1; // AHA! With graphics wrappers, speeds no longer must scale to the window size
+        this.size = 0.5;
+        this.speed = 0.1; // AHA! With graphics wrappers, speeds no longer must scale to the window size
 
         // We don't care about the magnitude of the velocity vector passed in
         // We keep its direction and scale it to speed, defined above

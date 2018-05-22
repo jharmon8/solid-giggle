@@ -70,4 +70,8 @@ public abstract class Projectile extends EntityCartesian {
         gw.setColor(color);
         gw.fillCircle(x - size, y - size, size * 2);
     }
+
+    public ArrayList<Projectile> attemptExplode(double x, double y, double vx, double vy){
+        return null;
+    }
 }

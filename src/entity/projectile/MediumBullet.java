@@ -12,7 +12,7 @@ public class MediumBullet extends Projectile {
 
         this.color = new Color(200,200,200);
         this.damage = 2;
-        this.size = 0.6;
+        this.size = 0.1;
         this.speed = 1; // AHA! With graphics wrappers, speeds no longer must scale to the window size
 
         // We don't care about the magnitude of the velocity vector passed in
