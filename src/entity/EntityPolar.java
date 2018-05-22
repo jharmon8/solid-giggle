@@ -53,4 +53,14 @@ public abstract class EntityPolar implements Entity {
         gw.setColor(color);
         gw.fillCircle(getX() - size, getY() - size, size * 2);
     }
+
+    @Override
+    public int getHealth() {
+        return health;
+    }
+
+    @Override
+    public int getMaxHealth() {
+        return maxHealth;
+    }
 }

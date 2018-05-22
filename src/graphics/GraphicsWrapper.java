@@ -1,11 +1,14 @@
 package graphics;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.Toolkit;
+import java.awt.geom.Line2D;
 
 /*
  * Making a game that scales to resolution in this way is a huge pain.
@@ -28,6 +31,7 @@ public class GraphicsWrapper {
 
     // the current canvas
     private Graphics g;
+    private Graphics2D g2;
 
     public GraphicsWrapper(int sWidth, int sHeight, int gameWidth, int gameHeight) {
         this.sWidth = sWidth;
@@ -41,6 +45,7 @@ public class GraphicsWrapper {
 
     public void setGraphics(Graphics g) {
         this.g = g;
+        this.g2 = (Graphics2D) g;
     }
 
     public void setColor(Color color) {
@@ -107,5 +112,17 @@ public class GraphicsWrapper {
         // Sadly there's no way to scale fonts perfectly... I think
         g.setFont(new Font("Verdana", Font.BOLD, (int)(size * rWidth)));
         g.drawString(message, (int)(x * rWidth), (int)(y * rHeight));
+    }
+
+    public void drawText(String message, double x, double y, double size, boolean bold) {
+        // Sadly there's no way to scale fonts perfectly... I think
+        g.setFont(new Font("Verdana", bold ? Font.BOLD : Font.PLAIN, (int)(size * rWidth)));
+        g.drawString(message, (int)(x * rWidth), (int)(y * rHeight));
+    }
+
+    public void drawLine(double x1, double y1, double x2, double y2, double thickness) {
+        // again, an imperfect scale :(
+        g2.setStroke(new BasicStroke((int)(thickness * rWidth)));
+        g2.draw(new Line2D.Float((int)(x1 * rWidth), (int)(y1 * rHeight), (int)(x2 * rWidth), (int)(y2 * rHeight)));
     }
 }

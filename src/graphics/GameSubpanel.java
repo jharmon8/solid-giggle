@@ -98,12 +98,14 @@ public class GameSubpanel implements Subpanel {
 
         // side panels
         double sidePanelWidth = gameWidth / 8.0;
-        double sidePanelHeight = gameHeight * 2 /3;
+        double sidePanelHeight = gameHeight * .49;
 //        double sidePanelYOffset = gameHeight / 3.0;
 
-        graphicsWrapper.setColor(Color.blue);
+        graphicsWrapper.setColor(Color.white);
         graphicsWrapper.fillRect(-gameWidth / 2.0, -sidePanelHeight / 2.0, sidePanelWidth, sidePanelHeight);
         graphicsWrapper.fillRect(gameWidth / 2.0 - sidePanelWidth, -sidePanelHeight / 2.0, sidePanelWidth, sidePanelHeight);
+
+        drawStatusPanels(graphicsWrapper);
     }
 
     @Override
@@ -145,6 +147,13 @@ public class GameSubpanel implements Subpanel {
                 shouldFire = keysToPressed.get(fireKey);
             }
 
+            int secondaryKey = playersToKeys.get(p)[1];
+            boolean shouldSecondary = false;
+
+            if(keysToPressed.containsKey(secondaryKey)) {
+                shouldSecondary = keysToPressed.get(secondaryKey);
+            }
+
             if(shouldMoveLeft && !shouldMoveRight) {
                 p.move(false);
             }
@@ -158,6 +167,10 @@ public class GameSubpanel implements Subpanel {
                 if(newP != null) {
                     projectiles.add(newP);
                 }
+            }
+
+            if (shouldSecondary) {
+                p.shield();
             }
 
             p.update();
@@ -248,11 +261,94 @@ public class GameSubpanel implements Subpanel {
     @Override
     public void close() {}
 
-    public void drawStatusPanels() {
-
+    // todo WTF THIS IS HORRIBLE
+    public void drawStatusPanels(GraphicsWrapper gw) {
+        for(int i = 0; i < players.size(); i++) {
+            if(i < 3) {
+                // left side of screen
+                drawAvatar(-gameWidth/2 + gameWidth*0.0075, -gameHeight/2 + gameHeight*(0.16 * (i%3 + 1.62)), players.get(i), 11, gw, i + 1, false);
+            } else {
+                // right side of screen
+                drawAvatar(gameWidth/2 - 11 - gameWidth*0.0075, -gameHeight/2 + gameHeight*(0.16 * (i%3 + 1.62)), players.get(i), 11, gw, i + 1, false);
+            }
+        }
     }
 
-    public void drawAvatar(double x, double y, Player p) {
+    public void drawAvatar(double x, double y, Player p, double size, GraphicsWrapper gw, int playerNum, boolean disabled) {
+        // gray background square
+        gw.setColor(Color.gray);
+        gw.fillRect(x, y, size, size);
 
+        // jump right in to the health bar
+        gw.setColor(Color.red);
+        gw.fillRect(x + size/18, y + size/18, size * 4 / 18, size * 16/18);
+
+        double healthPortion = Math.max(0, p.getHealth()) / (double) p.getMaxHealth();
+
+        gw.setColor(Color.green);
+        gw.fillRect(x + size/18, y + size/18 - (size * 16/18 * healthPortion) + size * 16/18, size * 4 / 18, size * 16/18 * healthPortion);
+
+        // health borders
+        gw.setColor(Color.black);
+        gw.drawLine(x + size/18, y + size/18, x + size*5/18, y + size/18, 0.3);
+        gw.drawLine(x + size/18, y + size/18, x + size/18, y + size*17/18, 0.3);
+        gw.drawLine(x + size*5/18, y + size*17/18, x + size*5/18, y + size/18, 0.3);
+        gw.drawLine(x + size*5/18, y + size*17/18, x + size/18, y + size*17/18, 0.3);
+
+        // shield bar
+        gw.setColor(new Color(191, 219, 221));
+        gw.fillRect(x + size/3 + size/18, y + size/18, size * 4 / 18, size * 16/18);
+
+        double shieldPortion = p.shieldRefreshCurrent / (double) p.shieldRefreshMax;
+
+        gw.setColor(Color.blue);
+        gw.fillRect(x + size/3 + size/18, y + size/18 - (size * 16/18 * shieldPortion) + size * 16/18, size * 4 / 18, size * 16/18 * shieldPortion);
+
+        // shield borders
+        gw.setColor(Color.black);
+        gw.drawLine(x + size/3 + size/18, y + size/18, x + size/3 + size*5/18, y + size/18, 0.3);
+        gw.drawLine(x + size/3 + size/18, y + size/18, x + size/3 + size/18, y + size*17/18, 0.3);
+        gw.drawLine(x + size/3 + size*5/18, y + size*17/18, x + size/3 + size*5/18, y + size/18, 0.3);
+        gw.drawLine(x + size/3 + size*5/18, y + size*17/18, x + size/3 + size/18, y + size*17/18, 0.3);
+
+        // ScreenClear Box
+        gw.setColor(p.canScreenClear ? Color.green : Color.darkGray);
+        gw.fillRect(x + size*2/3 + size/18, y + size/18, size * 4 / 18, size * 4/18);
+
+        // ScreenClear borders
+        gw.setColor(Color.black);
+        gw.drawLine(x + size*2/3 + size/18, y + size/18, x + size*2/3 + size*5/18, y + size/18, 0.3);
+        gw.drawLine(x + size*2/3 + size/18, y + size/18, x + size*2/3 + size/18, y + size*5/18, 0.3);
+        gw.drawLine(x + size*2/3 + size*5/18, y + size*5/18, x + size*2/3 + size*5/18, y + size/18, 0.3);
+        gw.drawLine(x + size*2/3 + size*5/18, y + size*5/18, x + size*2/3 + size/18, y + size*5/18, 0.3);
+
+        // Powerup Box
+        switch(p.powerup) {
+            case 1:
+                gw.setColor(Color.pink);
+                break;
+            case 2:
+                gw.setColor(Color.cyan);
+                break;
+            case 3:
+                gw.setColor(new Color(142,199,129));
+                break;
+            default:
+                gw.setColor(Color.darkGray);
+        }
+
+        gw.fillRect(x + size*2/3 + size/18, y + size*2/3 + size/18, size * 4 / 18, size * 4/18);
+
+
+        // Powerup borders
+        gw.setColor(Color.black);
+        gw.drawLine(x + size*2/3 + size/18, y + size*13/18, x + size*2/3 + size*5/18, y + size*13/18, 0.3);
+        gw.drawLine(x + size*2/3 + size/18, y + size*13/18, x + size*2/3 + size/18, y + size*17/18, 0.3);
+        gw.drawLine(x + size*2/3 + size*5/18, y + size*17/18, x + size*2/3 + size*5/18, y + size*13/18, 0.3);
+        gw.drawLine(x + size*2/3 + size*5/18, y + size*17/18, x + size*2/3 + size/18, y + size*17/18, 0.3);
+
+        // The player number
+        gw.setColor(Color.black);
+        gw.drawText(playerNum + "", x + size*2/3 + size * 0.033, y + size*2/3, 4, false);
     }
 }

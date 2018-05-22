@@ -23,4 +23,8 @@ public interface Entity {
 
     // engine
     public void update();
+
+    // drawing avatars and stuff
+    public int getHealth();
+    public int getMaxHealth();
 }
