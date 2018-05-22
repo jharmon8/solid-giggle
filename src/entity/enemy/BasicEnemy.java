@@ -12,7 +12,7 @@ public class BasicEnemy extends EntityCartesian {
     private double initialThetaRange = Math.PI / 2;
 
     private double vx, vy;
-    private boolean dead = false;
+    public boolean dead = false;
 
     private double speed;
 
@@ -70,5 +70,26 @@ public class BasicEnemy extends EntityCartesian {
             gw.setColor(highlite);
             gw.fillTriangle(x, y, direction, size);
         }
+    }
+
+    @Override
+    public boolean collides(Projectile proj) {
+        if(proj.ignoreList.contains(this)) {
+            return false;
+        }
+
+        return collides(proj.getX(), proj.getY());
+    }
+
+    private boolean collides(double x, double y) {
+        double dx = getX() - x;
+        double dy = getY() - y;
+
+        // We give a leeway on player size because we are generous gods
+        return Math.sqrt(dx * dx + dy * dy) < size * 0.9;
+    }
+
+    public void takeDamage(int dmg) {
+        health -= dmg;
     }
 }

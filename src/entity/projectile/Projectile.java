@@ -3,6 +3,7 @@ package entity.projectile;
 import entity.Entity;
 import entity.EntityCartesian;
 import entity.Player;
+import entity.enemy.BasicEnemy;
 import graphics.GraphicsWrapper;
 import util.GameUtils;
 
@@ -19,6 +20,7 @@ public abstract class Projectile extends EntityCartesian {
     // The thing that fired this bullet
     public Entity parent;
     public ArrayList<Entity> ignoreList = new ArrayList<>();
+    public boolean dead = false;
 
     int damage;
 
@@ -44,6 +46,14 @@ public abstract class Projectile extends EntityCartesian {
         ignoreList.add(p);
 
         p.takeDamage(damage);
+    }
+
+    public void onCollide(BasicEnemy e) {
+        // prevents us from hitting p on every tick
+        ignoreList.add(e);
+        dead = true;
+
+        e.takeDamage(damage);
     }
 
     public boolean onScreen(int gameWidth, int gameHeight) {

@@ -23,7 +23,7 @@ public class GameSubpanel implements Subpanel {
     private int numPlayers = 1;
 
     ArrayList<Player> players = new ArrayList<Player>();
-    ArrayList<Entity> enemies = new ArrayList<Entity>();
+    ArrayList<BasicEnemy> enemies = new ArrayList<BasicEnemy>();
     ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
     private HashMap<Player, int[]> playersToKeys = new HashMap<>();
@@ -159,6 +159,8 @@ public class GameSubpanel implements Subpanel {
 
         // update projectiles
         ArrayList<Projectile> projToRemove = new ArrayList<>();
+        ArrayList<BasicEnemy> enemyToRemove = new ArrayList<>();
+
         for(Projectile proj : projectiles) {
             for(Player player : players) {
                 if (player.collides(proj)) {
@@ -166,17 +168,34 @@ public class GameSubpanel implements Subpanel {
                 }
             }
 
+            for(BasicEnemy enemy : enemies) {
+                if (enemy.collides(proj)) {
+                    proj.onCollide(enemy);
+                }
+
+                if (enemy.dead) {
+                    enemyToRemove.add(enemy);
+                }
+            }
+
             proj.update();
 
             if(!proj.onScreen(gameWidth, gameHeight)) {
                 projToRemove.add(proj);
-                continue;
+            }
+
+            if(proj.dead) {
+                projToRemove.add(proj);
             }
         }
 
         // remove any projectiles that have left the screen
         for(Projectile deleteMe : projToRemove) {
             projectiles.remove(deleteMe);
+        }
+
+        for(BasicEnemy deleteMe : enemyToRemove) {
+            enemies.remove(deleteMe);
         }
 
         parent.repaint();
