@@ -8,7 +8,7 @@ import util.GameUtils;
 
 import java.awt.Color;
 
-public class BasicEnemy extends EntityCartesian {
+public class BasicEnemy extends Enemy {
     // Instead of doing the chord math, we just have an angular range and it picks a direction in that range
     private double initialThetaRange = Math.PI / 2;
 
@@ -16,7 +16,6 @@ public class BasicEnemy extends EntityCartesian {
     public boolean dead = false;
 
     private double speed;
-    private int collisionDamage;
 
     // just used for graphics
     private double direction;
@@ -102,32 +101,7 @@ public class BasicEnemy extends EntityCartesian {
         return collides(proj.getX(), proj.getY(), proj.getSize());
     }
 
-    public boolean collides(Player p) {
-        return collides(p.getX(), p.getY(), p.getSize());
-    }
-
-    private boolean collides(double x, double y, double targetSize) {
-        double dx = getX() - x;
-        double dy = getY() - y;
-
-        // We give a leeway on player size because we are generous gods
-        return Math.sqrt(dx * dx + dy * dy) < (size+targetSize) * 0.9;
-    }
-
-    public void onCollide(Player p) {
-        dead = true;
-
-        p.takeDamage(collisionDamage);
-    }
-
-    public boolean inPlayfield(int escapeRadius) {
-        if(getR() > escapeRadius * 1.1) {
-            return false;
-        }
-
-        return true;
-    }
-
+    @Override
     public void takeDamage(int dmg) {
         health -= dmg;
         countTick = 0;

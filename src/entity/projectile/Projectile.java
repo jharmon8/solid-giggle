@@ -4,6 +4,7 @@ import entity.Entity;
 import entity.EntityCartesian;
 import entity.Player;
 import entity.enemy.BasicEnemy;
+import entity.enemy.Enemy;
 import graphics.GraphicsWrapper;
 import util.GameUtils;
 
@@ -48,7 +49,7 @@ public abstract class Projectile extends EntityCartesian {
         p.takeDamage(damage);
     }
 
-    public void onCollide(BasicEnemy e) {
+    public void onCollide(Enemy e) {
         // prevents us from hitting p on every tick
         ignoreList.add(e);
         dead = true;

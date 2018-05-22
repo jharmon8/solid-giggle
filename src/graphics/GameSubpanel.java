@@ -3,6 +3,7 @@ package graphics;
 import entity.Entity;
 import entity.Player;
 import entity.enemy.BasicEnemy;
+import entity.enemy.Enemy;
 import entity.projectile.Projectile;
 import util.GameUtils;
 
@@ -22,9 +23,9 @@ public class GameSubpanel implements Subpanel {
 
     private int numPlayers = 1;
 
-    ArrayList<Player> players = new ArrayList<Player>();
-    ArrayList<BasicEnemy> enemies = new ArrayList<BasicEnemy>();
-    ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+    ArrayList<Player> players = new ArrayList<>();
+    ArrayList<Enemy> enemies = new ArrayList<>();
+    ArrayList<Projectile> projectiles = new ArrayList<>();
 
     private HashMap<Player, int[]> playersToKeys = new HashMap<>();
     private HashMap<Integer, Boolean> keysToPressed = new HashMap<>();
@@ -108,7 +109,7 @@ public class GameSubpanel implements Subpanel {
     @Override
     public void actionPerformed(ActionEvent e) {
         // check enemy collision with players
-        for (BasicEnemy enemy : enemies) {
+        for (Enemy enemy : enemies) {
             for (Player p : players) {
                 if (enemy.collides(p)) {
                     enemy.onCollide(p);
@@ -163,14 +164,14 @@ public class GameSubpanel implements Subpanel {
         }
 
         // update enemies
-        ArrayList<Entity> entitiesToRemove = new ArrayList<>();
+        ArrayList<Enemy> entitiesToRemove = new ArrayList<>();
         for(Entity enemy : enemies) {
             enemy.update();
         }
 
         // update projectiles
         ArrayList<Projectile> projToRemove = new ArrayList<>();
-        ArrayList<BasicEnemy> enemyToRemove = new ArrayList<>();
+        ArrayList<Enemy> enemyToRemove = new ArrayList<>();
         for(Projectile proj : projectiles) {
             for(Player player : players) {
                 if (player.collides(proj)) {
@@ -178,7 +179,7 @@ public class GameSubpanel implements Subpanel {
                 }
             }
 
-            for(BasicEnemy enemy : enemies) {
+            for(Enemy enemy : enemies) {
                 if (enemy.collides(proj)) {
                     proj.onCollide(enemy);
                 }
@@ -195,8 +196,8 @@ public class GameSubpanel implements Subpanel {
             }
         }
         //check for dead enemies
-        for (BasicEnemy enemy : enemies) {
-            if (enemy.dead) {
+        for (Enemy enemy : enemies) {
+            if (enemy.isDead()) {
                 enemyToRemove.add(enemy);
             }
 
@@ -209,11 +210,10 @@ public class GameSubpanel implements Subpanel {
         }
 
         // remove any projectiles that have left the screen
-        for(Projectile deleteMe : projToRemove) {
-            projectiles.remove(deleteMe);
-        }
+        projectiles.removeAll(projToRemove);
 
-        for(BasicEnemy deleteMe : enemyToRemove) {
+        // hopefully we can move score somewhere else
+        for(Enemy deleteMe : enemyToRemove) {
             enemies.remove(deleteMe);
             scoreboard = scoreboard + 100;
         }
@@ -247,4 +247,5 @@ public class GameSubpanel implements Subpanel {
     public void keyTyped(KeyEvent e) {}
     @Override
     public void close() {}
+
 }
