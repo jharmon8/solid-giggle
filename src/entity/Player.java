@@ -1,5 +1,6 @@
 package entity;
 
+import entity.projectile.HeavyBullet;
 import entity.projectile.LightBullet;
 import entity.projectile.Projectile;
 import graphics.GraphicsWrapper;
