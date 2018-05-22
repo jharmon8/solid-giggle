@@ -22,7 +22,9 @@ public class MenuSubpanel implements Subpanel {
 
     @Override
     public void paintComponent(Graphics g) {
+        graphicsWrapper.setGraphics(g);
 
+        graphicsWrapper.drawImage("res/main_menu.jpg", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
     }
 
     @Override
