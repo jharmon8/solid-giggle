@@ -111,7 +111,7 @@ public class Player extends EntityPolar {
 
         if (Math.ceil(countTick / 3) == 0 || Math.ceil(countTick / 3) == 2) {
             if (dead) {
-                gw.setColor(Color.white);
+                gw.setColor(Color.white.darker().darker());
             } else {
                 gw.setColor(color.darker().darker());
             }
@@ -139,5 +139,6 @@ public class Player extends EntityPolar {
 
     public void takeDamage(int dmg) {
         health -= dmg;
+        countTick = 0;
     }
 }

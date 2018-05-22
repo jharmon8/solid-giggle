@@ -46,7 +46,6 @@ public abstract class Projectile extends EntityCartesian {
         ignoreList.add(p);
 
         p.takeDamage(damage);
-        p.countTick = 0;
     }
 
     public void onCollide(BasicEnemy e) {
@@ -55,7 +54,6 @@ public abstract class Projectile extends EntityCartesian {
         dead = true;
 
         e.takeDamage(damage);
-        e.countTick = 0;
     }
 
     public boolean onScreen(int gameWidth, int gameHeight) {

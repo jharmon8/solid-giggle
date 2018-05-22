@@ -130,5 +130,6 @@ public class BasicEnemy extends EntityCartesian {
 
     public void takeDamage(int dmg) {
         health -= dmg;
+        countTick = 0;
     }
 }

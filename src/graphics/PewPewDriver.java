@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class PewPewDriver {
 
-    public static boolean FULLSCREEN = true;
+    public static boolean FULLSCREEN = false;
 
     public static void main(String args[]) {
         launchDesigner();
