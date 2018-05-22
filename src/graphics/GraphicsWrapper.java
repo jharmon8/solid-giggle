@@ -84,6 +84,7 @@ public class GraphicsWrapper {
         // Changing this to a for loop that will try a maximum number of times
         // TODO these need to all be loaded into a hash map and cached
         boolean loaded = false;
+/*
         for(int i = 0; i < 1000000; i++) {
             if(Toolkit.getDefaultToolkit().prepareImage(img, (int)(width * rWidth), (int)(height * rHeight), null)) {
                 loaded = true;
@@ -95,6 +96,9 @@ public class GraphicsWrapper {
             System.err.println(filename + " not found");
             System.exit(1);
         }
+*/
+
+        while(!Toolkit.getDefaultToolkit().prepareImage(img, (int)(width * rWidth), (int)(height * rHeight), null)){}
 
         g.drawImage(img, (int)(x * rWidth), (int)(y * rHeight), (int)(width * rWidth), (int)(height * rHeight), null);
     }
