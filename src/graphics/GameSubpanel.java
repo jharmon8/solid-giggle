@@ -194,7 +194,6 @@ public class GameSubpanel implements Subpanel {
         enemies.add(newEnemy);
     }
 
-
     @Override
     public void keyPressed(KeyEvent e) {
         keysToPressed.put(e.getKeyCode(), true);
