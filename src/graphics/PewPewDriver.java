@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class PewPewDriver {
 
-    public static boolean FULLSCREEN = true;
+    public static boolean FULLSCREEN = false;
 
     public static void main(String args[]) {
         launchDesigner();
@@ -27,6 +27,6 @@ public class PewPewDriver {
         f.pack();
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-//        f.setVisible(true);
+        f.setVisible(true);
     }
 }
