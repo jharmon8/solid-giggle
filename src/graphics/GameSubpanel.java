@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,6 +20,8 @@ import java.util.HashMap;
  * Trying to figure out how to best package this so that menus and stuff will be easy
  */
 public class GameSubpanel implements Subpanel {
+
+    private boolean ALLOW_GAMEOVER = false;
 
     private int numPlayers = 1;
 
@@ -47,6 +50,8 @@ public class GameSubpanel implements Subpanel {
     private int numEnemy = 4;
 
     private PewPanel parent;
+
+    private DecimalFormat scoreFormatter = new DecimalFormat("###,###");
 
     public GameSubpanel(int sWidth, int sHeight, PewPanel parent, int numPlayers) {
         this.parent = parent;
@@ -107,6 +112,11 @@ public class GameSubpanel implements Subpanel {
         graphicsWrapper.fillRect(gameWidth / 2.0 - sidePanelWidth, -sidePanelHeight / 2.0, sidePanelWidth, sidePanelHeight);
 
         drawStatusPanels(graphicsWrapper);
+
+        // arrange the score nicely
+        String score = scoreFormatter.format(scoreboard);
+        graphicsWrapper.setColor(new Color(255,255,255,175));
+        graphicsWrapper.drawText(score, -gameWidth*(0.015 * score.length()), -gameHeight/2.4, 5, false);
     }
 
     @Override
