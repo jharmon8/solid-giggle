@@ -13,7 +13,6 @@ public class BasicEnemy extends Enemy {
     private double initialThetaRange = Math.PI / 2;
 
     private double vx, vy;
-    public boolean dead = false;
 
     private double speed;
 
@@ -30,7 +29,7 @@ public class BasicEnemy extends Enemy {
         this.x = x;
         this.y = y;
 
-        this.size = 1.5;
+        this.size = 1.75;
         this.speed = 0.25;
         this.collisionDamage = 3;
 
@@ -39,7 +38,7 @@ public class BasicEnemy extends Enemy {
         this.color = Color.lightGray;
         this.highlite = Color.white;
 
-        this.maxHealth = 5;
+        this.maxHealth = 3;
         this.health = maxHealth;
 
         // calculate trajectory
