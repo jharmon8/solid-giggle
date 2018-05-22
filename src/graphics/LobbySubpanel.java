@@ -100,7 +100,7 @@ public class LobbySubpanel implements Subpanel {
             }
 
             if(numPlayers == 0) {
-                parent.declareSubpanelFinished(LoseSubpanel.class);
+                parent.declareSubpanelFinished(MenuSubpanel.class);
             } else {
                 parent.declareSubpanelFinished(GameSubpanel.class, numPlayers);
             }
@@ -133,7 +133,7 @@ public class LobbySubpanel implements Subpanel {
     // player #playerNum joins the game
     public void join(int playerNum) {
         if(!joined[playerNum]) {
-            AudioManager.playSound("res/Blip 002.wav");
+            AudioManager.playSound("res/Blip 002.wav", -10);
         }
 
         joined[playerNum] = true;

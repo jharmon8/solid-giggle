@@ -20,6 +20,16 @@ public class Player extends EntityPolar {
 
     private Color shieldColor;
 
+    public int shieldRefreshMax = 1000;
+    public int shieldRefreshDuration = 200;
+    public int shieldRefreshCurrent = 0;
+    public boolean shielded = false;
+
+    public boolean canScreenClear = true;
+
+    // idk I guess -1 is no powerup and we'll figure the rest out
+    public int powerup = -1;
+
     private int enemySurvivedDamage;
 
     public int countTick;
@@ -34,7 +44,7 @@ public class Player extends EntityPolar {
 
         this.color = color;
 
-        this.maxHealth = 5;
+        this.maxHealth = 20;
         this.health = maxHealth;
 
         this.shieldColor = new Color(180,200,255);
@@ -49,6 +59,16 @@ public class Player extends EntityPolar {
         countTick++;
 
         fireDelayTimer--;
+
+        if(shieldRefreshCurrent < shieldRefreshMax && !shielded) {
+            shieldRefreshCurrent++;
+        } else if(shielded) {
+            shieldRefreshCurrent -= shieldRefreshMax / shieldRefreshDuration;
+        }
+
+        if(shieldRefreshCurrent <= 0) {
+            shielded = false;
+        }
     }
 
     // returns a projectile to be added to the projectiles array
@@ -76,8 +96,10 @@ public class Player extends EntityPolar {
         return null;
     }
 
-    public void swap() {
-
+    public void shield() {
+        if(shieldRefreshCurrent >= shieldRefreshMax) {
+            shielded = true;
+        }
     }
 
     public void move(boolean clockwise) {
@@ -132,6 +154,11 @@ public class Player extends EntityPolar {
             gw.setColor(shieldColor);
             gw.drawCircle(x - size, y - size, size * 2);
         }
+
+        if(shielded) {
+            gw.setColor(new Color(140,150,240,85));
+            gw.fillCircle(x - size * 1.2, y - size * 1.2, size * 2.4);
+        }
     }
 
     public void enemyPassed() {
@@ -139,6 +166,10 @@ public class Player extends EntityPolar {
     }
 
     public void takeDamage(int dmg) {
+        if(shielded) {
+            return;
+        }
+
         health -= dmg;
         countTick = 0;
     }

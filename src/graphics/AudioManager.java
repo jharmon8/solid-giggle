@@ -6,6 +6,7 @@ import javafx.scene.media.MediaPlayer;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
@@ -26,13 +27,19 @@ public class AudioManager {
      */
 
     // returns the ID of the sound being played
-    public static int playSound(String filename) {
+    // note that the volume here is in decibles... unsure if I should change that
+    public static int playSound(String filename, float decibles) {
         try {
             File file = new File(filename);
             Clip clip = AudioSystem.getClip();
             // getAudioInputStream() also accepts a File or InputStream
             AudioInputStream ais = AudioSystem.getAudioInputStream(file);
             clip.open(ais);
+
+            FloatControl gainControl =
+                    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(decibles);
+
             clip.loop(0);
 
             UUID++;
