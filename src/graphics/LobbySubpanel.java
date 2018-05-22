@@ -19,14 +19,18 @@ public class LobbySubpanel implements Subpanel {
 
     PewPanel parent;
 
-    public int ticksUntilNextGame = 250;
-    public int currentTicks = ticksUntilNextGame;
+    private int numSecondsToWait = 10;
+    public int ticksUntilNextGame;
+    public int currentTicks;
 
     public boolean[] joined = new boolean[6];
 
     public LobbySubpanel(int sWidth, int sHeight, PewPanel parent) {
-        currentTicks = ticksUntilNextGame;
+
         this.parent = parent;
+
+        ticksUntilNextGame = numSecondsToWait * 1000 / PewPanel.timerDelay;
+        currentTicks = ticksUntilNextGame;
 
         graphicsWrapper = new GraphicsWrapper(sWidth, sHeight, gameWidth, gameHeight);
 
@@ -39,7 +43,7 @@ public class LobbySubpanel implements Subpanel {
 
         graphicsWrapper.drawImage("res/lobby.png", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
 
-        String time = (currentTicks / 25) + "";
+        String time = (currentTicks * PewPanel.timerDelay / 1000) + "";
         graphicsWrapper.setColor(Color.black);
         graphicsWrapper.drawText(time, -4, 5, 8);
 
