@@ -27,6 +27,6 @@ public class PewPewDriver {
         f.pack();
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        f.setVisible(true);
+//        f.setVisible(true);
     }
 }
