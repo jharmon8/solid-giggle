@@ -33,7 +33,7 @@ public class AudioManager {
             // getAudioInputStream() also accepts a File or InputStream
             AudioInputStream ais = AudioSystem.getAudioInputStream(file);
             clip.open(ais);
-            clip.loop(1);
+            clip.loop(0);
 
             UUID++;
             currentSounds.put(UUID, clip);

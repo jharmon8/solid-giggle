@@ -44,7 +44,7 @@ public class GameSubpanel implements Subpanel {
 
     private PewPanel parent;
 
-    public GameSubpanel(int sWidth, int sHeight, PewPanel parent) {
+    public GameSubpanel(int sWidth, int sHeight, PewPanel parent, int numPlayers) {
         this.parent = parent;
 
         for(int i = 0; i < numPlayers; i++) {
@@ -53,7 +53,7 @@ public class GameSubpanel implements Subpanel {
             Player p = new Player(rads, GameUtils.playerColors[i], railRadius);
 
             players.add(p);
-            playersToKeys.put(p, GameUtils.defaultControls[i]);
+            playersToKeys.put(p, GameUtils.getControls()[i]);
         }
 
         graphicsWrapper = new GraphicsWrapper(sWidth, sHeight, gameWidth, gameHeight);

@@ -38,6 +38,9 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     private Subpanel currentSubpanel;
     private boolean currentSubpanelFinished = false; // when this is true, we'll swap to a new panel on the next tick
+    private Class nextSubpanelClass;
+
+    private int extraDummy = -1;
 
     public PewPanel () {
         if(simulateProjectorAspectRatio) {
@@ -68,8 +71,24 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
         timer.start();
     }
 
-    public void declareSubpanelFinished() {
+    /*
+     * This is a weird system, but it's honestly not that bad
+     *
+     * The worst part is this extra num field. It's how the lobby communicates player numbers,
+     *   and how the game communicates score to game over or victory
+     *
+     * Everyone else should pass -1
+     *
+     * (or nothing works now, too, cuz overloading)
+     */
+    public void declareSubpanelFinished(Class nextSubpanelClass) {
+        declareSubpanelFinished(nextSubpanelClass, -1);
+    }
+
+    public void declareSubpanelFinished(Class nextSubpanelClass, int extraNum) {
+        this.extraDummy = extraNum;
         currentSubpanelFinished = true;
+        this.nextSubpanelClass = nextSubpanelClass;
     }
 
     private void swapSubpanel(Subpanel nextSubpanel) {
@@ -103,14 +122,44 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(currentSubpanelFinished) {
-            swapSubpanel(new GameSubpanel(sWidth, sHeight, this));
+            // here's the big gross logic block for our state machine... ew
+
+            if(nextSubpanelClass.equals(LobbySubpanel.class)) {
+                swapSubpanel(new LobbySubpanel(sWidth, sHeight, this));
+            } else
+            if(nextSubpanelClass.equals(GameSubpanel.class)) {
+                // pass in the number of players to this one
+                swapSubpanel(new GameSubpanel(sWidth, sHeight, this, extraDummy == -1 ? 3 : extraDummy));
+            } else
+            if(nextSubpanelClass.equals(LoseSubpanel.class)) {
+                swapSubpanel(new LoseSubpanel(sWidth, sHeight, this));
+            } else
+            if(nextSubpanelClass.equals(WinSubpanel.class)) {
+                swapSubpanel(new WinSubpanel(sWidth, sHeight, this));
+            } else
+            if(nextSubpanelClass.equals(MenuSubpanel.class)) {
+                swapSubpanel(new MenuSubpanel(sWidth, sHeight, this));
+            } else {
+                swapSubpanel(new ErrorSubpanel());
+            }
+
+
+
         } else {
             currentSubpanel.actionPerformed(e);
         }
+
+        repaint();
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
+        // Close window on escape
+        // Maybe take this out before the real game
+        if(e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            System.exit(0);
+        }
+
         currentSubpanel.keyPressed(e);
     }
 
