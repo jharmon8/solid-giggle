@@ -47,7 +47,7 @@ public class BombEnemy extends Enemy {
         this.maxHealth = 5;
         this.health = maxHealth;
 
-        this.shotInterval = 40;
+        this.shotInterval = 75;
         this.shotTick = 0;
 
         // calculate trajectory
