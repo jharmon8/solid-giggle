@@ -179,6 +179,10 @@ public class GameSubpanel implements Subpanel {
             projectiles.remove(deleteMe);
         }
 
+        for(Integer code : keysToPressed.keySet()) {
+            keysToPressed.put(code, false);
+        }
+
         parent.repaint();
     }
 
@@ -201,7 +205,7 @@ public class GameSubpanel implements Subpanel {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        keysToPressed.put(e.getKeyCode(), false);
+//        keysToPressed.put(e.getKeyCode(), false);
     }
 
     @Override

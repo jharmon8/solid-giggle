@@ -111,18 +111,24 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+/*
         System.out.println("PRESS: " + e.getKeyChar());
+*/
         currentSubpanel.keyPressed(e);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+/*
         System.out.println("RELEASE: " + e.getKeyChar());
+*/
         currentSubpanel.keyReleased(e);
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
+/*
         System.out.println("TYPE: " + e.getKeyChar());
+*/
     }
 }
