@@ -66,13 +66,34 @@ public class GameUtils {
     /*
      * Config util stuff
      */
+    // if this is true, keyboard control mapping will be used
+    // otherwise, joypad mapping will be used
+    public static final boolean KEYBOARD_CONTROLS = true;
+
     // These are the default controls for each player
     // I guess right now the order is shoot, swap, left, right
-    public static int[][] defaultControls = {
+    private static int[][] defaultControls = {
             {KeyEvent.VK_Q, KeyEvent.VK_W, KeyEvent.VK_E, KeyEvent.VK_R}, // player 1
             {KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, KeyEvent.VK_F}, // player 2
             {KeyEvent.VK_Z, KeyEvent.VK_X, KeyEvent.VK_C, KeyEvent.VK_V}, // etc
+            {KeyEvent.VK_T, KeyEvent.VK_Y, KeyEvent.VK_U, KeyEvent.VK_I},
+            {KeyEvent.VK_G, KeyEvent.VK_H, KeyEvent.VK_J, KeyEvent.VK_K},
+            {KeyEvent.VK_B, KeyEvent.VK_N, KeyEvent.VK_M, KeyEvent.VK_COMMA},
     };
+
+    // Here's the controls that map to the gaming controllers
+    private static int[][] joypadControls = {
+            {KeyEvent.VK_Q, KeyEvent.VK_W, KeyEvent.VK_E, KeyEvent.VK_R}, // player 1
+            {KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, KeyEvent.VK_F}, // player 2
+            {KeyEvent.VK_Z, KeyEvent.VK_X, KeyEvent.VK_C, KeyEvent.VK_V}, // etc
+            {KeyEvent.VK_T, KeyEvent.VK_Y, KeyEvent.VK_U, KeyEvent.VK_I},
+            {KeyEvent.VK_G, KeyEvent.VK_H, KeyEvent.VK_J, KeyEvent.VK_K},
+            {KeyEvent.VK_B, KeyEvent.VK_N, KeyEvent.VK_M, KeyEvent.VK_COMMA},
+    };
+
+    public static int[][] getControls() {
+        return KEYBOARD_CONTROLS ? defaultControls : joypadControls;
+    }
 
     public static Color[] playerColors = {
             Color.red,      // player 1
@@ -81,6 +102,5 @@ public class GameUtils {
             Color.yellow,
             Color.pink,
             Color.orange,
-            Color.gray
     };
 }

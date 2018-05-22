@@ -1,6 +1,7 @@
 package graphics;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Polygon;
@@ -79,7 +80,28 @@ public class GraphicsWrapper {
 
     public void drawImage(String filename, double x, double y, double width, double height) {
         Image img = Toolkit.getDefaultToolkit().getImage(filename);
-        while(!Toolkit.getDefaultToolkit().prepareImage(img, (int)(width * rWidth), (int)(height * rHeight), null)) {}
+
+        // Changing this to a for loop that will try a maximum number of times
+        // TODO these need to all be loaded into a hash map and cached
+        boolean loaded = false;
+        for(int i = 0; i < 1000000; i++) {
+            if(Toolkit.getDefaultToolkit().prepareImage(img, (int)(width * rWidth), (int)(height * rHeight), null)) {
+                loaded = true;
+                break;
+            }
+        }
+
+        if(!loaded) {
+            System.err.println(filename + " not found");
+            System.exit(1);
+        }
+
         g.drawImage(img, (int)(x * rWidth), (int)(y * rHeight), (int)(width * rWidth), (int)(height * rHeight), null);
+    }
+
+    public void drawText(String message, double x, double y, double size) {
+        // Sadly there's no way to scale fonts perfectly... I think
+        g.setFont(new Font("Verdana", Font.BOLD, (int)(size * rWidth)));
+        g.drawString(message, (int)(x * rWidth), (int)(y * rHeight));
     }
 }
