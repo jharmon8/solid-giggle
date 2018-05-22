@@ -69,9 +69,11 @@ public class GameUtils {
     // These are the default controls for each player
     // I guess right now the order is shoot, swap, left, right
     public static int[][] defaultControls = {
-            {KeyEvent.VK_Q, KeyEvent.VK_W, KeyEvent.VK_E, KeyEvent.VK_R}, // player 1
+            {KeyEvent.VK_J, KeyEvent.VK_I, KeyEvent.VK_G, KeyEvent.VK_H}, // player 1
+/*
             {KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, KeyEvent.VK_F}, // player 2
             {KeyEvent.VK_Z, KeyEvent.VK_X, KeyEvent.VK_C, KeyEvent.VK_V}, // etc
+*/
     };
 
     public static Color[] playerColors = {

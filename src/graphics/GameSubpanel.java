@@ -20,7 +20,7 @@ import java.util.HashMap;
  */
 public class GameSubpanel implements Subpanel {
 
-    private int numPlayers = 3;
+    private int numPlayers = 1;
 
     ArrayList<Player> players = new ArrayList<Player>();
     ArrayList<Entity> enemies = new ArrayList<Entity>();
