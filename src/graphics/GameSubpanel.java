@@ -340,6 +340,7 @@ public class GameSubpanel implements Subpanel {
         gw.fillRect(x + size*2/3 + size/18, y + size*2/3 + size/18, size * 4 / 18, size * 4/18);
 
 
+        // todo I bet these could be an "outline rectangle" method
         // Powerup borders
         gw.setColor(Color.black);
         gw.drawLine(x + size*2/3 + size/18, y + size*13/18, x + size*2/3 + size*5/18, y + size*13/18, 0.3);

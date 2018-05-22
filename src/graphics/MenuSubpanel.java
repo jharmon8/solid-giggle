@@ -17,7 +17,7 @@ public class MenuSubpanel implements Subpanel {
 
         graphicsWrapper = new GraphicsWrapper(sWidth, sHeight, gameWidth, gameHeight);
 
-//        AudioManager.playSound("res/short_song.wav");
+        AudioManager.playSound("res/short_song.wav", -15f);
     }
 
     @Override
