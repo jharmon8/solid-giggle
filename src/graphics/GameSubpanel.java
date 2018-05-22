@@ -248,4 +248,11 @@ public class GameSubpanel implements Subpanel {
     @Override
     public void close() {}
 
+    public void drawStatusPanels() {
+
+    }
+
+    public void drawAvatar(double x, double y, Player p) {
+
+    }
 }

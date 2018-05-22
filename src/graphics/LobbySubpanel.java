@@ -100,7 +100,7 @@ public class LobbySubpanel implements Subpanel {
             }
 
             if(numPlayers == 0) {
-                parent.declareSubpanelFinished(LoseSubpanel.class);
+                parent.declareSubpanelFinished(MenuSubpanel.class);
             } else {
                 parent.declareSubpanelFinished(GameSubpanel.class, numPlayers);
             }
