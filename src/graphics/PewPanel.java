@@ -35,6 +35,8 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     private boolean simulateProjectorAspectRatio = true;
 
     private Timer timer;
+    public static final int timerDelay = 20;
+    public static final int initDelay = 750;
 
     private Subpanel currentSubpanel;
     private boolean currentSubpanelFinished = false; // when this is true, we'll swap to a new panel on the next tick
@@ -66,8 +68,8 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
         repaint();
 
-        timer = new Timer(15, this);
-        timer.setInitialDelay(1000);
+        timer = new Timer(timerDelay, this);
+        timer.setInitialDelay(initDelay);
         timer.start();
     }
 
