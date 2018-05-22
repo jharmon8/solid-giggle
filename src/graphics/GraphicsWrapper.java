@@ -79,6 +79,7 @@ public class GraphicsWrapper {
 
     public void drawImage(String filename, double x, double y, double width, double height) {
         Image img = Toolkit.getDefaultToolkit().getImage(filename);
+        while(!Toolkit.getDefaultToolkit().prepareImage(img, (int)(width * rWidth), (int)(height * rHeight), null)) {}
         g.drawImage(img, (int)(x * rWidth), (int)(y * rHeight), (int)(width * rWidth), (int)(height * rHeight), null);
     }
 }
