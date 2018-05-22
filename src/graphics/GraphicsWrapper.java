@@ -2,7 +2,9 @@ package graphics;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Polygon;
+import java.awt.Toolkit;
 
 /*
  * Making a game that scales to resolution in this way is a huge pain.
@@ -69,5 +71,14 @@ public class GraphicsWrapper {
 
 //        Polygon p = new Polygon(xVals, yVals, xVals.length);
         g.fillPolygon(xVals, yVals, xVals.length);
+    }
+
+    public void fillRect(double x, double y, double width, double height) {
+        g.fillRect((int)(x * rWidth), (int)(y * rHeight), (int)(width * rWidth), (int)(height * rHeight));
+    }
+
+    public void drawImage(String filename, double x, double y, double width, double height) {
+        Image img = Toolkit.getDefaultToolkit().getImage(filename);
+        g.drawImage(img, (int)(x * rWidth), (int)(y * rHeight), (int)(width * rWidth), (int)(height * rHeight), null);
     }
 }

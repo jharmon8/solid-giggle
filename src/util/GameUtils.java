@@ -1,5 +1,8 @@
 package util;
 
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+
 /*
  * this class is a collection of random bullshit
  */
@@ -59,4 +62,25 @@ public class GameUtils {
     public static double flipAngle(double theta) {
         return theta + Math.PI;
     }
+
+    /*
+     * Config util stuff
+     */
+    // These are the default controls for each player
+    // I guess right now the order is shoot, swap, left, right
+    public static int[][] defaultControls = {
+            {KeyEvent.VK_Q, KeyEvent.VK_W, KeyEvent.VK_E, KeyEvent.VK_R}, // player 1
+            {KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, KeyEvent.VK_F}, // player 2
+            {KeyEvent.VK_Z, KeyEvent.VK_X, KeyEvent.VK_C, KeyEvent.VK_V}, // etc
+    };
+
+    public static Color[] playerColors = {
+            Color.red,      // player 1
+            Color.green,    // player 2
+            Color.blue,     // etc
+            Color.yellow,
+            Color.pink,
+            Color.orange,
+            Color.gray
+    };
 }
