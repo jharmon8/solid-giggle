@@ -216,7 +216,7 @@ public class Player extends EntityPolar {
     public void getPowerup(Powerup p){
         if (p.getClass() == laserPowerup.class){
             this.ammoType = 1;
-            this.powerupTicks = 50;
+            this.powerupTicks = 1000;
         }
     }
 

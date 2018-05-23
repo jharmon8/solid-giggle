@@ -107,6 +107,11 @@ public class GameSubpanel implements Subpanel {
             e.draw(graphicsWrapper);
         }
 
+        // Draw powerups
+        for(Powerup pup : powerups) {
+            pup.draw(graphicsWrapper);
+        }
+
         // side panels
         double sidePanelWidth = gameWidth / 8.0;
         double sidePanelHeight = gameHeight * .49;
