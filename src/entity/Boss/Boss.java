@@ -40,7 +40,6 @@ public abstract class Boss extends Enemy {
         return canShoot;
     }
 
-    @Override
     public int selectShoot (Vector<Integer> availWep){
         int wepToFire = (int) Math.random()*availWep.size();
         return availWep.get(wepToFire);

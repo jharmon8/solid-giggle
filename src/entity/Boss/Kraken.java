@@ -13,6 +13,15 @@ import java.util.Vector;
 public class Kraken extends Boss {
     private int frame;
 
+    private double speed;
+    private Color highlite;
+    private double escapeRadius;
+    private double spawnRadius;
+    private double direction;
+
+    private double vx;
+    private double vy;
+
     private Vector<Integer> attackTimer = new Vector<>();
 
     public Kraken(int escapeRadius, int spawnRadius) {
@@ -50,7 +59,7 @@ public class Kraken extends Boss {
     @Override
     public void update() {
         frame++;
-        direction = computeDirection(x,y);
+        direction = computeTrajectory(x,y);
         vx = Math.cos(direction) * speed;
         vy = Math.sin(direction) * speed;
         x += vx;
@@ -67,7 +76,7 @@ public class Kraken extends Boss {
     @Override
     public Player targetPlayer(ArrayList<Player> players) {
         int minHP = -1;
-        Player target;
+        Player target = null;
         for (Player p : players) {
             if (p.getHealth() < minHP || minHP < 0) {
                 minHP = p.getHealth();
@@ -77,7 +86,6 @@ public class Kraken extends Boss {
         return target;
     }
 
-    @Override
     public ArrayList<Projectile> attemptShoot (int wepToFire){
         return null;
     }
