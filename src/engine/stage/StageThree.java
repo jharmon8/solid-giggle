@@ -7,8 +7,8 @@ import entity.enemy.ShootEnemy;
 
 import java.util.ArrayList;
 
-public class StageTwo extends Stage {
-    private int scoreThreshold = 4000;
+public class StageThree extends Stage {
+    private int scoreThreshold = 10000;
     private int maxEnemies = 10;
 
     private int spawnRadius = 16;
@@ -21,8 +21,8 @@ public class StageTwo extends Stage {
 
     private int frame = 0;
 
-    StageTwo() {
-        displayName = "- Stage 2 -";
+    StageThree() {
+        displayName = "- Stage 3 -";
     }
 
     @Override
@@ -41,11 +41,14 @@ public class StageTwo extends Stage {
         if(currentEnemies.size() < maxEnemies && spawnTick <= 0 && frame > initialSpawnDelay) {
             spawnTick = spawnDelay;
             int spawnEnemy = (int) (Math.random() * 10);
-            if (spawnEnemy <= 4) {
+            if (spawnEnemy <= 3) {
                 Enemy newEnemy = spawn(BasicEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
-            } else {
+            } else if (spawnEnemy <= 7) {
                 Enemy newEnemy = spawn(ArcEnemy.class, currentEnemies, spawnRadius, escapeRadius);
+                output.add(newEnemy);
+            } else {
+                Enemy newEnemy = spawn(ShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
             }
             return output;
@@ -56,6 +59,6 @@ public class StageTwo extends Stage {
 
     @Override
     public Stage getNextStage() {
-        return new StageThree();
+        return new StageFour();
     }
 }
