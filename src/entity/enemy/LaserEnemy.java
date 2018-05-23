@@ -1,6 +1,8 @@
 package entity.enemy;
 
 import entity.Player;
+import entity.powerup.Powerup;
+import entity.powerup.laserPowerup;
 import entity.projectile.LightLaser;
 import entity.projectile.Projectile;
 import engine.util.GraphicsWrapper;
@@ -46,6 +48,8 @@ public class LaserEnemy extends Enemy {
 
         this.shotInterval = 75;
         this.shotTick = 0;
+
+        this.powerupChance = 1;
 
         // calculate trajectory
         double thetaOffset = (Math.random() - 0.5) * initialThetaRange;
@@ -135,6 +139,20 @@ public class LaserEnemy extends Enemy {
             return projToAdd;
         }
 
+        return null;
+    }
+
+    public ArrayList<Powerup> dropPowerup() {
+        if(Math.random() <= powerupChance){
+            ArrayList<Powerup> droppedPowerup= new ArrayList<>();
+            double powerupSelect = (int) Math.random()*1;
+            if (powerupSelect == 0) {
+                Powerup p = new laserPowerup(getX(), getY(), vx, vy);
+                droppedPowerup.add(p);
+            }
+
+            return droppedPowerup;
+        }
         return null;
     }
 }

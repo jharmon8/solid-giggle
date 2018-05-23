@@ -2,6 +2,8 @@ package entity.enemy;
 
 import entity.EntityCartesian;
 import entity.Player;
+import entity.powerup.Powerup;
+import entity.powerup.laserPowerup;
 import entity.projectile.Projectile;
 import engine.util.GameUtils;
 
@@ -11,6 +13,8 @@ public abstract class Enemy extends EntityCartesian {
     protected int scoreValue;
     protected boolean dead = false;
     protected int collisionDamage;
+
+    protected double powerupChance;
 
     public int getScoreValue() {
         return scoreValue;
@@ -53,4 +57,6 @@ public abstract class Enemy extends EntityCartesian {
     public ArrayList<Projectile> attemptShoot(ArrayList<Player> players) {
         return null;
     }
+
+    public ArrayList<Powerup> dropPowerup () {return null;}
 }

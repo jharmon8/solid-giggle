@@ -7,6 +7,7 @@ import engine.PewPanel;
 import entity.Entity;
 import entity.Player;
 import entity.enemy.*;
+import entity.powerup.Powerup;
 import entity.projectile.Projectile;
 import engine.util.GameUtils;
 
@@ -30,6 +31,7 @@ public class GameSubpanel implements Subpanel {
     ArrayList<Player> players = new ArrayList<>();
     ArrayList<Enemy> enemies = new ArrayList<>();
     ArrayList<Projectile> projectiles = new ArrayList<>();
+    ArrayList<Powerup> powerups = new ArrayList<>();
 
     private HashMap<Player, int[]> playersToKeys = new HashMap<>();
     private HashMap<Integer, Boolean> keysToPressed = new HashMap<>();
@@ -104,6 +106,11 @@ public class GameSubpanel implements Subpanel {
             e.draw(graphicsWrapper);
         }
 
+        // Draw powerups
+        for(Powerup pup : powerups) {
+            pup.draw(graphicsWrapper);
+        }
+
         // side panels
         double sidePanelWidth = gameWidth / 8.0;
         double sidePanelHeight = gameHeight * .49;
@@ -154,6 +161,16 @@ public class GameSubpanel implements Subpanel {
                 }
             }
         }
+
+        // check powerup collision with players & player projectiles
+        for (Powerup pup : powerups) {
+            for (Player p : players) {
+                if (pup.collides(p)) {
+                    pup.onCollide(p);
+                }
+            }
+        }
+
 
         // Take player input
         for(Player p : players) {
@@ -210,11 +227,13 @@ public class GameSubpanel implements Subpanel {
         // Removal arrays to prevent concurrent modification
         ArrayList<Projectile> projToRemove = new ArrayList<>();
         ArrayList<Enemy> enemyToRemove = new ArrayList<>();
+        ArrayList<Powerup> powerupToRemove = new ArrayList<>();
         ArrayList<Player> playersToRemove = new ArrayList<>();
 
         // update enemies
         ArrayList<Enemy> entitiesToRemove = new ArrayList<>();
         ArrayList<Projectile> projToAdd = new ArrayList<>();
+        ArrayList<Powerup> powerupToAdd = new ArrayList<>();
         for(Enemy enemy : enemies) {
             enemy.update();
             projToAdd = enemy.attemptShoot(players);
@@ -226,6 +245,12 @@ public class GameSubpanel implements Subpanel {
 
             if (enemy.isDead()) {
                 enemyToRemove.add(enemy);
+                ArrayList<Powerup> powerupDrop = new ArrayList<>();
+                //Powerup powerupDrop = enemy.dropPowerup();
+                powerupDrop = enemy.dropPowerup();
+                if (powerupDrop != null){
+                    powerupToAdd.addAll(powerupDrop);
+                }
                 // this should probably be somewhere else
                 scoreboard = scoreboard + enemy.getScoreValue();
             }
@@ -240,6 +265,19 @@ public class GameSubpanel implements Subpanel {
                     player.enemyPassed();
                 }
 */
+            }
+        }
+
+        //update powerup
+        for (Powerup pup : powerups) {
+            pup.update();
+            if (pup.isDead()) {
+                powerupToRemove.add(pup);
+            }
+
+            // bounds check
+            if (!pup.inPlayfield(escapeRadius)) {
+                powerupToRemove.add(pup);
             }
         }
 
@@ -302,6 +340,12 @@ public class GameSubpanel implements Subpanel {
 
         // remove players
         players.removeAll(playersToRemove);
+
+        //change projectiles array
+        powerups.removeAll(powerupToRemove);
+        if(powerupToAdd != null) {
+            powerups.addAll(powerupToAdd);
+        }
 
         parent.repaint();
     }

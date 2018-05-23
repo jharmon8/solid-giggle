@@ -1,5 +1,6 @@
 package entity;
 
+import entity.powerup.Powerup;
 import entity.projectile.Projectile;
 import engine.util.GraphicsWrapper;
 
@@ -25,4 +26,7 @@ public interface Entity {
     // drawing avatars and stuff
     public int getHealth();
     public int getMaxHealth();
+
+    // collect powerups
+    //public void getPowerup(Powerup p);
 }

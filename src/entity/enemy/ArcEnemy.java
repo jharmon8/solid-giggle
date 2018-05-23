@@ -1,6 +1,8 @@
 package entity.enemy;
 
 import entity.Player;
+import entity.powerup.Powerup;
+import entity.powerup.laserPowerup;
 import entity.projectile.Projectile;
 import engine.util.GraphicsWrapper;
 
@@ -44,6 +46,8 @@ public class ArcEnemy extends Enemy {
         this.maxHealth = 3;
         this.health = maxHealth;
         this.rotationSide = rotationSide;
+
+        this.powerupChance = 1;
 
         arcFactor = (Math.PI/30)*(0.5 + 2.5*Math.random());
 
@@ -142,6 +146,20 @@ public class ArcEnemy extends Enemy {
 
     @Override
     public  ArrayList<Projectile> attemptShoot(ArrayList<Player> players) {
+        return null;
+    }
+
+    public ArrayList<Powerup> dropPowerup() {
+        if(Math.random() <= powerupChance){
+            ArrayList<Powerup> droppedPowerup= new ArrayList<>();
+            double powerupSelect = (int) Math.random()*1;
+            if (powerupSelect == 0) {
+                Powerup p = new laserPowerup(getX(), getY(), vx, vy);
+                droppedPowerup.add(p);
+            }
+
+            return droppedPowerup;
+        }
         return null;
     }
 }

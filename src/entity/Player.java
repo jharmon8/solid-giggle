@@ -1,12 +1,16 @@
 package entity;
 
 import engine.util.AudioManager;
+import entity.powerup.Powerup;
+import entity.powerup.laserPowerup;
 import entity.projectile.LightBullet;
+import entity.projectile.MediumLaser;
 import entity.projectile.Projectile;
 import engine.util.GraphicsWrapper;
 import engine.util.GameUtils;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Player extends EntityPolar {
     public int playerNum;
@@ -21,6 +25,9 @@ public class Player extends EntityPolar {
     private double speed = 0.06;
 
     private Color shieldColor;
+
+    private int ammoType;
+    private int powerupTicks;
 
     public int shieldRefreshMax = 600;
     public int shieldRefreshDuration = 400;
@@ -56,6 +63,7 @@ public class Player extends EntityPolar {
         this.health = maxHealth;
 
         this.shieldColor = new Color(180,200,255);
+        this.ammoType = 0;
 
     }
 
@@ -80,6 +88,12 @@ public class Player extends EntityPolar {
         if(shieldRefreshCurrent <= 0) {
             shielded = false;
         }
+
+        if (this.powerupTicks > 0){
+            this.powerupTicks--;
+        } else {
+            this.ammoType = 0;
+        }
     }
 
     // returns a projectile to be added to the projectiles array
@@ -91,6 +105,8 @@ public class Player extends EntityPolar {
                     theta
             );
 
+            Projectile p = bulletSelector(vec.px, vec.py, vec.vx, vec.vy, this);
+            /*
             Projectile p = new LightBullet(
                     vec.px,
                     vec.py,
@@ -98,6 +114,7 @@ public class Player extends EntityPolar {
                     vec.vy,
                     this
             );
+            */
 
             fireDelayTimer = fireDelay;
 
@@ -194,5 +211,38 @@ public class Player extends EntityPolar {
 
     public boolean isDead() {
         return dead;
+    }
+
+    public void getPowerup(Powerup p){
+        if (p.getClass() == laserPowerup.class){
+            this.ammoType = 1;
+            this.powerupTicks = 1000;
+        }
+    }
+
+    public Projectile bulletSelector (double px, double py, double vx, double vy, Player p){
+        //ArrayList<Projectile> bulletFired = new ArrayList<>();
+        if (p.ammoType == 0){
+            Projectile proj = new LightBullet(
+                    px,
+                    py,
+                    vx,
+                    vy,
+                    this
+            );
+            return proj;
+            //bulletFired.add(p);
+        } else if (p.ammoType == 1) {
+            Projectile proj = new MediumLaser(
+                    px,
+                    py,
+                    vx,
+                    vy,
+                    this
+            );
+            return proj;
+            //bulletFired.add(p);
+        }
+        return null;
     }
 }
