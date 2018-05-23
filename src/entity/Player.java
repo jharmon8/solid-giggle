@@ -2,15 +2,17 @@ package entity;
 
 import engine.util.AudioManager;
 import entity.powerup.Powerup;
-import entity.powerup.laserPowerup;
+import entity.powerup.LaserPowerup;
 import entity.projectile.LightBullet;
 import entity.projectile.MediumLaser;
 import entity.projectile.Projectile;
 import engine.util.GraphicsWrapper;
 import engine.util.GameUtils;
+import javafx.scene.effect.Light;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public class Player extends EntityPolar {
     public int playerNum;
@@ -26,9 +28,6 @@ public class Player extends EntityPolar {
 
     private Color shieldColor;
 
-    private int ammoType;
-    private int powerupTicks;
-
     public int shieldRefreshMax = 600;
     public int shieldRefreshDuration = 400;
     public int shieldRefreshCurrent = 0;
@@ -37,7 +36,11 @@ public class Player extends EntityPolar {
     public boolean canScreenClear = true;
 
     // idk I guess -1 is no powerup and we'll figure the rest out
-    public int powerup = -1;
+    // nah, we'll make it an actual powerup, and null is no powerup
+    private Powerup powerup = null;
+
+    // this is the bullet used if there's no powerup
+    private Class defaultAmmoType = LightBullet.class;
 
     private int enemySurvivedDamage;
 
@@ -63,8 +66,6 @@ public class Player extends EntityPolar {
         this.health = maxHealth;
 
         this.shieldColor = new Color(180,200,255);
-        this.ammoType = 0;
-
     }
 
     @Override
@@ -89,10 +90,12 @@ public class Player extends EntityPolar {
             shielded = false;
         }
 
-        if (this.powerupTicks > 0){
-            this.powerupTicks--;
-        } else {
-            this.ammoType = 0;
+        // update our powerup
+        if(powerup != null) {
+            powerup.playerUpdate();
+            if (powerup.isFinished()) {
+                powerup = null;
+            }
         }
     }
 
@@ -100,21 +103,7 @@ public class Player extends EntityPolar {
     // null if I can't fire
     public Projectile fire() {
         if(fireDelayTimer < 0) {
-            GameUtils.BulletVector vec = GameUtils.bulletVector(
-                    radius * .95,
-                    theta
-            );
-
-            Projectile p = bulletSelector(vec.px, vec.py, vec.vx, vec.vy, this);
-            /*
-            Projectile p = new LightBullet(
-                    vec.px,
-                    vec.py,
-                    vec.vx,
-                    vec.vy,
-                    this
-            );
-            */
+            Projectile p = createBullet();
 
             fireDelayTimer = fireDelay;
 
@@ -213,36 +202,43 @@ public class Player extends EntityPolar {
         return dead;
     }
 
-    public void getPowerup(Powerup p){
-        if (p.getClass() == laserPowerup.class){
-            this.ammoType = 1;
-            this.powerupTicks = 1000;
-        }
+    public void givePowerup(Powerup p){
+        powerup = p;
     }
 
-    public Projectile bulletSelector (double px, double py, double vx, double vy, Player p){
-        //ArrayList<Projectile> bulletFired = new ArrayList<>();
-        if (p.ammoType == 0){
-            Projectile proj = new LightBullet(
-                    px,
-                    py,
-                    vx,
-                    vy,
-                    this
-            );
-            return proj;
-            //bulletFired.add(p);
-        } else if (p.ammoType == 1) {
-            Projectile proj = new MediumLaser(
-                    px,
-                    py,
-                    vx,
-                    vy,
-                    this
-            );
-            return proj;
-            //bulletFired.add(p);
+    private Class getAmmoType() {
+        // if we have a powerup and it changes our ammo type
+        if(powerup != null && powerup.getAmmoType() != null) {
+            return powerup.getAmmoType();
         }
-        return null;
+
+        return defaultAmmoType;
+    }
+
+    private Projectile createBullet (){
+        Projectile output = null;
+        Class ammoType = getAmmoType();
+
+        GameUtils.BulletVector vec = GameUtils.bulletVector(
+                radius * .95,
+                theta
+        );
+
+        // fancy bullet reflection constructor
+        // I know it's gross, but if it works, it should make our lives easy
+        // in particular, this will break if we change the way projectile constructors work.
+        try {
+            Constructor constructor = ammoType.getConstructor(new Class[]{Double.TYPE, Double.TYPE, Double.TYPE, Double.TYPE, Entity.class});
+            output = (Projectile) constructor.newInstance(vec.px, vec.py, vec.vx, vec.vy, this);
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            System.err.println("Player cannot create bullet of type " + ammoType);
+            e.printStackTrace();
+        }
+
+        return output;
+    }
+
+    public Powerup getPowerup() {
+        return powerup;
     }
 }

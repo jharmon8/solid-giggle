@@ -3,9 +3,7 @@ package entity.enemy;
 import entity.EntityCartesian;
 import entity.Player;
 import entity.powerup.Powerup;
-import entity.powerup.laserPowerup;
 import entity.projectile.Projectile;
-import engine.util.GameUtils;
 
 import java.util.ArrayList;
 

@@ -43,7 +43,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     private int extraDummy = -1;
 
-    private final boolean SKIP_TO_GAME = false;
+    private final boolean SKIP_TO_GAME = true;
 
     public PewPanel () {
         if(simulateProjectorAspectRatio) {

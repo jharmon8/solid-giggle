@@ -17,6 +17,9 @@ public abstract class Powerup extends EntityCartesian {
     protected double speed;
     protected Color color;
 
+    protected int frame;
+    protected int timeToLive;
+
     // The thing that fired this bullet
     public Entity parent;
     public ArrayList<Entity> ignoreList = new ArrayList<>();
@@ -40,6 +43,10 @@ public abstract class Powerup extends EntityCartesian {
         y += vy;
     }
 
+    public void playerUpdate() {
+        frame++;
+    }
+
     public boolean collides(Player p) {
         return collides(p.getX(), p.getY(), p.getSize());
     }
@@ -56,7 +63,7 @@ public abstract class Powerup extends EntityCartesian {
         // prevents us from hitting p on every tick
         ignoreList.add(p);
         this.dead = true;
-        p.getPowerup(this);
+        p.givePowerup(this);
     }
 
     public boolean onScreen(int gameWidth, int gameHeight) {
@@ -69,7 +76,7 @@ public abstract class Powerup extends EntityCartesian {
 
     @Override
     public void draw(GraphicsWrapper gw) {
-        gw.setColor(color);
+        gw.setColor(getStatusColor());
         gw.fillCircle(x - size, y - size, size * 2);
     }
 
@@ -83,5 +90,19 @@ public abstract class Powerup extends EntityCartesian {
         }
 
         return true;
+    }
+
+    public boolean isFinished() {
+        return frame > timeToLive;
+    }
+
+    // if this powerup changes ammo type, put the new class here
+    // null means that this powerup doesn't change ammo type
+    public Class getAmmoType() {
+        return null;
+    }
+
+    public Color getStatusColor() {
+        return color;
     }
 }
