@@ -2,9 +2,8 @@ package entity.enemy;
 
 import entity.EntityCartesian;
 import entity.Player;
-import entity.projectile.LightBullet;
 import entity.projectile.Projectile;
-import util.GameUtils;
+import engine.util.GameUtils;
 
 import java.util.ArrayList;
 

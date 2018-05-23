@@ -1,10 +1,9 @@
 package entity;
 
-import entity.projectile.HeavyBullet;
 import entity.projectile.LightBullet;
 import entity.projectile.Projectile;
-import graphics.GraphicsWrapper;
-import util.GameUtils;
+import engine.util.GraphicsWrapper;
+import engine.util.GameUtils;
 
 import java.awt.*;
 

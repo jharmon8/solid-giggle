@@ -1,10 +1,12 @@
-package graphics;
+package engine;
 
-import entity.Entity;
-import entity.Player;
-import entity.enemy.BasicEnemy;
-import entity.projectile.Projectile;
-import util.GameUtils;
+import engine.subpanel.ErrorSubpanel;
+import engine.subpanel.GameSubpanel;
+import engine.subpanel.LobbySubpanel;
+import engine.subpanel.LoseSubpanel;
+import engine.subpanel.MenuSubpanel;
+import engine.subpanel.Subpanel;
+import engine.subpanel.WinSubpanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,9 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PewPanel extends JPanel implements KeyListener, ActionListener {
 

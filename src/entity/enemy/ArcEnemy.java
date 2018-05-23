@@ -1,10 +1,8 @@
 package entity.enemy;
 
-import entity.EntityCartesian;
 import entity.Player;
 import entity.projectile.Projectile;
-import graphics.GraphicsWrapper;
-import util.GameUtils;
+import engine.util.GraphicsWrapper;
 
 import java.awt.Color;
 import java.util.ArrayList;

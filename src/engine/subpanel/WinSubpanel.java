@@ -1,13 +1,14 @@
-package graphics;
+package engine.subpanel;
+
+import engine.util.*;
+import engine.PewPanel;
+import engine.util.GraphicsWrapper;
 
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-/*
- * Ahhh... Ye ol' game over screen
- */
-public class LoseSubpanel implements Subpanel {
+public class WinSubpanel implements Subpanel {
     public GraphicsWrapper graphicsWrapper;
 
     public int gameWidth = 100;
@@ -18,7 +19,7 @@ public class LoseSubpanel implements Subpanel {
     public int ticksUntilNextGame = 250;
     public int currentTicks = ticksUntilNextGame;
 
-    public LoseSubpanel(int sWidth, int sHeight, PewPanel parent) {
+    public WinSubpanel(int sWidth, int sHeight, PewPanel parent) {
         currentTicks = ticksUntilNextGame;
         this.parent = parent;
 
@@ -39,7 +40,7 @@ public class LoseSubpanel implements Subpanel {
         currentTicks--;
 
         if(currentTicks <= 0) {
-            parent.declareSubpanelFinished(LobbySubpanel.class);
+            parent.declareSubpanelFinished(MenuSubpanel.class);
         }
     }
 

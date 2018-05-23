@@ -3,10 +3,8 @@ package entity.projectile;
 import entity.Entity;
 import entity.EntityCartesian;
 import entity.Player;
-import entity.enemy.BasicEnemy;
 import entity.enemy.Enemy;
-import graphics.GraphicsWrapper;
-import util.GameUtils;
+import engine.util.GraphicsWrapper;
 
 import java.awt.*;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package graphics;
+package engine.subpanel;
 
 import java.awt.Color;
 import java.awt.Graphics;

@@ -1,14 +1,14 @@
-package graphics;
+package engine.subpanel;
 
+import engine.util.GraphicsWrapper;
+import engine.PewPanel;
 import entity.Entity;
 import entity.Player;
 import entity.enemy.*;
 import entity.projectile.Projectile;
-import util.GameUtils;
+import engine.util.GameUtils;
 
-import javax.swing.Timer;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;

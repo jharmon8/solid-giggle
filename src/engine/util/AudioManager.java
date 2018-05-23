@@ -1,6 +1,5 @@
-package graphics;
+package engine.util;
 
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import javax.sound.sampled.AudioInputStream;

@@ -1,7 +1,9 @@
-package graphics;
+package engine.subpanel;
 
-import entity.Player;
-import util.GameUtils;
+import engine.util.AudioManager;
+import engine.util.GraphicsWrapper;
+import engine.PewPanel;
+import engine.util.GameUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;

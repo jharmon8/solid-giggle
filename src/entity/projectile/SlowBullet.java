@@ -1,7 +1,7 @@
 package entity.projectile;
 
 import entity.Entity;
-import util.GameUtils;
+import engine.util.GameUtils;
 
 import java.awt.Color;
 
