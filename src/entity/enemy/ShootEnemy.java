@@ -29,6 +29,8 @@ public class ShootEnemy extends Enemy {
     private int shotInterval;
 
     public ShootEnemy(double x, double y, int escapeRadius) {
+        this.scoreValue = 100;
+
         this.x = x;
         this.y = y;
 

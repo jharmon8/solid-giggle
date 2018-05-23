@@ -47,6 +47,14 @@ public class GraphicsWrapper {
         this.g2 = (Graphics2D) g;
     }
 
+    public int getsWidth() {
+        return gameWidth;
+    }
+
+    public int getsHeight() {
+        return gameHeight;
+    }
+
     public void setColor(Color color) {
         g.setColor(color);
     }

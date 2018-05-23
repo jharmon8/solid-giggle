@@ -43,7 +43,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     private int extraDummy = -1;
 
-    private final boolean SKIP_TO_GAME = false;
+    private final boolean SKIP_TO_GAME = true;
 
     public PewPanel () {
         if(simulateProjectorAspectRatio) {
@@ -142,16 +142,13 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
                 swapSubpanel(new LoseSubpanel(sWidth, sHeight, this));
             } else
             if(nextSubpanelClass.equals(WinSubpanel.class)) {
-                swapSubpanel(new WinSubpanel(sWidth, sHeight, this));
+                swapSubpanel(new WinSubpanel(sWidth, sHeight, extraDummy, this));
             } else
             if(nextSubpanelClass.equals(MenuSubpanel.class)) {
                 swapSubpanel(new MenuSubpanel(sWidth, sHeight, this));
             } else {
                 swapSubpanel(new ErrorSubpanel());
             }
-
-
-
         } else {
             currentSubpanel.actionPerformed(e);
         }

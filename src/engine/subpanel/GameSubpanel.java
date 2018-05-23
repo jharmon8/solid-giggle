@@ -1,5 +1,6 @@
 package engine.subpanel;
 
+import engine.stage.StageController;
 import engine.util.AudioManager;
 import engine.util.GraphicsWrapper;
 import engine.PewPanel;
@@ -49,6 +50,7 @@ public class GameSubpanel implements Subpanel {
     public int scoreboard = 0;
 
     private int numEnemy = 5;
+    private StageController stageController = new StageController();
 
     private PewPanel parent;
 
@@ -67,9 +69,6 @@ public class GameSubpanel implements Subpanel {
         }
 
         graphicsWrapper = new GraphicsWrapper(sWidth, sHeight, gameWidth, gameHeight);
-
-        BasicEnemy enemyTest = new BasicEnemy(10, 10, escapeRadius);
-        enemies.add(enemyTest);
 
         AudioManager.stopAllSounds();
     }
@@ -120,6 +119,9 @@ public class GameSubpanel implements Subpanel {
         String score = scoreFormatter.format(scoreboard);
         graphicsWrapper.setColor(new Color(255,255,255,175));
         graphicsWrapper.drawText(score, -gameWidth*(0.015 * score.length()), -gameHeight/2.4, 5, false);
+
+        // lastly, on top of everything, draw the stage overlay
+        stageController.draw(graphicsWrapper);
     }
 
     /*
@@ -133,6 +135,17 @@ public class GameSubpanel implements Subpanel {
             return;
         }
 
+        // update the stage, and maybe spawn new enemies
+        ArrayList<Enemy> enemiesToSpawn = stageController.update(enemies, scoreboard);
+        if(enemiesToSpawn != null) {
+            enemies.addAll(enemiesToSpawn);
+        }
+
+        // if the stage controller decides we've won, we go to the victory screen
+        if(stageController.isVictory()) {
+            parent.declareSubpanelFinished(WinSubpanel.class, scoreboard);
+        }
+
         // check enemy collision with players
         for (Enemy enemy : enemies) {
             for (Player p : players) {
@@ -140,12 +153,6 @@ public class GameSubpanel implements Subpanel {
                     enemy.onCollide(p);
                 }
             }
-        }
-
-        // shitty test spawn system
-        frame++;
-        if(frame % 50 == 0) {
-            spawn((int)(Math.random()*numEnemy)+1);
         }
 
         // Take player input
@@ -297,32 +304,6 @@ public class GameSubpanel implements Subpanel {
         players.removeAll(playersToRemove);
 
         parent.repaint();
-    }
-
-    private void spawn(int enemyToSpawn) {
-        // at a random angle
-        double theta = Math.random() * 2 * Math.PI;
-        // pick a random point from 10% spawn radius to 100% spawn radius
-        double radius = (Math.random() * 0.9 + 0.1) * spawnRadius;
-
-        GameUtils.Position p = GameUtils.radialLocation(radius, theta);
-        //BasicEnemy newEnemy = new BasicEnemy(p.x, p.y, escapeRadius);
-
-        Enemy newEnemy;
-        if (enemyToSpawn == 1) {
-            newEnemy = new BasicEnemy(p.x, p.y, escapeRadius);
-        } else if (enemyToSpawn == 2) {
-            newEnemy = new ShootEnemy(p.x, p.y, escapeRadius);
-        } else if (enemyToSpawn == 3) {
-            newEnemy = new LaserEnemy(p.x, p.y, escapeRadius);
-        } else if (enemyToSpawn == 4) {
-            newEnemy = new BombEnemy(p.x, p.y, escapeRadius);
-        } else {
-            int rotateSide = (int)Math.round(Math.random());
-            newEnemy = new ArcEnemy(p.x, p.y, escapeRadius, rotateSide);
-        }
-
-        enemies.add(newEnemy);
     }
 
     @Override

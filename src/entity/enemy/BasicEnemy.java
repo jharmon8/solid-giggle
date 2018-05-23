@@ -25,6 +25,8 @@ public class BasicEnemy extends Enemy {
     private int countTick;
 
     public BasicEnemy(double x, double y, int escapeRadius) {
+        this.scoreValue = 100;
+
         this.x = x;
         this.y = y;
 
