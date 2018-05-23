@@ -144,6 +144,7 @@ public class ShootEnemy extends Enemy {
         return null;
     }
 
+    @Override
     public ArrayList<Powerup> dropPowerup() {
         if(Math.random() <= powerupChance){
             ArrayList<Powerup> droppedPowerup= new ArrayList<>();
