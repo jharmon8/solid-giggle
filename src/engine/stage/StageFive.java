@@ -5,7 +5,7 @@ import entity.enemy.*;
 import java.util.ArrayList;
 
 public class StageFive extends Stage {
-    private int scoreThreshold = 17500;
+    private int scoreThreshold = 12500;
     private int maxEnemies = 15;
 
     private int spawnRadius = 16;
