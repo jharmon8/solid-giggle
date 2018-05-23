@@ -82,7 +82,8 @@ public class LobbySubpanel implements Subpanel {
                 graphicsWrapper.fillCircle(xPos[i % 3] + xBtnOffsets[btn + (i % 3)*4], yPos[i / 3] + yBtnOffsets[i / 3], 3);
 
                 // highlight center
-                graphicsWrapper.setColor(pressed ? Color.red.darker().darker() : Color.lightGray);
+                Color center = btn < 2 ? Color.red.darker().darker() : Color.green.darker().darker();
+                graphicsWrapper.setColor(pressed ? center : Color.darkGray);
                 graphicsWrapper.fillCircle(xPos[i % 3] + xBtnOffsets[btn + (i % 3)*4] + lineThickness, yPos[i / 3] + yBtnOffsets[i / 3] + lineThickness, 3 - lineThickness * 2);
             }
         }
