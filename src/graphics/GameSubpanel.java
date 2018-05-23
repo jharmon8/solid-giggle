@@ -44,7 +44,7 @@ public class GameSubpanel implements Subpanel {
 
     public int scoreboard = 0;
 
-    private int numEnemy = 4;
+    private int numEnemy = 5;
 
     private PewPanel parent;
 
@@ -267,8 +267,11 @@ public class GameSubpanel implements Subpanel {
             newEnemy = new ShootEnemy(p.x, p.y, escapeRadius);
         } else if (enemyToSpawn == 3) {
             newEnemy = new LaserEnemy(p.x, p.y, escapeRadius);
-        } else {
+        } else if (enemyToSpawn == 4) {
             newEnemy = new BombEnemy(p.x, p.y, escapeRadius);
+        } else {
+            int rotateSide = (int)Math.round(Math.random());
+            newEnemy = new ArcEnemy(p.x, p.y, escapeRadius, rotateSide);
         }
 
         enemies.add(newEnemy);
