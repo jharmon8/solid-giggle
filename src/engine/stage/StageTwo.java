@@ -7,14 +7,18 @@ import entity.enemy.ShootEnemy;
 import java.util.ArrayList;
 
 public class StageTwo extends Stage {
-    private int scoreThreshold = 2000;
+    private int scoreThreshold = 3000;
     private int maxEnemies = 10;
 
     private int spawnRadius = 16;
     private int escapeRadius = 48;
 
-    private int spawnDelay = 20;
+    private int initialSpawnDelay = 150;
+
+    private int spawnDelay = 30;
     private int spawnTick = 0;
+
+    private int frame = 0;
 
     StageTwo() {
         displayName = "- Stage 2 -";
@@ -27,11 +31,13 @@ public class StageTwo extends Stage {
 
     @Override
     public ArrayList<Enemy> attemptSpawn(ArrayList<Enemy> currentEnemies) {
+        frame++;
+
         ArrayList<Enemy> output = new ArrayList<>();
 
         spawnTick--;
 
-        if(currentEnemies.size() < maxEnemies && spawnTick <= 0) {
+        if(currentEnemies.size() < maxEnemies && spawnTick <= 0 && frame > initialSpawnDelay) {
             spawnTick = spawnDelay;
 
             Enemy newEnemy = spawn(ShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
