@@ -4,7 +4,7 @@ package entity.Boss;
 import entity.Player;
 import entity.projectile.Projectile;
 import entity.projectile.SlowBullet;
-import graphics.GraphicsWrapper;
+import engine.util.GraphicsWrapper;
 
 import java.awt.*;
 import java.util.ArrayList;

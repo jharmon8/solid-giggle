@@ -22,7 +22,7 @@ public class LoseSubpanel implements Subpanel {
 
     PewPanel parent;
 
-    private int numSecondsToWait = 5;
+    private int numSecondsToWait = 10;
     public int ticksUntilNextGame;
     public int currentTicks;
 

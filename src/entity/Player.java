@@ -22,8 +22,8 @@ public class Player extends EntityPolar {
 
     private Color shieldColor;
 
-    public int shieldRefreshMax = 1000;
-    public int shieldRefreshDuration = 200;
+    public int shieldRefreshMax = 600;
+    public int shieldRefreshDuration = 400;
     public int shieldRefreshCurrent = 0;
     public boolean shielded = false;
 
