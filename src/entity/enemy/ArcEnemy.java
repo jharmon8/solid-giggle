@@ -2,17 +2,14 @@ package entity.enemy;
 
 import entity.EntityCartesian;
 import entity.Player;
-import entity.projectile.ExploderBullet;
-import entity.projectile.LightBullet;
 import entity.projectile.Projectile;
-import entity.projectile.SlowBullet;
 import graphics.GraphicsWrapper;
 import util.GameUtils;
 
 import java.awt.Color;
 import java.util.ArrayList;
 
-public class BombEnemy extends Enemy {
+public class ArcEnemy extends Enemy {
     // Instead of doing the chord math, we just have an angular range and it picks a direction in that range
     private double initialThetaRange = Math.PI / 2;
 
@@ -26,33 +23,32 @@ public class BombEnemy extends Enemy {
     private Color highlite;
 
     private int escapeRadius;
-
+    private int rotationSide;
     private int countTick;
-    private int shotTick;
-    private int shotInterval;
+    private int damageTick;
+    private double thetaCenter;
 
-    public BombEnemy(double x, double y, int escapeRadius) {
+    public ArcEnemy(double x, double y, int escapeRadius, int rotationSide) {
         this.x = x;
         this.y = y;
 
         this.size = 1.75;
-        this.speed = 0.15;
+        this.speed = 0.25;
         this.collisionDamage = 3;
 
-        this.countTick = 10;
+        this.countTick = 0;
+        this.damageTick = 8;
 
-        this.highlite = new Color(200, 100, 0);
+        this.highlite = new Color(0, 200, 0);
         this.color = highlite.darker();
 
-        this.maxHealth = 5;
+        this.maxHealth = 3;
         this.health = maxHealth;
-
-        this.shotInterval = 75;
-        this.shotTick = 0;
+        this.rotationSide = rotationSide;
 
         // calculate trajectory
         double thetaOffset = (Math.random() - 0.5) * initialThetaRange;
-        double thetaCenter = Math.atan2(-y, -x);
+        thetaCenter = Math.atan2(-y, -x);
         direction = thetaCenter + thetaOffset;
 
         if(Double.isNaN(direction)) {
@@ -72,15 +68,43 @@ public class BombEnemy extends Enemy {
         }
 
         countTick++;
-        shotTick ++;
+        damageTick++;
 
         x += vx;
         y += vy;
+        updateVel();
+
+    }
+
+    public void updateVel() {
+        double arcFactor = (Math.PI/30)*(0.5 + 2.5*Math.random());
+        int critTick = 40;
+        double accelFactor = 1;
+
+        if (rotationSide == 0) {
+            thetaCenter = Math.atan2(-y, -x);
+            direction = thetaCenter + Math.PI / 2 + arcFactor;
+        } else {
+            thetaCenter = Math.atan2(y, x);
+            direction = thetaCenter + Math.PI / 2 - arcFactor;
+        }
+
+        if (((countTick/critTick) % 2) == 0) {
+            //accelFactor += Math.pow(getR() / escapeRadius, 2);
+            accelFactor = accelFactor+(double)(countTick % critTick)/(10*critTick);
+        } else {
+            //accelFactor -= Math.pow(getR() / escapeRadius, 2);
+            accelFactor = accelFactor-(double)(countTick % critTick)/(10*critTick);
+        }
+
+        double radialScale = 0.33 + Math.pow(getR() / escapeRadius, 2);
+        vx = Math.cos(direction) * (speed*accelFactor*radialScale);
+        vy = Math.sin(direction) * (speed*accelFactor*radialScale);
     }
 
     @Override
     public void draw(GraphicsWrapper gw) {
-        if (Math.ceil(countTick / 3) == 0 || Math.ceil(countTick / 3) == 2) {
+        if (Math.ceil(damageTick / 3) == 0 || Math.ceil(damageTick / 3) == 2) {
             gw.setColor(color.darker().darker());
             gw.fillCircle(getX() - size, getY() - size, size * 2);
 
@@ -113,31 +137,11 @@ public class BombEnemy extends Enemy {
     @Override
     public void takeDamage(int dmg) {
         health -= dmg;
-        countTick = 0;
+        damageTick = 0;
     }
 
     @Override
-    public ArrayList<Projectile> attemptShoot(ArrayList<Player> players) {
-        if (shotTick % shotInterval == 0 && shotTick > 0) {
-            double minDist = -1;
-            Player closestPlayer = null;
-            for (Player p : players) {
-                double dist = GameUtils.distance(x, y, p.getX(), p.getY());
-                if (dist < minDist || minDist < 0) {
-                    closestPlayer = p;
-                    minDist = dist;
-                }
-            }
-            if (closestPlayer == null){
-                return null;
-            }
-
-            Projectile p = new ExploderBullet(x, y, closestPlayer.getX() - x, closestPlayer.getY() - y,this);
-            ArrayList<Projectile> projToAdd = new ArrayList<>();
-            projToAdd.add(p);
-            return projToAdd;
-        }
-
+    public  ArrayList<Projectile> attemptShoot(ArrayList<Player> players) {
         return null;
     }
 }
