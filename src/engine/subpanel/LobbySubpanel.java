@@ -27,6 +27,8 @@ public class LobbySubpanel implements Subpanel {
 
     public boolean[] joined = new boolean[6];
 
+    private int[][] controls = GameUtils.getControls();
+
     public LobbySubpanel(int sWidth, int sHeight, PewPanel parent) {
 
         this.parent = parent;
@@ -52,6 +54,7 @@ public class LobbySubpanel implements Subpanel {
         double checkmarkWidth = gameWidth * 0.25;
         double checkmarkHeight = gameHeight * 0.3;
 
+        // Draw checkmarks
         double[] xPos = {-gameWidth/2, -gameWidth/6, gameWidth/6};
         double[] yPos = {-gameHeight/2, gameHeight*0.1};
 
@@ -61,32 +64,28 @@ public class LobbySubpanel implements Subpanel {
             }
         }
 
-        // lmao I made the lobby image so poorly that I need to hardcode the checkmarks for now
-/*
-        if(joined[0]) {
-            graphicsWrapper.drawImage("res/check.png", -gameWidth/2, -gameHeight/2, checkmarkWidth, checkmarkHeight);
-        }
+        // Draw button pushes
+        double[] xBtnOffsets = {12, 16, 20, 24, 8.5, 12.5, 16.5, 20.5, 6.7, 10.7, 14.7, 18.7};
+        double[] yBtnOffsets = {gameWidth * 0.03, gameHeight * 0.275};
 
-        if(joined[1]) {
-            graphicsWrapper.drawImage("res/check.png", -gameWidth/6, -gameHeight/2, checkmarkWidth, checkmarkHeight);
-        }
+        for(int i = 0; i < joined.length; i++) {
+            for(int btn = 0; btn < 4; btn++) {
+                boolean pressed = false;
+                if(keysToPressed.containsKey(controls[i][btn])) {
+                    pressed = keysToPressed.get(controls[i][btn]);
+                }
 
-        if(joined[2]) {
-            graphicsWrapper.drawImage("res/check.png", gameWidth/6, -gameHeight/2, checkmarkWidth, checkmarkHeight);
-        }
+                double lineThickness = 0.4;
 
-        if(joined[3]) {
-            graphicsWrapper.drawImage("res/check.png", -gameWidth/2, 0, checkmarkWidth, checkmarkHeight);
-        }
+                // black background
+                graphicsWrapper.setColor(Color.black);
+                graphicsWrapper.fillCircle(xPos[i % 3] + xBtnOffsets[btn + (i % 3)*4], yPos[i / 3] + yBtnOffsets[i / 3], 3);
 
-        if(joined[4]) {
-            graphicsWrapper.drawImage("res/check.png", -gameWidth/6, 0, checkmarkWidth, checkmarkHeight);
+                // highlight center
+                graphicsWrapper.setColor(pressed ? Color.red.darker().darker() : Color.lightGray);
+                graphicsWrapper.fillCircle(xPos[i % 3] + xBtnOffsets[btn + (i % 3)*4] + lineThickness, yPos[i / 3] + yBtnOffsets[i / 3] + lineThickness, 3 - lineThickness * 2);
+            }
         }
-
-        if(joined[5]) {
-            graphicsWrapper.drawImage("res/check.png", gameWidth/6, 0, checkmarkWidth, checkmarkHeight);
-        }
-*/
     }
 
     @Override
@@ -111,8 +110,6 @@ public class LobbySubpanel implements Subpanel {
 
     // check if anyone has joined
     public void checkKeys() {
-        int[][] controls = GameUtils.getControls();
-
         // go through every player
         for(int i = 0; i < controls.length; i++) {
 
