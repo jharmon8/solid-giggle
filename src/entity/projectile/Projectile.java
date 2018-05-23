@@ -5,6 +5,7 @@ import entity.EntityCartesian;
 import entity.Player;
 import entity.enemy.Enemy;
 import engine.util.GraphicsWrapper;
+import entity.powerup.Powerup;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -53,6 +54,17 @@ public abstract class Projectile extends EntityCartesian {
         dead = true;
 
         e.takeDamage(damage);
+    }
+
+    public void onCollide(Powerup p) {
+        // prevents us from hitting p on every tick
+        if (parent.getClass() == Player.class) {
+            ((Player) parent).getPowerup(p);
+            dead = true;
+            p.dead = true;
+        }
+
+        ignoreList.add(p);
     }
 
     public boolean onScreen(int gameWidth, int gameHeight) {
