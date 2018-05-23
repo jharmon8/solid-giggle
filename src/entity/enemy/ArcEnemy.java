@@ -25,6 +25,7 @@ public class ArcEnemy extends Enemy {
     private int countTick;
     private int damageTick;
     private double thetaCenter;
+    private double arcFactor;
 
     public ArcEnemy(double x, double y, int escapeRadius, int rotationSide) {
         this.x = x;
@@ -43,6 +44,8 @@ public class ArcEnemy extends Enemy {
         this.maxHealth = 3;
         this.health = maxHealth;
         this.rotationSide = rotationSide;
+
+        arcFactor = (Math.PI/30)*(0.5 + 2.5*Math.random());
 
         // calculate trajectory
         double thetaOffset = (Math.random() - 0.5) * initialThetaRange;
@@ -75,7 +78,6 @@ public class ArcEnemy extends Enemy {
     }
 
     public void updateVel() {
-        double arcFactor = (Math.PI/30)*(0.5 + 2.5*Math.random());
         int critTick = 40;
         double accelFactor = 1;
 

@@ -1,3 +1,4 @@
+
 package entity.Boss;
 
 import entity.Player;
@@ -26,8 +27,19 @@ public abstract class Boss extends Enemy {
         return direction;
     }
 
-    public Player targetPlayer(ArrayList<Player> players) {
-        return null;
+    public Player targetWeakPlayer(ArrayList<Player> players) {
+        int minHP = -1;
+        int target = -1;
+        int loop = -1;
+        for (Player p : players) {
+            loop++;
+            if (p.getHealth() < minHP || minHP < 0) {
+                minHP = p.getHealth();
+                target = loop;
+            }
+        }
+
+        return players.get(target);
     }
 
     public Vector<Integer> canShoot (Vector<Integer> cooldown){
@@ -37,11 +49,20 @@ public abstract class Boss extends Enemy {
                 canShoot.add(v);
             }
         }
-        return canShoot;
+
+        if (canShoot.size()  == 0) {
+            return null;
+        } else {
+            return canShoot;
+        }
     }
 
     public int selectShoot (Vector<Integer> availWep){
-        int wepToFire = (int) Math.random()*availWep.size();
-        return availWep.get(wepToFire);
+        if (availWep == null) {
+            return -1;
+        } else {
+            int wepToFire = (int) Math.random() * availWep.size();
+            return availWep.get(wepToFire);
+        }
     }
 }
