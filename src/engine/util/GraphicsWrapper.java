@@ -91,7 +91,7 @@ public class GraphicsWrapper {
     }
 
     public void drawImage(String filename, double x, double y, double width, double height) {
-        Image img = Toolkit.getDefaultToolkit().getImage(filename);
+        Image img = AssetLoader.loadAndPrepareImage(filename, width, rWidth, height, rHeight);
 
         // Changing this to a for loop that will try a maximum number of times
         // TODO these need to all be loaded into a hash map and cached
@@ -109,8 +109,6 @@ public class GraphicsWrapper {
             System.exit(1);
         }
 */
-
-        while(!Toolkit.getDefaultToolkit().prepareImage(img, (int)(width * rWidth), (int)(height * rHeight), null)){}
 
         g.drawImage(img, (int)(x * rWidth), (int)(y * rHeight), (int)(width * rWidth), (int)(height * rHeight), null);
     }

@@ -53,8 +53,6 @@ public class StageController {
                 alpha = (int)(255 * (double)(lastDisplayFrame - frame)/fadeOutFrames);
             }
 
-            System.out.println("Frame: " + frame + ", Alpha: " + alpha);
-
             gw.setColor(new Color(255,255,255, alpha));
             gw.drawText(currentStage.getDisplayName(), -w*numChar*0.025, 0, 10, false);
         }
