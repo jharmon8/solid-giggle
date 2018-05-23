@@ -8,6 +8,8 @@ import engine.util.GameUtils;
 import java.awt.*;
 
 public class Player extends EntityPolar {
+    public int playerNum;
+
     private int fireDelay = 10;
     private int fireDelayTimer = 0;
 
@@ -31,9 +33,15 @@ public class Player extends EntityPolar {
 
     private int enemySurvivedDamage;
 
+    // after taking damage, the player will be given 50 iFrames (i.e. 50 ticks of invincibility)
+    private int iFramesLeft = 0;
+    private int iFramesAfterDamage = 20;
+
     public int countTick;
 
-    public Player(double theta, Color color, double radius) {
+    public Player(double theta, Color color, double radius, int playerNum) {
+        this.playerNum = playerNum;
+
         this.theta = theta;
         this.radius = radius;
         this.countTick = 8;
@@ -43,10 +51,11 @@ public class Player extends EntityPolar {
 
         this.color = color;
 
-        this.maxHealth = 20;
+        this.maxHealth = 8;
         this.health = maxHealth;
 
         this.shieldColor = new Color(180,200,255);
+
     }
 
     @Override
@@ -54,6 +63,8 @@ public class Player extends EntityPolar {
         if(health <= 0) {
             dead = true;
         }
+
+        iFramesLeft--;
 
         countTick++;
 
@@ -169,7 +180,16 @@ public class Player extends EntityPolar {
             return;
         }
 
+        if(iFramesLeft > 0) {
+            return;
+        }
+
+        iFramesLeft = iFramesAfterDamage;
         health -= dmg;
         countTick = 0;
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 }

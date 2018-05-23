@@ -65,7 +65,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
         currentSubpanelFinished = false;
 
         if(SKIP_TO_GAME) {
-            swapSubpanel(new GameSubpanel(sWidth, sHeight, this,6));
+            swapSubpanel(new GameSubpanel(sWidth, sHeight, this,3));
         }
 
         setFocusable(true);

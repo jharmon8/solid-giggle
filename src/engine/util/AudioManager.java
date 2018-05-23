@@ -10,6 +10,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /*
@@ -52,7 +53,7 @@ public class AudioManager {
         return -1;
     }
 
-    public static void stopSound(int ID) {
+    public static void stopSound(Integer ID) {
         Clip clip = currentSounds.get(ID);
 
         if(clip != null) {
@@ -63,7 +64,13 @@ public class AudioManager {
     }
 
     public static void stopAllSounds() {
+        // this looks a little weird because of concurrent modification stuff
+        ArrayList<Integer> soundsToStop = new ArrayList<>();
         for(Integer id : currentSounds.keySet()) {
+            soundsToStop.add(id);
+        }
+
+        for(Integer id : soundsToStop) {
             stopSound(id);
         }
     }
