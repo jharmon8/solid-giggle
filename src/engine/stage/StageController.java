@@ -22,7 +22,7 @@ public class StageController {
         if(DEBUG_STAGE) {
             currentStage = new StageMinotaur();
         } else {
-            currentStage = new StageKraken();
+            currentStage = new StageMinotaur();
         }
     }
 
