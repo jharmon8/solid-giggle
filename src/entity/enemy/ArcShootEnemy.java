@@ -3,7 +3,7 @@ package entity.enemy;
 import engine.util.GameUtils;
 import entity.Player;
 import entity.powerup.Powerup;
-import entity.powerup.laserPowerup;
+import entity.powerup.LaserPowerup;
 import entity.projectile.Projectile;
 import engine.util.GraphicsWrapper;
 import entity.projectile.SlowBullet;
@@ -182,7 +182,7 @@ public class ArcShootEnemy extends Enemy {
             ArrayList<Powerup> droppedPowerup= new ArrayList<>();
             double powerupSelect = (int) Math.random()*1;
             if (powerupSelect == 0) {
-                Powerup p = new laserPowerup(getX(), getY(), vx, vy);
+                Powerup p = new LaserPowerup(getX(), getY(), vx, vy);
                 droppedPowerup.add(p);
             }
 
