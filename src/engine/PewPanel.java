@@ -45,7 +45,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     private Object extraDummy = new Integer(-1);
 //    private int extraDummy = -1;
 
-    private final boolean SKIP_TO_GAME = false;
+    private final boolean SKIP_TO_GAME = true;
 
     public PewPanel () {
         if(simulateProjectorAspectRatio) {
@@ -68,9 +68,9 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
         if(SKIP_TO_GAME) {
             ArrayList<Integer> threePlayers = new ArrayList<Integer>() {{
+                add(0);
+                add(1);
                 add(2);
-                add(4);
-                add(5);
             }};
 
             swapSubpanel(new GameSubpanel(sWidth, sHeight, this,threePlayers));

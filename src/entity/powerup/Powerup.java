@@ -105,4 +105,8 @@ public abstract class Powerup extends EntityCartesian {
     public Color getStatusColor() {
         return color;
     }
+
+    public int getHeal() {
+        return 0;
+    }
 }

@@ -93,9 +93,17 @@ public class Player extends EntityPolar {
         // update our powerup
         if(powerup != null) {
             powerup.playerUpdate();
+            health += powerup.getHeal();
+
+            // all powerup logic has to go above this
             if (powerup.isFinished()) {
                 powerup = null;
             }
+        }
+
+        // make sure our health is within bounds
+        if(health > maxHealth) {
+            health = maxHealth;
         }
     }
 
