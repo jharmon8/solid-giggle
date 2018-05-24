@@ -2,10 +2,8 @@
 package entity.Boss;
 
 import entity.Player;
-import entity.projectile.Projectile;
-import entity.projectile.SlowBullet;
+import entity.projectile.*;
 import engine.util.GraphicsWrapper;
-import entity.projectile.TrackingLaser;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -24,6 +22,8 @@ public class Kraken extends Boss {
     private double direction;
     private double vx;
     private double vy;
+    private double thetaOffset;
+    private double arcFactor;
 
     private Color highlite;
 
@@ -38,7 +38,7 @@ public class Kraken extends Boss {
     private double[] lastPlayerPx;
     private double[] lastPlayerPy;
 
-    private ArrayList<Projectile> projAdded = new ArrayList<>();
+    private double attackChance;
 
     public Kraken(int escapeRadius, int spawnRadius) {
         this.x = 0;
@@ -53,24 +53,26 @@ public class Kraken extends Boss {
 
         this.maxHealth = 3;
         this.health = maxHealth;
-        this.escapeRadius = escapeRadius;
         this.spawnRadius = spawnRadius;
+        this.escapeRadius = escapeRadius;
 
         this.wepToFire = -1;
 
-        maxCooldown[0] = 200;
-        maxCooldown[1] = 80;
-        maxCooldown[2] = 100;
-        maxCooldown[3] = 200;
-        maxCooldown[4] = 150;
-        maxCooldown[5] = 10;
+        this.attackChance = 0.1;
 
-        attackLength[0] = 5;
+        maxCooldown[0] = 400; //trackLaser
+        maxCooldown[1] = 500; //laser vomit <- remove
+        maxCooldown[2] = 350; //interlock arc
+        maxCooldown[3] = 800; // wave arc
+        maxCooldown[4] = 700; // shield?
+        maxCooldown[5] = 30;  //simple shot
+
+        attackLength[0] = 200;
         attackLength[1] = 100;
-        attackLength[2] = 80;
+        attackLength[2] = 1000;
         attackLength[3] = 400;
         attackLength[4] = 100;
-        attackLength[5] = 25;
+        attackLength[5] = -1;
 
         currentCooldown[0] = -1 * maxCooldown[0];
         currentCooldown[1] = -1 * maxCooldown[1];
@@ -98,10 +100,8 @@ public class Kraken extends Boss {
                 currentCooldown[i] = currentCooldown[i] - 1;
                 doMove = false;
 
-                if(i == 0){
-                    if (currentCooldown[i] >= (attackLength[i] - 100)){
-                        wepToFire = i;
-                    }
+                if(i == 0 || i == 2){
+                    wepToFire = i;
                 }
             } else if (Math.abs(currentCooldown[i]) < maxCooldown[i]){
                 currentCooldown[i] = currentCooldown[i] - 1;
@@ -146,30 +146,57 @@ public class Kraken extends Boss {
             }
         }
     }
-/*
-    @Override
-    public int selectShoot (int[] availWep){
-        int[] working = {0};
-        for(int i = 0; i < availWep.length; i ++) {
-            if (availWep[i] > 0) {
-                working[working.length] = i;
+
+    public ArrayList<Projectile> laserTrack (ArrayList<Player> players) {
+        ArrayList<Projectile> projToAdd = new ArrayList<>();
+        int deathTime = 50;
+        int padding = 50;
+
+        if (currentCooldown[0] >= (attackLength[0] - (attackLength[0] - deathTime - padding))) {
+            lastPlayerPx = new double[players.size()];
+            lastPlayerPy = new double[players.size()];
+            for (int i = 0; i < players.size(); i ++) {
+                Projectile p = new TrackingLaser(x, y, players.get(i).getX(), players.get(i).getY(), this);
+                lastPlayerPx[i] = players.get(i).getX();
+                lastPlayerPy[i] = players.get(i).getY();
+                projToAdd.add(p);
+            }
+        } else if (currentCooldown[0] >= deathTime && currentCooldown[0] < (attackLength[0] - (attackLength[0] - deathTime - padding))) {
+            for (int i = 0; i < lastPlayerPx.length; i++) {
+                Projectile p = new TrackingLaser(x, y, lastPlayerPx[i], lastPlayerPy[i], this);
+                projToAdd.add(p);
+            }
+        } else if (currentCooldown[0] < deathTime && currentCooldown[0] > 0) {
+            for (int i = 0; i < lastPlayerPx.length; i++) {
+                Projectile p = new DamageLaser(x, y, lastPlayerPx[i], lastPlayerPy[i], this);
+                projToAdd.add(p);
             }
         }
-        int toFire = working[1 + (int) (Math.random() * (working.length-1))];
-        return toFire;
+        //System.out.println(projToAdd.size());
+        return projToAdd;
     }
-*/
-    public ArrayList<Projectile> laserTrack (ArrayList<Player> players){
+
+    public ArrayList<Projectile> interArc (ArrayList<Player> players) {
         ArrayList<Projectile> projToAdd = new ArrayList<>();
-        for(Player play : players) {
-            Projectile p = new TrackingLaser(x, y, play.getX(), play.getY(), this);
-            projToAdd.add(p);
+        int numberAroundCircumference = 6;
+        double randomComponent = (2*Math.PI*Math.random());
+
+        if (currentCooldown[2] % 200 == 0 && currentCooldown[2] > 0){
+            for (int i = 0; i < numberAroundCircumference; i++) {
+                double theta = i * 2 * Math.PI / numberAroundCircumference + randomComponent;
+                double spawnX = x + size * Math.cos(theta);
+                double spawnY = y + size * Math.sin(theta);
+                Projectile l = new InterlockBullet(spawnX, spawnY, 0, 0, this, i % 2, theta);
+                Projectile r = new InterlockBullet(spawnX, spawnY, 0, 0, this, (i + 1) % 2, theta);
+                projToAdd.add(l);
+                projToAdd.add(r);
+            }
         }
 
         return projToAdd;
     }
 
-    public ArrayList<Projectile> simpleShot (ArrayList<Player> players){
+    public ArrayList<Projectile> simpleShot (ArrayList<Player> players){ // select two random enemies to shoot
         Player weakPlayer = targetWeakPlayer(players);
         Projectile p = new SlowBullet(x, y, weakPlayer.getX() - x, weakPlayer.getY() - y,this);
         ArrayList<Projectile> projToAdd = new ArrayList<>();
@@ -180,50 +207,52 @@ public class Kraken extends Boss {
 
     @Override
     public ArrayList<Projectile> attemptShoot (ArrayList<Player> players){
+        ArrayList<Projectile> projAdded = new ArrayList<>();
+        ArrayList<Projectile> projAddedTotal = new ArrayList<>();
+
         projAdded.clear();
-        if (wepToFire < 0) {
+        if (wepToFire < 0 && (1-Math.random()) < attackChance ) {
             int[] canShootArray = canShoot(currentCooldown, maxCooldown);
 
             if (canShootArray != null) {
                 wepToFire = selectShoot(canShootArray);
             }
         }
-
-         if (wepToFire == 0) {
-            projAdded = laserTrack(players);
-            if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
-                currentCooldown[wepToFire] = attackLength[wepToFire];
-            }
-            return projAdded;
-        } else if (wepToFire == 1){
-            //projAdded = laserVomit();
-
+        if (wepToFire == 2){ // overlapping arc
              if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
                  currentCooldown[wepToFire] = attackLength[wepToFire];
              }
-             return null;
-        } else if (wepToFire == 2){
-            //projAdded = interArc();
 
-             if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
-                 currentCooldown[wepToFire] = attackLength[wepToFire];
-             }
-             return null;
-        } else if (wepToFire == 3){
+             arcFactor = (Math.PI/10)*(0.5 + 2.5*Math.random());
+             thetaOffset = (Math.random() - 0.5) * initialThetaRange;
+
+             projAdded = interArc(players);
+             projAddedTotal.addAll(projAdded);
+        } else if (wepToFire == 3){ //selective arc
             //projAdded = waveArc();
 
              if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
                  currentCooldown[wepToFire] = attackLength[wepToFire];
              }
              return null;
-        } else if (wepToFire == 4) {
-            projAdded = simpleShot(players);
-             if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
-                 currentCooldown[wepToFire] = attackLength[wepToFire];
-             }
-             return projAdded;
         }
-        return null;
+
+        //weapons that may be fired in overlap
+        if (frame % maxCooldown[5] == 0) { //constantfiring
+             projAdded = simpleShot(players);
+             projAddedTotal.addAll(projAdded);
+        }
+
+        if (currentCooldown[0] > 0 || currentCooldown[0] == -1 * maxCooldown[0]) { //lasertracking
+
+            if (currentCooldown[0] == -1* maxCooldown[0]) {
+                currentCooldown[0] = attackLength[0];
+            }
+            projAdded = laserTrack(players);
+            projAddedTotal.addAll(projAdded);
+        }
+
+        return projAddedTotal;
     }
 
     @Override

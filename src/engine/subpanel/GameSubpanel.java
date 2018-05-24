@@ -146,6 +146,7 @@ public class GameSubpanel implements Subpanel {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+
         // First, check for game over
         if(players.isEmpty()) {
             parent.declareSubpanelFinished(LoseSubpanel.class);
@@ -357,6 +358,7 @@ public class GameSubpanel implements Subpanel {
 
         // remove projectiles
         projectiles.removeAll(projToRemove);
+
         if (projToAdd != null){
             projectiles.addAll(projToAdd);
         }
