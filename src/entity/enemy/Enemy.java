@@ -28,6 +28,9 @@ public abstract class Enemy extends EntityCartesian {
     protected int damageTick;
     protected int countTick;
 
+    protected int fadeInTick = 0;
+    protected int maxFadeIn = 10;
+
     // The types is self explanator
     protected Class[] powerupTypes = {RegenPowerup.class, LaserPowerup.class};
     // The chances is the chance (out of 1) that each of the types is spawned, respectively
@@ -112,25 +115,31 @@ public abstract class Enemy extends EntityCartesian {
 
     @Override
     public void draw(GraphicsWrapper gw) {
-        if (Math.ceil(damageTick / 3) == 0 || Math.ceil(damageTick / 3) == 2) {
-            gw.setColor(color.darker().darker());
-            gw.fillCircle(getX() - size, getY() - size, size * 2);
+        fadeInTick++;
 
-            if (!Double.isNaN(direction)) {
-                gw.setColor(highlite.darker().darker());
-                gw.fillTriangle(x, y, direction, size);
-            }
-        }
-        else {
-            gw.setColor(color);
-            gw.fillCircle(getX() - size, getY() - size, size * 2);
+        Color circleColor = color;
+        Color triangleColor = highlite;
 
-            if (!Double.isNaN(direction)) {
-                gw.setColor(highlite);
-                gw.fillTriangle(x, y, direction, size);
-            }
+        if (damageTick == 0 || damageTick == 1 || damageTick == 4 || damageTick == 5) {
+            circleColor = circleColor.darker().darker();
+            triangleColor = triangleColor.darker().darker();
         }
 
+        if(fadeInTick < maxFadeIn) {
+            color = setAlpha(color, (int)(255 * (double) fadeInTick / maxFadeIn));
+            highlite = setAlpha(highlite, (int)(255 * (double) fadeInTick / maxFadeIn));
+        }
+
+        gw.setColor(color);
+        gw.fillCircle(getX() - size, getY() - size, size * 2);
+
+        gw.setColor(highlite);
+        gw.fillTriangle(x, y, direction, size);
     }
 
+    private Color setAlpha(Color c, int alpha) {
+        Color output = new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha);
+
+        return output;
+    }
 }
