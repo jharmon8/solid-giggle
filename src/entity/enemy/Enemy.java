@@ -29,7 +29,7 @@ public abstract class Enemy extends EntityCartesian {
     protected int countTick;
 
     protected int fadeInTick = 0;
-    protected int maxFadeIn = 10;
+    protected int maxFadeIn = 16;
 
     // The types is self explanator
     protected Class[] powerupTypes = {RegenPowerup.class, LaserPowerup.class};

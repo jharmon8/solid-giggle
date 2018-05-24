@@ -3,7 +3,6 @@ package engine.stage;
 import entity.enemy.ArcEnemy;
 import entity.enemy.BasicEnemy;
 import entity.enemy.Enemy;
-import entity.enemy.ShootEnemy;
 
 import java.util.ArrayList;
 
@@ -26,7 +25,7 @@ public class StageTwo extends Stage {
     }
 
     @Override
-    public boolean isFinished(final int score) {
+    public boolean isFinished(final int score, final ArrayList<Enemy> currentEnemies) {
         return score > scoreThreshold;
     }
 

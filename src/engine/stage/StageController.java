@@ -34,7 +34,7 @@ public class StageController {
 
         frame ++;
 
-        if(currentStage.isFinished(score)) {
+        if(currentStage.isFinished(score, enemies)) {
             currentStage = currentStage.getNextStage();
             frame = 0;
             return null;

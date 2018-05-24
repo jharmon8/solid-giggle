@@ -68,8 +68,8 @@ public class GraphicsWrapper {
     }
 
     public void fillTriangle(double x, double y, double centerTheta, double radius) {
-        double leftTheta = centerTheta - 0.67 * Math.PI;
-        double rightTheta = centerTheta + 0.67 * Math.PI;
+        double leftTheta = centerTheta - 0.75 * Math.PI;
+        double rightTheta = centerTheta + 0.75 * Math.PI;
 
         int[] xVals = {
                 (int)((Math.cos(leftTheta) * radius + x) * rWidth),

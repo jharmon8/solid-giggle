@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public abstract class Stage {
     protected String displayName;
 
-    public abstract boolean isFinished(final int score);
+    public abstract boolean isFinished(final int score, final ArrayList<Enemy> currentEnemies);
 
     public abstract ArrayList<Enemy> attemptSpawn(final ArrayList<Enemy> currentEnemies);
 
@@ -33,7 +33,7 @@ public abstract class Stage {
 
         GameUtils.Position p = GameUtils.radialLocation(radius, theta);
 
-        Enemy newEnemy;
+        Enemy newEnemy = null;
         if (enemyClass == BasicEnemy.class) {
             newEnemy = new BasicEnemy(p.x, p.y, escapeRadius);
         } else if (enemyClass == ShootEnemy.class) {
@@ -42,9 +42,13 @@ public abstract class Stage {
             newEnemy = new LaserEnemy(p.x, p.y, escapeRadius);
         } else if (enemyClass == BombEnemy.class) {
             newEnemy = new BombEnemy(p.x, p.y, escapeRadius);
-        } else {
+        } else if (enemyClass == ArcEnemy.class) {
             int rotateSide = (int)Math.round(Math.random());
             newEnemy = new ArcEnemy(p.x, p.y, escapeRadius, rotateSide);
+        }
+
+        if(newEnemy == null) {
+            System.err.println("Stage cannot spawn enemy of type " + enemyClass);
         }
 
         return newEnemy;
