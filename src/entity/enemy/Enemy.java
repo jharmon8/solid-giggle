@@ -36,7 +36,7 @@ public abstract class Enemy extends EntityCartesian {
     // The chances is the chance (out of 1) that each of the types is spawned, respectively
     // Only one can spawn at a time (unless you override dropPowerup())
     // These should spawn to less than one
-    protected Double[] powerupChances = {1.0, 0.0};
+    protected Double[] powerupChances = {1.1, 0.025};
 
     public int getScoreValue() {
         return scoreValue;

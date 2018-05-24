@@ -77,7 +77,7 @@ public class Player extends EntityPolar {
 
         this.color = color;
 
-        this.maxHealth = 8;
+        this.maxHealth = 10;
         this.health = maxHealth;
 
         this.shieldColor = new Color(180,200,255);
@@ -112,6 +112,7 @@ public class Player extends EntityPolar {
 
             // all powerup logic has to go above this
             if (powerup.isFinished()) {
+                AudioManager.playSound("res/deactivate.wav", -12f);
                 powerup = null;
             }
         }
@@ -213,7 +214,10 @@ public class Player extends EntityPolar {
 
     private void powerup() {
         if(powerup != null) {
-            powerup.activate();
+            if(!powerup.isActive()) {
+                AudioManager.playSound("res/activate.wav", -12f);
+                powerup.activate();
+            }
         }
     }
 
