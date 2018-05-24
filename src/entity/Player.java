@@ -53,7 +53,7 @@ public class Player extends EntityPolar {
     // the 'action' stuff is my hold logic
     private boolean previousAction = false;
     private int actionCount = 0;
-    private int holdThreshold = 50;
+    private int holdThreshold = 35; // tuning things like this is hard since framerate might be slow on my computer
 
     private boolean previousFire = false;
 

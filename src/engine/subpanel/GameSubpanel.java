@@ -81,16 +81,19 @@ public class GameSubpanel implements Subpanel {
     public void paintComponent(Graphics g) {
         graphicsWrapper.setGraphics(g);
 
-        // draw the player rail outline first
-        g.setColor(Color.darkGray);
+        // Draw Background first
+        graphicsWrapper.drawImage("res/black_hole.jpg", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
+
+        // draw the player rail outline
+        graphicsWrapper.setColor(Color.darkGray);
         graphicsWrapper.drawCircle(-railRadius, -railRadius, railRadius * 2);
 
         // draw spawn area (probably just for testing)
-        g.setColor(Color.darkGray);
+        graphicsWrapper.setColor(Color.darkGray);
         graphicsWrapper.drawCircle(-spawnRadius, -spawnRadius, spawnRadius * 2);
 
         // draw spawn area (probably just for testing)
-        g.setColor(Color.darkGray);
+        graphicsWrapper.setColor(Color.darkGray);
         graphicsWrapper.drawCircle(-escapeRadius, -escapeRadius, escapeRadius * 2);
 
         // Draw Player
@@ -505,6 +508,6 @@ public class GameSubpanel implements Subpanel {
 
         // The player number
         gw.setColor(Color.black);
-        gw.drawText(p.playerNum + "", x + size*2/3 + size * 0.034, y + size*2/3, 4, false);
+        gw.drawText(p.playerNum + "", x + size*2/3 + size * 0.05, y + size*0.63, 4, false);
     }
 }
