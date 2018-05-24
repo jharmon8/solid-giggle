@@ -65,6 +65,10 @@ public class Player extends EntityPolar {
     private int maxReloadFrames = 250;
     private int reloadFramesFromButton = 25;
 
+    private int powerupPolygonFaces = 6;
+    private double powerupPolygonTheta = 0;
+    private double powerupPolygonChange = 0.05;
+
     public Player(double theta, Color color, double radius, int playerNum) {
         this.playerNum = playerNum;
 
@@ -91,10 +95,9 @@ public class Player extends EntityPolar {
         }
 
         iFramesLeft--;
-
         countTick++;
-
         fireDelayTimer--;
+        powerupPolygonTheta -= powerupPolygonChange;
 
         if(shieldRefreshCurrent < shieldRefreshMax && !shielded) {
             shieldRefreshCurrent++;
@@ -300,7 +303,8 @@ public class Player extends EntityPolar {
         if(powerup != null) {
             if(powerup.isActive()) {
                 gw.setColor(powerup.getStatusColor());
-                gw.drawCircle(x - size * 1.3, y - size * 1.3, size * 2.6);
+//                gw.drawCircle(x - size * 1.3, y - size * 1.3, size * 2.6);
+                gw.drawPolygon(x, y, size * 1.2, powerupPolygonFaces, powerupPolygonTheta);
             }
         }
     }
@@ -330,7 +334,14 @@ public class Player extends EntityPolar {
     }
 
     public void givePowerup(Powerup p){
-        powerup = p;
+        if(powerup == null) {
+            powerup = p;
+            return;
+        }
+
+        if(!powerup.isActive()) {
+            powerup = p;
+        }
     }
 
     private Class getAmmoType() {

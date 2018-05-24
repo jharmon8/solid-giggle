@@ -1,15 +1,66 @@
 package entity.Boss;
 
+import engine.util.GameUtils;
+
 import java.awt.Color;
 
+import static entity.Boss.Minotaur.MinotaurState.*;
+
 public class Minotaur extends Boss {
+    enum MinotaurState {
+        // In ready, the minotaur picks a move
+        READY,
+
+        // In charge rush, the Minotaur charges to random points with a shield
+        CHARGE_RUSH,
+        CHARGE_RUSH_PAUSE_1,
+        CHARGE_RUSH_MOVE_1,
+        CHARGE_RUSH_PAUSE_2,
+        CHARGE_RUSH_MOVE_2,
+        CHARGE_RUSH_PAUSE_3,
+        CHARGE_RUSH_MOVE_3,
+        CHARGE_RUSH_PAUSE_4,
+        CHARGE_RUSH_RETURN,
+        CHARGE_RUSH_DEACTIVATE,
+
+        // In heavy shots, Minotaur will fire heavy bullets at players while wandering randomly
+        HEAVY_SHOTS,
+        HEAVY_SHOTS_RETURN,
+
+        // in quick spiral, Minotaur fires 4 rapid beams of light projectiles while spinning
+        QUICK_SPIRAL,
+
+        // There might be a cool dying fade-out
+        DYING,
+    }
+
+    private MinotaurState state = READY;
+    private MinotaurState[] moves = {CHARGE_RUSH, HEAVY_SHOTS, QUICK_SPIRAL};
+
+    private int frame = -1;
+    private GameUtils.Position[] currentPath = null;
+
+    private boolean shield = false;
+
+    private int pauseTime = 50;
+    private int chargeTime = 50;
+
+/*
+    private double chargeTargetDistance = 40;
+    private double chargeTargetRadius = 10;
+*/
+
+    private double chargeTargetDistance = 40;
+    private double chargeThetaRange = 1.5;
 
     public Minotaur() {
-        this.scoreValue = 1000;
+        this.scoreValue = 10000;
 
+/*
         this.x = 0;
         this.y = 0;
 
+*/
         this.size = 5;
         this.collisionDamage = 3;
 
@@ -23,5 +74,135 @@ public class Minotaur extends Boss {
     @Override
     public void update() {
 
+        // this should be quite the ugly monster of a switch statement
+        switch(state) {
+            //// ENTRY ////
+            case READY:
+                // go to a random move
+/*
+                changeState(moves[(int)(Math.random() * moves.length)]);
+*/
+                changeState(CHARGE_RUSH);
+                break;
+
+            //// CHARGE RUSH ////
+            case CHARGE_RUSH:
+                shield = true;
+                changeState(CHARGE_RUSH_PAUSE_1);
+                break;
+            case CHARGE_RUSH_PAUSE_1:
+                wait(CHARGE_RUSH_MOVE_1);
+                break;
+            case CHARGE_RUSH_MOVE_1:
+                charge(CHARGE_RUSH_PAUSE_2);
+                break;
+            case CHARGE_RUSH_PAUSE_2:
+                wait(CHARGE_RUSH_MOVE_2);
+                break;
+            case CHARGE_RUSH_MOVE_2:
+                charge(CHARGE_RUSH_PAUSE_3);
+                break;
+            case CHARGE_RUSH_PAUSE_3:
+                wait(CHARGE_RUSH_MOVE_3);
+                break;
+            case CHARGE_RUSH_MOVE_3:
+                charge(CHARGE_RUSH_PAUSE_4);
+                break;
+            case CHARGE_RUSH_PAUSE_4:
+                wait(CHARGE_RUSH_RETURN);
+                break;
+            case CHARGE_RUSH_RETURN:
+                home(CHARGE_RUSH_DEACTIVATE);
+                break;
+            case CHARGE_RUSH_DEACTIVATE:
+                shield = false;
+                changeState(READY);
+                break;
+
+            //// HEAVY SHOTS ////
+            case HEAVY_SHOTS:
+                break;
+            case HEAVY_SHOTS_RETURN:
+                break;
+
+            //// QUICK SPIRAL ////
+            case QUICK_SPIRAL:
+                break;
+
+
+            case DYING:
+                break;
+
+/*
+            default:
+                System.err.println("Minotaur has no state " + state);
+                state = READY;
+                break;
+*/
+        }
     }
+
+    // this is used to switch states to avoid bugs
+    private void changeState(MinotaurState nextState) {
+/*
+        System.out.println("From " + state + " to " + nextState);
+*/
+        frame = -1;
+        currentPath = null;
+        state = nextState;
+    }
+
+    // do nothing for some frames
+    private void wait(MinotaurState nextState) {
+        if(frame == -1) { // if we just got here
+            frame = pauseTime;
+        } else if (frame == 0) { // if it's the last tick
+            changeState(nextState);
+        } else {
+            frame--;
+        }
+    }
+
+    // the running part
+    private void charge(MinotaurState nextState) {
+        frame++;
+
+        if(currentPath == null) { // first tick
+            GameUtils.Position start = new GameUtils.Position(x, y);
+            GameUtils.Position end = getChargeTarget();
+
+            currentPath = GameUtils.interpolate(start, end, chargeTime);
+        } else if(frame == currentPath.length) { // last tick
+            changeState(nextState);
+        } else {
+            x = currentPath[frame].x;
+            y = currentPath[frame].y;
+        }
+    }
+
+    // Bring the minotaur back to 0,0
+    private void home(MinotaurState nextState) {
+        frame++;
+
+        if(currentPath == null) { // first tick
+            GameUtils.Position start = new GameUtils.Position(x, y);
+            GameUtils.Position end = new GameUtils.Position(0,0);
+
+            currentPath = GameUtils.interpolate(start, end, chargeTime);
+        } else if(frame == currentPath.length) { // last tick
+            changeState(nextState);
+        } else {
+            x = currentPath[frame].x;
+            y = currentPath[frame].y;
+        }
+    }
+
+    private GameUtils.Position getChargeTarget() {
+        if(GameUtils.distance(x, y) < 1) {
+            return GameUtils.radialLocation(chargeTargetDistance, Math.random() * 6.28);
+        }
+
+        double theta = GameUtils.flipAngle(getTheta()) + (Math.random() - 0.5) * chargeThetaRange;
+        return GameUtils.radialLocation(chargeTargetDistance, theta);
+    };
 }

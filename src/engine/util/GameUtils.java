@@ -2,11 +2,14 @@ package engine.util;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 
 /*
  * this class is a collection of random bullshit
  */
 public class GameUtils {
+    public static DecimalFormat debugger = new DecimalFormat("00.000");
+
     public static Position radialLocation(double radius, double radians) {
         double x = Math.cos(radians) * radius;
         double y = Math.sin(radians) * radius;
@@ -33,6 +36,11 @@ public class GameUtils {
         public Position(double x, double y) {
             this.x = x;
             this.y = y;
+        }
+
+        @Override
+        public String toString() {
+            return "(" + debugger.format(x) + ", " + debugger.format(y) + ")";
         }
     }
 
@@ -103,6 +111,34 @@ public class GameUtils {
             Color.pink,
             Color.orange,
     };
+
+    // Great for bosses! Some cubics or something would be cool, too
+    public static Position[] interpolate(Position start, Position end, int frames) {
+/*
+        System.out.println("Start: " + start);
+        System.out.println("End: " + end);
+*/
+
+        Position[] output = new Position[frames];
+
+        double currentX = start.x;
+        double currentY = start.y;
+
+        double xRate = (end.x - start.x) / frames;
+        double yRate = (end.y - start.y) / frames;
+
+        for(int i = 0; i < frames - 1; i++) {
+            currentX += xRate;
+            currentY += yRate;
+
+            output[i] = new Position(currentX, currentY);
+        }
+
+        // manually set last position to avoid rounding error
+        output[frames - 1] = new Position(end.x, end.y);
+
+        return output;
+    }
 }
 
 //878787qw8de7xq8rwde78qxrd7we8qxd7ewd8xqr7ex8wdqrex7d8wqedrx78qwdxe7rq8weq7r8wqe7qr8we7q8wreq78wreq7w8erqwe87qrewqr87eqr8w7er8qwe7r8q7878xdxdxdxdwqw

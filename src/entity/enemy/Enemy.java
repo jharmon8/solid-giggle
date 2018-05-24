@@ -142,4 +142,8 @@ public abstract class Enemy extends EntityCartesian {
 
         return output;
     }
+
+    public boolean shouldPruneOffScreen() {
+        return true;
+    }
 }

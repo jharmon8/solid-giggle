@@ -267,7 +267,9 @@ public class GameSubpanel implements Subpanel {
 
             // bounds check
             if (!enemy.inPlayfield(escapeRadius)) {
-                enemyToRemove.add(enemy);
+                if(enemy.shouldPruneOffScreen()) {
+                    enemyToRemove.add(enemy);
+                }
 
                 // removing enemy escape damage for now
 /*

@@ -73,4 +73,9 @@ public abstract class Boss extends Enemy {
         return availWep[toFire];
 
     }
+
+    @Override
+    public boolean shouldPruneOffScreen() {
+        return false;
+    }
 }
