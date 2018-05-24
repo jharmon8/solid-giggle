@@ -1,5 +1,6 @@
 package engine.stage;
 
+import engine.util.AudioManager;
 import engine.util.GraphicsWrapper;
 import entity.enemy.Enemy;
 
@@ -15,7 +16,7 @@ public class StageController {
     // this should be more than fade in + fade out
     private int lastDisplayFrame = 140;
 
-    private boolean DEBUG_STAGE = true;
+    private boolean DEBUG_STAGE = false;
 
     public StageController() {
         if(DEBUG_STAGE) {
@@ -27,6 +28,10 @@ public class StageController {
 
     // Spawn and stage transition logic goes here, and this is called on every tick
     public ArrayList<Enemy> update(final ArrayList<Enemy> enemies, final int score) {
+        if(frame == 0) {
+            AudioManager.playSound("res/alarm1.wav", -10f, 2);
+        }
+
         frame ++;
 
         if(currentStage.isFinished(score)) {

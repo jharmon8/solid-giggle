@@ -17,7 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 public class Player extends EntityPolar {
     public int playerNum;
 
-    private int fireDelay = 10;
+    private int fireDelay = 15;
     private int fireDelayTimer = 0;
 
     private int bulletDamage = 4;
@@ -29,7 +29,7 @@ public class Player extends EntityPolar {
     private Color shieldColor;
 
     public int shieldRefreshMax = 250;
-    public int shieldRefreshDuration = 150;
+    public int shieldRefreshDuration = 100;
     public int shieldRefreshCurrent = 0;
     public boolean shielded = false;
 
@@ -58,7 +58,7 @@ public class Player extends EntityPolar {
     private boolean previousFire = false;
 
     private boolean reloading = false;
-    private final int maxAmmo = 20;
+    private final int maxAmmo = 15;
     public int ammo = maxAmmo;
 
     private int reloadFramesLeft = 0;
@@ -87,6 +87,7 @@ public class Player extends EntityPolar {
     public void update() {
         if(health <= 0) {
             dead = true;
+            AudioManager.playSound("res/death.wav", -8f);
         }
 
         iFramesLeft--;
@@ -144,12 +145,16 @@ public class Player extends EntityPolar {
         if(reloading) {
             // if reloading and upward edge, speed the reload
             if (!previousFire) {
+                int fireSound = (int)(Math.random() * 4);
+                AudioManager.playSound("res/dud" + fireSound + ".wav", -20f);
                 reloadFramesLeft -= reloadFramesFromButton;
             }
         } else {
             // if not reloading, do shoot logic
             if(fireDelayTimer < 0) {
                 if(ammo > 0) {
+                    int fireSound = (int)(Math.random() * 6);
+                    AudioManager.playSound("res/shoot0" + fireSound + ".wav", -15f);
                     Projectile p = createBullet();
 
                     fireDelayTimer = fireDelay;
@@ -236,6 +241,10 @@ public class Player extends EntityPolar {
         }
 
         return (double) (maxReloadFrames - reloadFramesLeft) / maxReloadFrames;
+    }
+
+    public boolean isReloading() {
+        return reloading;
     }
 
     @Override

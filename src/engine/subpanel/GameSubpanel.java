@@ -483,7 +483,7 @@ public class GameSubpanel implements Subpanel {
         ///////////// RELOAD /////////////
 
         // reload background
-        gw.setColor(Color.lightGray);
+        gw.setColor(p.isReloading() ? Color.red.darker() : Color.lightGray);
         gw.fillRect(x + size*2/3 + size/18, y + size*2/3 + size/18, size * 4 / 18, size * 4/18);
 
         // reload progress (reload percentage is 0 if not reloading)

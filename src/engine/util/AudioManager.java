@@ -28,7 +28,7 @@ public class AudioManager {
 
     // returns the ID of the sound being played
     // note that the volume here is in decibles... unsure if I should change that
-    public static int playSound(String filename, float decibles) {
+    public static int playSound(String filename, float decibles, int loop) {
         try {
             File file = new File(filename);
             Clip clip = AudioSystem.getClip();
@@ -40,7 +40,7 @@ public class AudioManager {
                     (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             gainControl.setValue(decibles);
 
-            clip.loop(0);
+            clip.loop(loop);
 
             UUID++;
             currentSounds.put(UUID, clip);
@@ -51,6 +51,11 @@ public class AudioManager {
         }
 
         return -1;
+    }
+
+    // no loop plays the sound once
+    public static int playSound(String filename, float decibles) {
+        return playSound(filename, decibles, 0);
     }
 
     public static void stopSound(Integer ID) {

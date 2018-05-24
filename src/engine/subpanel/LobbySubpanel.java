@@ -30,6 +30,8 @@ public class LobbySubpanel implements Subpanel {
 
     private int[][] controls = GameUtils.getControls();
 
+    private int prevTime = 9;
+
     public LobbySubpanel(int sWidth, int sHeight, PewPanel parent) {
 
         this.parent = parent;
@@ -93,6 +95,16 @@ public class LobbySubpanel implements Subpanel {
     @Override
     public void actionPerformed(ActionEvent e) {
         currentTicks--;
+
+        int time = (currentTicks * PewPanel.timerDelay / 1000);
+        if(time != prevTime) {
+            if(time == 0) {
+                AudioManager.playSound("res/count1.wav", -12f);
+            } else {
+                AudioManager.playSound("res/count0.wav", -15f);
+            }
+        }
+        prevTime = time;
 
         if(currentTicks <= 0) {
             ArrayList<Integer> playerList = new ArrayList<>();
