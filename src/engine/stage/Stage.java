@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public abstract class Stage {
     protected String displayName;
 
-    public abstract boolean isFinished(final int score);
+    public abstract boolean isFinished(final int score, final ArrayList<Enemy> currentEnemies);
 
     public abstract ArrayList<Enemy> attemptSpawn(final ArrayList<Enemy> currentEnemies);
 
@@ -34,7 +34,7 @@ public abstract class Stage {
 
         GameUtils.Position p = GameUtils.radialLocation(radius, theta);
 
-        Enemy newEnemy;
+        Enemy newEnemy = null;
         if (enemyClass == BasicEnemy.class) {
             newEnemy = new BasicEnemy(p.x, p.y, escapeRadius);
         } else if (enemyClass == ShootEnemy.class) {
@@ -45,11 +45,20 @@ public abstract class Stage {
             newEnemy = new BombEnemy(p.x, p.y, escapeRadius);
         } else if (enemyClass == Kraken.class) {
             newEnemy = new Kraken(escapeRadius, spawnRadius);
-        } else {
+        } else if (enemyClass == ArcEnemy.class) {
             int rotateSide = (int)Math.round(Math.random());
             newEnemy = new ArcEnemy(p.x, p.y, escapeRadius, rotateSide);
         }
 
+        if(newEnemy == null) {
+            System.err.println("Stage cannot spawn enemy of type " + enemyClass);
+        }
+
         return newEnemy;
+    }
+
+    // if you want a boss health bar, override this and return 0 to 1
+    public double bossHealth(ArrayList<Enemy> currentEnemies) {
+        return -1;
     }
 }

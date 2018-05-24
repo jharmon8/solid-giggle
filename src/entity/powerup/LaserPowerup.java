@@ -26,6 +26,10 @@ public class LaserPowerup extends Powerup {
 
     @Override
     public Class getAmmoType() {
-        return LightLaser.class;
+        if(active) {
+            return LightLaser.class;
+        }
+
+        return null;
     }
 }

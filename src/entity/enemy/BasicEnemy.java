@@ -18,15 +18,6 @@ public class BasicEnemy extends Enemy {
 
     private double speed;
 
-    // just used for graphics
-    private double direction;
-
-    private Color highlite;
-
-    private int escapeRadius;
-
-    private int countTick;
-
     public BasicEnemy(double x, double y, int escapeRadius) {
         this.scoreValue = 100;
 
@@ -36,8 +27,6 @@ public class BasicEnemy extends Enemy {
         this.size = 1.75;
         this.speed = 0.25;
         this.collisionDamage = 3;
-
-        this.countTick = 8;
 
         this.color = Color.lightGray;
         this.highlite = Color.white;
@@ -58,8 +47,6 @@ public class BasicEnemy extends Enemy {
 
         vx = Math.cos(direction) * speed;
         vy = Math.sin(direction) * speed;
-
-        this.escapeRadius = escapeRadius;
     }
 
     @Override
@@ -68,33 +55,11 @@ public class BasicEnemy extends Enemy {
             dead = true;
         }
 
+        damageTick++;
         countTick++;
 
         x += vx;
         y += vy;
-    }
-
-    @Override
-    public void draw(GraphicsWrapper gw) {
-        if (Math.ceil(countTick / 3) == 0 || Math.ceil(countTick / 3) == 2) {
-            gw.setColor(color.darker().darker());
-            gw.fillCircle(getX() - size, getY() - size, size * 2);
-
-            if (!Double.isNaN(direction)) {
-                gw.setColor(highlite.darker().darker());
-                gw.fillTriangle(x, y, direction, size);
-            }
-        }
-        else {
-            gw.setColor(color);
-            gw.fillCircle(getX() - size, getY() - size, size * 2);
-
-            if (!Double.isNaN(direction)) {
-                gw.setColor(highlite);
-                gw.fillTriangle(x, y, direction, size);
-            }
-        }
-
     }
 
     @Override
@@ -104,12 +69,6 @@ public class BasicEnemy extends Enemy {
         }
 
         return collides(proj.getX(), proj.getY(), proj.getSize());
-    }
-
-    @Override
-    public void takeDamage(int dmg) {
-        health -= dmg;
-        countTick = 0;
     }
 
     @Override

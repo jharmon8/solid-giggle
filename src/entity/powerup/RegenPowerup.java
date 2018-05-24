@@ -6,8 +6,8 @@ import entity.projectile.LightLaser;
 import java.awt.Color;
 
 public class RegenPowerup extends Powerup {
-    private int totalHeal = 4;
-    private int regenDelay = 25;
+    private int totalHeal = 5;
+    private int regenDelay = 40;
 
     public RegenPowerup(double px, double py, double vx, double vy) {
         super(px, py, vx, vy);
@@ -25,12 +25,11 @@ public class RegenPowerup extends Powerup {
     }
 
     @Override
-    public Class getAmmoType() {
-        return LightLaser.class;
-    }
-
-    @Override
     public int getHeal() {
+        if(!active) {
+            return 0;
+        }
+
         if((frame + 1) % regenDelay == 0) {
             return 1;
         }

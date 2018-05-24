@@ -43,7 +43,7 @@ public abstract class EntityCartesian implements Entity {
     }
     @Override
     public boolean collides(Projectile p) {
-        return size + p.getSize() < GameUtils.distance(x, y, p.getX(), p.getY());
+        return size + p.getSize() > GameUtils.distance(x, y, p.getX(), p.getY());
     }
 
     @Override

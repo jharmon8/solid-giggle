@@ -1,12 +1,18 @@
 package engine.stage;
 
-import entity.enemy.*;
+import entity.enemy.ArcEnemy;
+import entity.enemy.ArcShootEnemy;
+import entity.enemy.BasicEnemy;
+import entity.enemy.BombEnemy;
+import entity.enemy.Enemy;
+import entity.enemy.LaserEnemy;
+import entity.enemy.ShootEnemy;
 
 import java.util.ArrayList;
 
-public class StageFour extends Stage {
-    private int scoreThreshold = 10000;
-    private int maxEnemies = 12;
+public class StageDebug extends Stage {
+    private int scoreThreshold = 1000000;
+    private int maxEnemies = 100;
 
     private int spawnRadius = 16;
     private int escapeRadius = 48;
@@ -18,8 +24,17 @@ public class StageFour extends Stage {
 
     private int frame = 0;
 
-    StageFour() {
-        displayName = "- Stage 3 -";
+    private Class[] enemyTypes = {
+            ArcEnemy.class,
+            ArcShootEnemy.class,
+            BasicEnemy.class,
+            BombEnemy.class,
+            LaserEnemy.class,
+            ShootEnemy.class
+    };
+
+    StageDebug() {
+        displayName = "- Debug -";
     }
 
     @Override
@@ -37,17 +52,11 @@ public class StageFour extends Stage {
 
         if(currentEnemies.size() < maxEnemies && spawnTick <= 0 && frame > initialSpawnDelay) {
             spawnTick = spawnDelay;
-            int spawnEnemy = (int) (Math.random() * 10);
-            if (spawnEnemy <= 3) {
-                Enemy newEnemy = spawn(BasicEnemy.class, currentEnemies, spawnRadius, escapeRadius);
-                output.add(newEnemy);
-            } else if (spawnEnemy <= 6) {
-                Enemy newEnemy = spawn(ArcShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
-                output.add(newEnemy);
-            } else {
-                Enemy newEnemy = spawn(ShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
-                output.add(newEnemy);
-            }
+
+            Class type = enemyTypes[(int)(Math.random() * enemyTypes.length)];
+
+            Enemy newEnemy = spawn(type, currentEnemies, spawnRadius, escapeRadius);
+            output.add(newEnemy);
             return output;
         }
 
@@ -56,6 +65,6 @@ public class StageFour extends Stage {
 
     @Override
     public Stage getNextStage() {
-        return new StageFive();
+        return new StageTwo();
     }
 }

@@ -17,7 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 public class Player extends EntityPolar {
     public int playerNum;
 
-    private int fireDelay = 10;
+    private int fireDelay = 15;
     private int fireDelayTimer = 0;
 
     private int bulletDamage = 4;
@@ -28,8 +28,8 @@ public class Player extends EntityPolar {
 
     private Color shieldColor;
 
-    public int shieldRefreshMax = 600;
-    public int shieldRefreshDuration = 400;
+    public int shieldRefreshMax = 250;
+    public int shieldRefreshDuration = 100;
     public int shieldRefreshCurrent = 0;
     public boolean shielded = false;
 
@@ -50,6 +50,21 @@ public class Player extends EntityPolar {
 
     public int countTick;
 
+    // the 'action' stuff is my hold logic
+    private boolean previousAction = false;
+    private int actionCount = 0;
+    private int holdThreshold = 35; // tuning things like this is hard since framerate might be slow on my computer
+
+    private boolean previousFire = false;
+
+    private boolean reloading = false;
+    private final int maxAmmo = 15;
+    public int ammo = maxAmmo;
+
+    private int reloadFramesLeft = 0;
+    private int maxReloadFrames = 250;
+    private int reloadFramesFromButton = 25;
+
     public Player(double theta, Color color, double radius, int playerNum) {
         this.playerNum = playerNum;
 
@@ -62,7 +77,7 @@ public class Player extends EntityPolar {
 
         this.color = color;
 
-        this.maxHealth = 8;
+        this.maxHealth = 10;
         this.health = maxHealth;
 
         this.shieldColor = new Color(180,200,255);
@@ -72,6 +87,7 @@ public class Player extends EntityPolar {
     public void update() {
         if(health <= 0) {
             dead = true;
+            AudioManager.playSound("res/death.wav", -8f);
         }
 
         iFramesLeft--;
@@ -97,7 +113,23 @@ public class Player extends EntityPolar {
 
             // all powerup logic has to go above this
             if (powerup.isFinished()) {
+                AudioManager.playSound("res/deactivate.wav", -12f);
                 powerup = null;
+            }
+        }
+
+        // reloading
+        if(reloading) {
+            reloadFramesLeft--;
+
+            if(reloadFramesLeft <= 0) {
+                reloading = false;
+                ammo = maxAmmo;
+            }
+        } else {
+            if(ammo <= 0) {
+                reloading = true;
+                reloadFramesLeft = maxReloadFrames;
             }
         }
 
@@ -109,21 +141,88 @@ public class Player extends EntityPolar {
 
     // returns a projectile to be added to the projectiles array
     // null if I can't fire
-    public Projectile fire() {
-        if(fireDelayTimer < 0) {
-            Projectile p = createBullet();
+    public Projectile firePressed() {
+        if(reloading) {
+            // if reloading and upward edge, speed the reload
+            if (!previousFire) {
+                int fireSound = (int)(Math.random() * 4);
+                AudioManager.playSound("res/dud" + fireSound + ".wav", -20f);
+                reloadFramesLeft -= reloadFramesFromButton;
+            }
+        } else {
+            // if not reloading, do shoot logic
+            if(fireDelayTimer < 0) {
+                if(ammo > 0) {
+                    int fireSound = (int)(Math.random() * 6);
+                    AudioManager.playSound("res/shoot0" + fireSound + ".wav", -15f);
+                    Projectile p = createBullet();
 
-            fireDelayTimer = fireDelay;
+                    fireDelayTimer = fireDelay;
+                    ammo--;
 
-            return p;
+                    previousFire = true;
+                    return p;
+                }
+            }
         }
 
+        // this would be well done with a finally statement...
+        previousFire = true;
         return null;
     }
 
-    public void shield() {
+    // necessary for the stupid reload system
+    public void fireReleased() {
+        previousFire = false;
+    }
+
+    public void actionIsPressed() {
+        if(!previousAction) {
+            // this means it's just been pressed
+            previousAction = true;
+            actionCount = 0;
+        } else {
+            // this means it's being held
+            actionCount++;
+
+            if(actionCount > holdThreshold) {
+                powerup();
+            }
+        }
+
+        previousAction = true;
+    }
+
+    public void actionIsReleased() {
+        if(previousAction) {
+            // this means it's just being released
+            if(actionCount > holdThreshold) {
+//                powerup();
+            } else {
+                shield();
+            }
+
+            actionCount = 0;
+        } else {
+            // this means it was already released
+            // do nothing
+        }
+
+        previousAction = false;
+    }
+
+    private void shield() {
         if(shieldRefreshCurrent >= shieldRefreshMax) {
             shielded = true;
+        }
+    }
+
+    private void powerup() {
+        if(powerup != null) {
+            if(!powerup.isActive()) {
+                AudioManager.playSound("res/activate.wav", -12f);
+                powerup.activate();
+            }
         }
     }
 
@@ -133,6 +232,19 @@ public class Player extends EntityPolar {
         } else {
             this.theta -= speed;
         }
+    }
+
+    // for status panel
+    public double getReloadPercentage() {
+        if(!reloading) {
+            return 0;
+        }
+
+        return (double) (maxReloadFrames - reloadFramesLeft) / maxReloadFrames;
+    }
+
+    public boolean isReloading() {
+        return reloading;
     }
 
     @Override
@@ -183,6 +295,13 @@ public class Player extends EntityPolar {
         if(shielded) {
             gw.setColor(new Color(140,150,240,85));
             gw.fillCircle(x - size * 1.2, y - size * 1.2, size * 2.4);
+        }
+
+        if(powerup != null) {
+            if(powerup.isActive()) {
+                gw.setColor(powerup.getStatusColor());
+                gw.drawCircle(x - size * 1.3, y - size * 1.3, size * 2.6);
+            }
         }
     }
 

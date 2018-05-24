@@ -1,5 +1,6 @@
 package engine.stage;
 
+import engine.util.AudioManager;
 import engine.util.GraphicsWrapper;
 import entity.enemy.Enemy;
 
@@ -15,15 +16,25 @@ public class StageController {
     // this should be more than fade in + fade out
     private int lastDisplayFrame = 140;
 
+    private boolean DEBUG_STAGE = false;
+
     public StageController() {
-        currentStage = new StageOne();
+        if(DEBUG_STAGE) {
+            currentStage = new StageMinotaur();
+        } else {
+            currentStage = new StageOne();
+        }
     }
 
     // Spawn and stage transition logic goes here, and this is called on every tick
     public ArrayList<Enemy> update(final ArrayList<Enemy> enemies, final int score) {
+        if(frame == 0) {
+            AudioManager.playSound("res/alarm1.wav", -10f, 2);
+        }
+
         frame ++;
 
-        if(currentStage.isFinished(score)) {
+        if(currentStage.isFinished(score, enemies)) {
             currentStage = currentStage.getNextStage();
             frame = 0;
             return null;
@@ -38,7 +49,8 @@ public class StageController {
     }
 
     // If there's a fancy "STAGE ONE" type jumbotron text we wanna do, that goes here
-    public void draw(GraphicsWrapper gw) {
+    // also boss health and/or stage progress?
+    public void draw(GraphicsWrapper gw, ArrayList<Enemy> enemies) {
         if(frame < lastDisplayFrame && currentStage != null) {
             int numChar = currentStage.getDisplayName().length();
 

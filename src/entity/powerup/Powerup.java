@@ -27,6 +27,8 @@ public abstract class Powerup extends EntityCartesian {
 
     private double drawTheta = 0;
 
+    protected boolean active;
+
     public Powerup(double x, double y, double vx, double vy) {
         this.x = x;
         this.y = y;
@@ -51,7 +53,9 @@ public abstract class Powerup extends EntityCartesian {
     }
 
     public void playerUpdate() {
-        frame++;
+        if(active) {
+            frame++;
+        }
     }
 
     public boolean collides(Player p) {
@@ -115,5 +119,18 @@ public abstract class Powerup extends EntityCartesian {
 
     public int getHeal() {
         return 0;
+    }
+
+    public void activate() {
+        active = true;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    // for drawing on status panels
+    public double percentLeft() {
+        return (double) (timeToLive - frame) / timeToLive;
     }
 }

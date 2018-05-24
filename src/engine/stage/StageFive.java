@@ -23,7 +23,7 @@ public class StageFive extends Stage {
     }
 
     @Override
-    public boolean isFinished(final int score) {
+    public boolean isFinished(final int score, final ArrayList<Enemy> currentEnemies) {
         return score > scoreThreshold;
     }
 
