@@ -69,7 +69,7 @@ public class Kraken extends Boss {
 
         attackLength[0] = 200;
         attackLength[1] = 100;
-        attackLength[2] = 400;
+        attackLength[2] = 1000;
         attackLength[3] = 400;
         attackLength[4] = 100;
         attackLength[5] = -1;
@@ -179,10 +179,11 @@ public class Kraken extends Boss {
     public ArrayList<Projectile> interArc (ArrayList<Player> players) {
         ArrayList<Projectile> projToAdd = new ArrayList<>();
         int numberAroundCircumference = 6;
+        double randomComponent = (2*Math.PI*Math.random());
 
-        if (currentCooldown[2] % 100 == 0 && currentCooldown[2] > 0){
+        if (currentCooldown[2] % 200 == 0 && currentCooldown[2] > 0){
             for (int i = 0; i < numberAroundCircumference; i++) {
-                double theta = i * 2 * Math.PI / numberAroundCircumference;
+                double theta = i * 2 * Math.PI / numberAroundCircumference + randomComponent;
                 double spawnX = x + size * Math.cos(theta);
                 double spawnY = y + size * Math.sin(theta);
                 Projectile l = new InterlockBullet(spawnX, spawnY, 0, 0, this, i % 2, theta);
@@ -195,7 +196,7 @@ public class Kraken extends Boss {
         return projToAdd;
     }
 
-    public ArrayList<Projectile> simpleShot (ArrayList<Player> players){
+    public ArrayList<Projectile> simpleShot (ArrayList<Player> players){ // select two random enemies to shoot
         Player weakPlayer = targetWeakPlayer(players);
         Projectile p = new SlowBullet(x, y, weakPlayer.getX() - x, weakPlayer.getY() - y,this);
         ArrayList<Projectile> projToAdd = new ArrayList<>();
@@ -217,7 +218,7 @@ public class Kraken extends Boss {
                 wepToFire = selectShoot(canShootArray);
             }
         }
-        if (wepToFire == 2){
+        if (wepToFire == 2){ // overlapping arc
              if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
                  currentCooldown[wepToFire] = attackLength[wepToFire];
              }
@@ -227,7 +228,7 @@ public class Kraken extends Boss {
 
              projAdded = interArc(players);
              projAddedTotal.addAll(projAdded);
-        } else if (wepToFire == 3){
+        } else if (wepToFire == 3){ //selective arc
             //projAdded = waveArc();
 
              if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
@@ -237,15 +238,15 @@ public class Kraken extends Boss {
         }
 
         //weapons that may be fired in overlap
-        if (frame % maxCooldown[5] == 0) {
+        if (frame % maxCooldown[5] == 0) { //constantfiring
              projAdded = simpleShot(players);
              projAddedTotal.addAll(projAdded);
         }
 
-        if (currentCooldown[0] > 0 ) {
+        if (currentCooldown[0] > 0 || currentCooldown[0] == -1 * maxCooldown[0]) { //lasertracking
 
-            if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
-                currentCooldown[wepToFire] = attackLength[wepToFire];
+            if (currentCooldown[0] == -1* maxCooldown[0]) {
+                currentCooldown[0] = attackLength[0];
             }
             projAdded = laserTrack(players);
             projAddedTotal.addAll(projAdded);

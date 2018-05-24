@@ -16,8 +16,8 @@ public class InterlockBullet extends Projectile {
     private double startY;
 
     private double radius = 1;
-    private double thetaSpeed = 0.025;
-    private double radiusSpeed = 0.1;
+    private double thetaSpeed = 0.0125;
+    private double radiusSpeed = 0.225;
 
     public InterlockBullet(double px, double py, double vx, double vy, Entity parent, int rotationSide, double theta) {
         super(px, py, vx, vy, parent);
