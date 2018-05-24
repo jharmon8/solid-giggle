@@ -53,4 +53,9 @@ public abstract class Stage {
 
         return newEnemy;
     }
+
+    // if you want a boss health bar, override this and return 0 to 1
+    public double bossHealth(ArrayList<Enemy> currentEnemies) {
+        return -1;
+    }
 }

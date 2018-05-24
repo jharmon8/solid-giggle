@@ -20,7 +20,7 @@ public class StageController {
 
     public StageController() {
         if(DEBUG_STAGE) {
-            currentStage = new StageDebug();
+            currentStage = new StageMinotaur();
         } else {
             currentStage = new StageOne();
         }
@@ -49,7 +49,8 @@ public class StageController {
     }
 
     // If there's a fancy "STAGE ONE" type jumbotron text we wanna do, that goes here
-    public void draw(GraphicsWrapper gw) {
+    // also boss health and/or stage progress?
+    public void draw(GraphicsWrapper gw, ArrayList<Enemy> enemies) {
         if(frame < lastDisplayFrame && currentStage != null) {
             int numChar = currentStage.getDisplayName().length();
 

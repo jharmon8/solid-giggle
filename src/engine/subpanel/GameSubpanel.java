@@ -133,7 +133,7 @@ public class GameSubpanel implements Subpanel {
         graphicsWrapper.drawText(score, -gameWidth*(0.015 * score.length()), -gameHeight/2.4, 5, false);
 
         // lastly, on top of everything, draw the stage overlay
-        stageController.draw(graphicsWrapper);
+        stageController.draw(graphicsWrapper, enemies);
     }
 
     /*
