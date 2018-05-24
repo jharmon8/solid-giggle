@@ -39,7 +39,7 @@ public abstract class Powerup extends EntityCartesian {
         this.dead = false;
 
         this.size = 1;
-        this.speed = 0.33;
+        this.speed = 0.2;
     }
 
     @Override
@@ -47,7 +47,7 @@ public abstract class Powerup extends EntityCartesian {
         x += vx;
         y += vy;
 
-        drawTheta += 0.1;
+        drawTheta += 0.05;
     }
 
     public void playerUpdate() {
@@ -84,7 +84,7 @@ public abstract class Powerup extends EntityCartesian {
     @Override
     public void draw(GraphicsWrapper gw) {
         gw.setColor(getStatusColor());
-        gw.fillCircle(x - size, y - size, size * 2);
+        gw.drawPolygon(x, y, size, 6, drawTheta);
     }
 
     public boolean isDead() {
