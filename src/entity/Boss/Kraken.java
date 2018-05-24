@@ -22,8 +22,6 @@ public class Kraken extends Boss {
     private double direction;
     private double vx;
     private double vy;
-    private double thetaOffset;
-    private double arcFactor;
 
     private Color highlite;
 
@@ -70,7 +68,7 @@ public class Kraken extends Boss {
         attackLength[0] = 200;
         attackLength[1] = 100;
         attackLength[2] = 1000;
-        attackLength[3] = 400;
+        attackLength[3] = 800;
         attackLength[4] = 100;
         attackLength[5] = -1;
 
@@ -196,6 +194,27 @@ public class Kraken extends Boss {
         return projToAdd;
     }
 
+    public ArrayList<Projectile> selectArc (){ // select two random enemies to shoot
+        ArrayList<Projectile> projToAdd = new ArrayList<>();
+        int numberAroundCircumference = 36;
+        double randomComponent = (2*Math.PI*Math.random());
+
+        if (currentCooldown[2] % 125 == 0 && currentCooldown[2] > 0){
+            double safeTheta = (2*Math.PI*Math.random());
+            for (int i = 0; i < numberAroundCircumference; i++) {
+                double theta = i * 2 * Math.PI / numberAroundCircumference + randomComponent;
+                double spawnX = x + size * Math.cos(theta);
+                double spawnY = y + size * Math.sin(theta);
+                Projectile l = new InterlockBullet(spawnX, spawnY, 0, 0, this, i % 2, theta);
+                Projectile r = new InterlockBullet(spawnX, spawnY, 0, 0, this, (i + 1) % 2, theta);
+                projToAdd.add(l);
+                projToAdd.add(r);
+            }
+        }
+
+        return projToAdd;
+    }
+
     public ArrayList<Projectile> simpleShot (ArrayList<Player> players){ // select two random enemies to shoot
         Player weakPlayer = targetWeakPlayer(players);
         Projectile p = new SlowBullet(x, y, weakPlayer.getX() - x, weakPlayer.getY() - y,this);
@@ -223,9 +242,6 @@ public class Kraken extends Boss {
                  currentCooldown[wepToFire] = attackLength[wepToFire];
              }
 
-             arcFactor = (Math.PI/10)*(0.5 + 2.5*Math.random());
-             thetaOffset = (Math.random() - 0.5) * initialThetaRange;
-
              projAdded = interArc(players);
              projAddedTotal.addAll(projAdded);
         } else if (wepToFire == 3){ //selective arc
@@ -234,7 +250,8 @@ public class Kraken extends Boss {
              if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
                  currentCooldown[wepToFire] = attackLength[wepToFire];
              }
-             return null;
+            projAdded = selectArc();
+            projAddedTotal.addAll(projAdded);
         }
 
         //weapons that may be fired in overlap
@@ -251,6 +268,8 @@ public class Kraken extends Boss {
             projAdded = laserTrack(players);
             projAddedTotal.addAll(projAdded);
         }
+
+        //insert shield that may randomly occur. tie shield to power attack!
 
         return projAddedTotal;
     }
