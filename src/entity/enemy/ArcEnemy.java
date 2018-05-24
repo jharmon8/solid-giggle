@@ -17,15 +17,8 @@ public class ArcEnemy extends Enemy {
 
     private double speed;
 
-    // just used for graphics
-    private double direction;
-
-    private Color highlite;
-
     private int escapeRadius;
     private int rotationSide;
-    private int countTick;
-    private int damageTick;
     private double thetaCenter;
     private double arcFactor;
 
@@ -107,41 +100,12 @@ public class ArcEnemy extends Enemy {
     }
 
     @Override
-    public void draw(GraphicsWrapper gw) {
-        if (Math.ceil(damageTick / 3) == 0 || Math.ceil(damageTick / 3) == 2) {
-            gw.setColor(color.darker().darker());
-            gw.fillCircle(getX() - size, getY() - size, size * 2);
-
-            if (!Double.isNaN(direction)) {
-                gw.setColor(highlite.darker().darker());
-                gw.fillTriangle(x, y, direction, size);
-            }
-        }
-        else {
-            gw.setColor(color);
-            gw.fillCircle(getX() - size, getY() - size, size * 2);
-
-            if (!Double.isNaN(direction)) {
-                gw.setColor(highlite);
-                gw.fillTriangle(x, y, direction, size);
-            }
-        }
-
-    }
-
-    @Override
     public boolean collides(Projectile proj) {
         if(proj.ignoreList.contains(this)) {
             return false;
         }
 
         return collides(proj.getX(), proj.getY(), proj.getSize());
-    }
-
-    @Override
-    public void takeDamage(int dmg) {
-        health -= dmg;
-        damageTick = 0;
     }
 
     @Override

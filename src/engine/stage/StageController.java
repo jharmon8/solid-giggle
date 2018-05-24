@@ -15,8 +15,14 @@ public class StageController {
     // this should be more than fade in + fade out
     private int lastDisplayFrame = 140;
 
+    private boolean DEBUG_STAGE = true;
+
     public StageController() {
-        currentStage = new StageOne();
+        if(DEBUG_STAGE) {
+            currentStage = new StageDebug();
+        } else {
+            currentStage = new StageOne();
+        }
     }
 
     // Spawn and stage transition logic goes here, and this is called on every tick

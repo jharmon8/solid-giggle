@@ -1,5 +1,6 @@
 package entity.enemy;
 
+import engine.util.GraphicsWrapper;
 import entity.Entity;
 import entity.EntityCartesian;
 import entity.Player;
@@ -8,6 +9,7 @@ import entity.powerup.Powerup;
 import entity.powerup.RegenPowerup;
 import entity.projectile.Projectile;
 
+import java.awt.Color;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -18,6 +20,13 @@ public abstract class Enemy extends EntityCartesian {
     protected int collisionDamage;
 
     protected double powerupChance;
+
+    // just used for graphics
+    protected double direction;
+    protected Color highlite;
+
+    protected int damageTick;
+    protected int countTick;
 
     // The types is self explanator
     protected Class[] powerupTypes = {RegenPowerup.class, LaserPowerup.class};
@@ -62,6 +71,8 @@ public abstract class Enemy extends EntityCartesian {
 
     public void takeDamage(int dmg) {
         health -= dmg;
+        damageTick = 0;
+        countTick = 0;
     }
 
     public ArrayList<Projectile> attemptShoot(ArrayList<Player> players) {
@@ -98,4 +109,28 @@ public abstract class Enemy extends EntityCartesian {
 
         return output;
     }
+
+    @Override
+    public void draw(GraphicsWrapper gw) {
+        if (Math.ceil(damageTick / 3) == 0 || Math.ceil(damageTick / 3) == 2) {
+            gw.setColor(color.darker().darker());
+            gw.fillCircle(getX() - size, getY() - size, size * 2);
+
+            if (!Double.isNaN(direction)) {
+                gw.setColor(highlite.darker().darker());
+                gw.fillTriangle(x, y, direction, size);
+            }
+        }
+        else {
+            gw.setColor(color);
+            gw.fillCircle(getX() - size, getY() - size, size * 2);
+
+            if (!Double.isNaN(direction)) {
+                gw.setColor(highlite);
+                gw.fillTriangle(x, y, direction, size);
+            }
+        }
+
+    }
+
 }
