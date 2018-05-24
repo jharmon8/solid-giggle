@@ -26,7 +26,4 @@ public interface Entity {
     // drawing avatars and stuff
     public int getHealth();
     public int getMaxHealth();
-
-    // collect powerups
-    //public void getPowerup(Powerup p);
 }

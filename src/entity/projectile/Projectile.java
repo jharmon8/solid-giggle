@@ -59,7 +59,7 @@ public abstract class Projectile extends EntityCartesian {
     public void onCollide(Powerup p) {
         // prevents us from hitting p on every tick
         if (parent.getClass() == Player.class) {
-            ((Player) parent).getPowerup(p);
+            ((Player) parent).givePowerup(p);
             dead = true;
             p.dead = true;
         }

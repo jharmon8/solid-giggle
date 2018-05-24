@@ -1,16 +1,20 @@
 package entity.powerup;
 
 import engine.util.GameUtils;
+import entity.projectile.LightLaser;
+import entity.projectile.Projectile;
 
 import java.awt.*;
 
-public class laserPowerup extends Powerup {
+public class LaserPowerup extends Powerup {
     // Instead of doing the chord math, we just have an angular range and it picks a direction in that range
 
-    public laserPowerup(double px, double py, double vx, double vy) {
+    public LaserPowerup(double px, double py, double vx, double vy) {
         super(px, py, vx, vy);
 
-        this.color = new Color(0, 200, 0, 140);
+//        this.color = new Color(0, 200, 0, 140);
+        this.color = Color.red;
+
         this.size = 0.5;
         this.speed = 0.33;
 
@@ -19,5 +23,12 @@ public class laserPowerup extends Powerup {
         double velocityMag = GameUtils.distance(vx, vy);
         this.vx = vx / velocityMag * speed;
         this.vy = vy / velocityMag * speed;
+
+        this.timeToLive = 200;
+    }
+
+    @Override
+    public Class getAmmoType() {
+        return LightLaser.class;
     }
 }

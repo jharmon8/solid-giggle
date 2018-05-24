@@ -2,7 +2,7 @@ package entity.enemy;
 
 import entity.Player;
 import entity.powerup.Powerup;
-import entity.powerup.laserPowerup;
+import entity.powerup.LaserPowerup;
 import entity.projectile.Projectile;
 import engine.util.GraphicsWrapper;
 
@@ -122,7 +122,7 @@ public class BasicEnemy extends Enemy {
             ArrayList<Powerup> droppedPowerup= new ArrayList<>();
             double powerupSelect = (int) Math.random()*1;
             if (powerupSelect == 0) {
-                Powerup p = new laserPowerup(getX(), getY(), vx, vy);
+                Powerup p = new LaserPowerup(getX(), getY(), vx, vy);
                 droppedPowerup.add(p);
             }
 

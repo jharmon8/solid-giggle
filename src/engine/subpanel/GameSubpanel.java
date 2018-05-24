@@ -454,20 +454,11 @@ public class GameSubpanel implements Subpanel {
         gw.drawLine(x + size*2/3 + size*5/18, y + size*5/18, x + size*2/3 + size/18, y + size*5/18, 0.3);
 
         // Powerup Box
-        switch(p.powerup) {
-            case 1:
-                gw.setColor(Color.pink);
-                break;
-            case 2:
-                gw.setColor(Color.cyan);
-                break;
-            case 3:
-                gw.setColor(new Color(142,199,129));
-                break;
-            default:
-                gw.setColor(Color.darkGray);
+        if(p.getPowerup() != null) {
+            gw.setColor(p.getPowerup().getStatusColor());
+        } else {
+            gw.setColor(Color.lightGray);
         }
-
         gw.fillRect(x + size*2/3 + size/18, y + size*2/3 + size/18, size * 4 / 18, size * 4/18);
 
 
