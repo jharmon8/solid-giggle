@@ -15,9 +15,6 @@ public class RegenPowerup extends Powerup {
 //        this.color = new Color(0, 200, 0, 140);
         this.color = Color.pink;
 
-        this.size = 0.5;
-        this.speed = 0.33;
-
         // We don't care about the magnitude of the velocity vector passed in
         // We keep its direction and scale it to speed, defined above
         double velocityMag = GameUtils.distance(vx, vy);
