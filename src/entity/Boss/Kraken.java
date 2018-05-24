@@ -159,11 +159,21 @@ public class Kraken extends Boss {
         return toFire;
     }
 */
-    public ArrayList<Projectile> laserTrack (ArrayList<Player> players){
+    public ArrayList<Projectile> laserTrack (ArrayList<Player> players) {
         ArrayList<Projectile> projToAdd = new ArrayList<>();
-        for(Player play : players) {
-            Projectile p = new TrackingLaser(x, y, play.getX(), play.getY(), this);
-            projToAdd.add(p);
+        lastPlayerPx = new double[players.size()];
+        lastPlayerPy = new double[players.size()];
+
+        if ((currentCooldown[0] >= (attackLength[0] - 100))) {
+            for (Player play : players) {
+                Projectile p = new TrackingLaser(x, y, play.getX(), play.getY(), this);
+                projToAdd.add(p);
+            }
+        } else {
+            for (int i = 0; i < lastPlayerPx.length; i++) {
+                Projectile p = new DamageLaser(x, y, lastPlayerPx[i], lastPlayerPx[i], this);
+                projToAdd.add(p);
+            }
         }
 
         return projToAdd;
@@ -190,10 +200,11 @@ public class Kraken extends Boss {
         }
 
          if (wepToFire == 0) {
-            projAdded = laserTrack(players);
+
             if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
                 currentCooldown[wepToFire] = attackLength[wepToFire];
             }
+             projAdded = laserTrack(players);
             return projAdded;
         } else if (wepToFire == 1){
             //projAdded = laserVomit();
@@ -217,10 +228,11 @@ public class Kraken extends Boss {
              }
              return null;
         } else if (wepToFire == 4) {
-            projAdded = simpleShot(players);
+
              if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
                  currentCooldown[wepToFire] = attackLength[wepToFire];
              }
+             projAdded = simpleShot(players);
              return projAdded;
         }
         return null;
