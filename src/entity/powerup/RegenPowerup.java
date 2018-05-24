@@ -25,12 +25,11 @@ public class RegenPowerup extends Powerup {
     }
 
     @Override
-    public Class getAmmoType() {
-        return LightLaser.class;
-    }
-
-    @Override
     public int getHeal() {
+        if(!active) {
+            return 0;
+        }
+
         if((frame + 1) % regenDelay == 0) {
             return 1;
         }

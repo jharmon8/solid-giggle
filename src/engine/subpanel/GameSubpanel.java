@@ -55,6 +55,7 @@ public class GameSubpanel implements Subpanel {
     private PewPanel parent;
 
     private DecimalFormat scoreFormatter = new DecimalFormat("###,###");
+    private DecimalFormat ammoFormatter = new DecimalFormat("00");
 
     // are playerNums 0 or 1 indexed?
     // It is 0 right now, but player.playerNum needs to be 1 indexed
@@ -211,15 +212,20 @@ public class GameSubpanel implements Subpanel {
             }
 
             if(shouldFire) {
-                Projectile newP = p.fire();
+                Projectile newP = p.firePressed();
 
                 if(newP != null) {
                     projectiles.add(newP);
                 }
+            } else {
+                // this is for reload logic
+                p.fireReleased();
             }
 
             if (shouldSecondary) {
-                p.shield();
+                p.actionIsPressed();
+            } else {
+                p.actionIsReleased();
             }
 
             p.update();
@@ -398,6 +404,7 @@ public class GameSubpanel implements Subpanel {
 
     }
 
+    // WORST METHOD EVER
     public void drawAvatar(double x, double y, Player p, double size, GraphicsWrapper gw) {
         // if panel is disabled
         if(p == null) {
@@ -410,6 +417,8 @@ public class GameSubpanel implements Subpanel {
         // gray background square
         gw.setColor(Color.gray);
         gw.fillRect(x, y, size, size);
+
+        ///////////// HEALTH /////////////
 
         // jump right in to the health bar
         gw.setColor(Color.red);
@@ -427,6 +436,8 @@ public class GameSubpanel implements Subpanel {
         gw.drawLine(x + size*5/18, y + size*17/18, x + size*5/18, y + size/18, 0.3);
         gw.drawLine(x + size*5/18, y + size*17/18, x + size/18, y + size*17/18, 0.3);
 
+        ///////////// SHIELD /////////////
+
         // shield bar
         gw.setColor(new Color(191, 219, 221));
         gw.fillRect(x + size/3 + size/18, y + size/18, size * 4 / 18, size * 16/18);
@@ -443,36 +454,57 @@ public class GameSubpanel implements Subpanel {
         gw.drawLine(x + size/3 + size*5/18, y + size*17/18, x + size/3 + size*5/18, y + size/18, 0.3);
         gw.drawLine(x + size/3 + size*5/18, y + size*17/18, x + size/3 + size/18, y + size*17/18, 0.3);
 
+        ///////////// POWERUP /////////////
+
         // ScreenClear Box
-        gw.setColor(p.canScreenClear ? Color.green : Color.darkGray);
-        gw.fillRect(x + size*2/3 + size/18, y + size/18, size * 4 / 18, size * 4/18);
+        // Powerup Box
+        if(p.getPowerup() != null) {
+            gw.setColor(p.getPowerup().getStatusColor());
+            gw.fillRect(x + size*2/3 + size/18, y + size/18, size * 4 / 18 * p.getPowerup().percentLeft(), size * 4/18);
+        } else {
+            gw.setColor(Color.lightGray);
+            gw.fillRect(x + size*2/3 + size/18, y + size/18, size * 4 / 18, size * 4/18);
+        }
 
         // ScreenClear borders
-        gw.setColor(Color.black);
+        if(p.getPowerup() != null && p.getPowerup().isActive()) {
+            gw.setColor(Color.yellow);
+        } else {
+            gw.setColor(Color.black);
+        }
         gw.drawLine(x + size*2/3 + size/18, y + size/18, x + size*2/3 + size*5/18, y + size/18, 0.3);
         gw.drawLine(x + size*2/3 + size/18, y + size/18, x + size*2/3 + size/18, y + size*5/18, 0.3);
         gw.drawLine(x + size*2/3 + size*5/18, y + size*5/18, x + size*2/3 + size*5/18, y + size/18, 0.3);
         gw.drawLine(x + size*2/3 + size*5/18, y + size*5/18, x + size*2/3 + size/18, y + size*5/18, 0.3);
 
-        // Powerup Box
-        if(p.getPowerup() != null) {
-            gw.setColor(p.getPowerup().getStatusColor());
-        } else {
-            gw.setColor(Color.lightGray);
-        }
+        ///////////// RELOAD /////////////
+
+        // reload background
+        gw.setColor(Color.lightGray);
         gw.fillRect(x + size*2/3 + size/18, y + size*2/3 + size/18, size * 4 / 18, size * 4/18);
+
+        // reload progress (reload percentage is 0 if not reloading)
+        gw.setColor(Color.white);
+        gw.fillRect(x + size*2/3 + size/18, y + size*2/3 + size/18, size * 4 / 18 * p.getReloadPercentage(), size * 4/18);
+
+        // reload text
+        gw.setColor(Color.black);
+        gw.drawText(ammoFormatter.format(p.ammo), x + size*2/3 + size*3/36, y + size*2/3 + size*4/18, 1.5, false);
 
 
         // todo I bet these could be an "outline rectangle" method
-        // Powerup borders
+        // reload borders
         gw.setColor(Color.black);
         gw.drawLine(x + size*2/3 + size/18, y + size*13/18, x + size*2/3 + size*5/18, y + size*13/18, 0.3);
         gw.drawLine(x + size*2/3 + size/18, y + size*13/18, x + size*2/3 + size/18, y + size*17/18, 0.3);
         gw.drawLine(x + size*2/3 + size*5/18, y + size*17/18, x + size*2/3 + size*5/18, y + size*13/18, 0.3);
         gw.drawLine(x + size*2/3 + size*5/18, y + size*17/18, x + size*2/3 + size/18, y + size*17/18, 0.3);
 
+
+        ///////////// PLAYER NUMBER /////////////
+
         // The player number
         gw.setColor(Color.black);
-        gw.drawText(p.playerNum + "", x + size*2/3 + size * 0.033, y + size*2/3, 4, false);
+        gw.drawText(p.playerNum + "", x + size*2/3 + size * 0.034, y + size*2/3, 4, false);
     }
 }
