@@ -34,7 +34,7 @@ public class ArcEnemy extends Enemy {
         this.y = y;
 
         this.size = 1.75;
-        this.speed = 0.25;
+        this.speed = 0.5;
         this.collisionDamage = 3;
 
         this.countTick = 0;
@@ -49,7 +49,7 @@ public class ArcEnemy extends Enemy {
 
         this.powerupChance = 1;
 
-        arcFactor = (Math.PI/30)*(0.5 + 2.5*Math.random());
+        arcFactor = (Math.PI/10)*(0.5 + 2.5*Math.random());
 
         // calculate trajectory
         double thetaOffset = (Math.random() - 0.5) * initialThetaRange;

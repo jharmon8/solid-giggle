@@ -5,6 +5,7 @@ import entity.Player;
 import entity.projectile.Projectile;
 import entity.projectile.SlowBullet;
 import engine.util.GraphicsWrapper;
+import entity.projectile.TrackingLaser;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -156,7 +157,6 @@ public class Kraken extends Boss {
         return -1;
     }
 
-    /*
     public ArrayList<Projectile> laserTrack (ArrayList<Player> players){
         ArrayList<Projectile> projToAdd = new ArrayList<>();
         for(Player play : players) {
@@ -165,7 +165,6 @@ public class Kraken extends Boss {
         }
         return projToAdd;
     }
-    */
 
     public ArrayList<Projectile> simpleShot (ArrayList<Player> players){
         Player weakPlayer = targetWeakPlayer(players);

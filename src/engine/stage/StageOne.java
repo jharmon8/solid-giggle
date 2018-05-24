@@ -35,7 +35,7 @@ public class StageOne extends Stage {
         ArrayList<Enemy> output = new ArrayList<>();
 
         spawnTick--;
-
+/*
         if(currentEnemies.size() < maxEnemies && spawnTick <= 0 && frame > initialSpawnDelay) {
             spawnTick = spawnDelay;
 
@@ -43,7 +43,7 @@ public class StageOne extends Stage {
             output.add(newEnemy);
             return output;
         }
-
+*/
         return null;
     }
 

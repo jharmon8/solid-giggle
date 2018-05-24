@@ -41,10 +41,10 @@ public class StageThree extends Stage {
         if(currentEnemies.size() < maxEnemies && spawnTick <= 0 && frame > initialSpawnDelay) {
             spawnTick = spawnDelay;
             int spawnEnemy = (int) (Math.random() * 10);
-            if (spawnEnemy <= 3) {
+            if (spawnEnemy <= -3) {
                 Enemy newEnemy = spawn(BasicEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
-            } else if (spawnEnemy <= 7) {
+            } else if (spawnEnemy <= -7) {
                 Enemy newEnemy = spawn(ArcEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
             } else {

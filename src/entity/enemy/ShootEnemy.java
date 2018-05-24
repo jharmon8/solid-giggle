@@ -7,6 +7,7 @@ import entity.projectile.Projectile;
 import entity.projectile.SlowBullet;
 import engine.util.GraphicsWrapper;
 import engine.util.GameUtils;
+import entity.projectile.TrackingLaser;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -135,7 +136,8 @@ public class ShootEnemy extends Enemy {
                 return null;
             }
 
-            Projectile p = new SlowBullet(x, y, closestPlayer.getX() - x, closestPlayer.getY() - y,this);
+            //Projectile p = new SlowBullet(x, y, closestPlayer.getX() - x, closestPlayer.getY() - y,this);
+            Projectile p = new TrackingLaser(x, y, closestPlayer.getX(), closestPlayer.getY(),this);
             ArrayList<Projectile> projToAdd = new ArrayList<>();
             projToAdd.add(p);
             return projToAdd;

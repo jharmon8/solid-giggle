@@ -1,15 +1,16 @@
-/*
+
 package entity.projectile;
 
+import engine.util.GameUtils;
+import engine.util.GraphicsWrapper;
 import entity.Entity;
-import graphics.GraphicsWrapper;
-import util.GameUtils;
 
 import java.awt.Color;
 
 public class TrackingLaser extends Projectile {
 
     private double thick;
+    public double tx, ty;
 
     public TrackingLaser(double px, double py, double tx, double ty, Entity parent)  {
         super(px, py, tx, ty, parent);
@@ -26,8 +27,8 @@ public class TrackingLaser extends Projectile {
         this.vx = 0;
         this.vy = 0;
 
-        //tx = px;
-        //ty = py;
+        this.tx = px;
+        this.ty = py;
     }
 
     @Override
@@ -36,4 +37,3 @@ public class TrackingLaser extends Projectile {
         gw.drawLine(x, y, tx, ty, thick);
     }
 }
-*/

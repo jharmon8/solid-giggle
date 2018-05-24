@@ -342,7 +342,7 @@ public class GameSubpanel implements Subpanel {
         // remove players
         players.removeAll(playersToRemove);
 
-        //change projectiles array
+        //change array
         powerups.removeAll(powerupToRemove);
         if(powerupToAdd != null) {
             powerups.addAll(powerupToAdd);
