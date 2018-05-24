@@ -137,7 +137,7 @@ public abstract class Enemy extends EntityCartesian {
         gw.fillTriangle(x, y, direction, size);
     }
 
-    private Color setAlpha(Color c, int alpha) {
+    protected Color setAlpha(Color c, int alpha) {
         Color output = new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha);
 
         return output;
@@ -145,5 +145,11 @@ public abstract class Enemy extends EntityCartesian {
 
     public boolean shouldPruneOffScreen() {
         return true;
+    }
+
+    // number from 0 to 1 indicating how much health to draw
+    // -1 means this is not a boss and does not need a health bar
+    public double bossHealth() {
+        return -1;
     }
 }

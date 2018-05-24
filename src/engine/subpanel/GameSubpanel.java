@@ -54,6 +54,8 @@ public class GameSubpanel implements Subpanel {
 
     private PewPanel parent;
 
+    private double bossHealth = -1;
+
     private DecimalFormat scoreFormatter = new DecimalFormat("###,###");
     private DecimalFormat ammoFormatter = new DecimalFormat("00");
 
@@ -131,6 +133,9 @@ public class GameSubpanel implements Subpanel {
         String score = scoreFormatter.format(scoreboard);
         graphicsWrapper.setColor(new Color(255,255,255,175));
         graphicsWrapper.drawText(score, -gameWidth*(0.015 * score.length()), -gameHeight/2.4, 5, false);
+
+        // draw boss health bar
+        drawBossHealthBar(graphicsWrapper);
 
         // lastly, on top of everything, draw the stage overlay
         stageController.draw(graphicsWrapper, enemies);
@@ -244,8 +249,16 @@ public class GameSubpanel implements Subpanel {
         ArrayList<Enemy> entitiesToRemove = new ArrayList<>();
         ArrayList<Projectile> projToAdd = new ArrayList<>();
         ArrayList<Powerup> powerupToAdd = new ArrayList<>();
+
+        boolean foundBoss = false;
         for(Enemy enemy : enemies) {
             enemy.update();
+
+            if(enemy.bossHealth() > 0) {
+                foundBoss = true;
+                bossHealth = enemy.bossHealth();
+            }
+
             projToAdd = enemy.attemptShoot(players);
             if (projToAdd != null) {
                 for (Projectile projAdded : projToAdd) {
@@ -278,6 +291,9 @@ public class GameSubpanel implements Subpanel {
                 }
 */
             }
+        }
+        if(!foundBoss) {
+            bossHealth = -1;
         }
 
         //update powerup
@@ -511,5 +527,30 @@ public class GameSubpanel implements Subpanel {
         // The player number
         gw.setColor(Color.black);
         gw.drawText(p.playerNum + "", x + size*2/3 + size * 0.05, y + size*0.63, 4, false);
+    }
+
+    public void drawBossHealthBar(GraphicsWrapper gw) {
+
+        if(bossHealth < 0) {
+            return;
+        }
+
+        double minX = -gameWidth * 0.4;
+        double minY = gameHeight * 0.45;
+
+        double maxX = gameWidth * 0.4;
+        double maxY = gameHeight * 0.47;
+
+        gw.setColor(Color.red.darker());
+        gw.fillRect(minX, minY, maxX - minX, maxY - minY);
+        gw.setColor(Color.green.darker());
+        gw.fillRect(minX, minY, (maxX - minX) * bossHealth, maxY - minY);
+
+        // reload borders
+        gw.setColor(Color.black);
+        gw.drawLine(minX, minY, minX, maxY, 0.3);
+        gw.drawLine(minX, maxY, maxX, maxY, 0.3);
+        gw.drawLine(maxX, maxY, maxX, minY, 0.3);
+        gw.drawLine(maxX, minY, minX, minY, 0.3);
     }
 }
