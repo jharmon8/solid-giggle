@@ -130,4 +130,36 @@ public class GraphicsWrapper {
         g2.setStroke(new BasicStroke((int)(thickness * rWidth)));
         g2.draw(new Line2D.Float((int)(x1 * rWidth), (int)(y1 * rHeight), (int)(x2 * rWidth), (int)(y2 * rHeight)));
     }
+
+    public void drawPolygon(double centerX, double centerY, double radius, int faces, double thetaStart) {
+        int[] xPoints = new int[faces];
+        int[] yPoints = new int[faces];
+
+        double theta = thetaStart;
+        double dTheta = 6.28 / faces;
+
+        for(int i = 0; i < faces; i++) {
+            // find current point
+            double[] currentPoint = getRadialPoint(centerX, centerY, radius, theta);
+
+            // put point in arrays
+            xPoints[i] = (int)(currentPoint[0] * rWidth);
+            yPoints[i] = (int)(currentPoint[1] * rHeight);
+
+            // rotate by one face
+            theta += dTheta;
+        }
+
+        g.drawPolygon(xPoints, yPoints, faces);
+    }
+
+    // returns {x, y} in game coords
+    private double[] getRadialPoint(double centerX, double centerY, double radius, double theta) {
+        double[] point = new double[2];
+
+        point[0] = Math.cos(theta) * radius + centerX;
+        point[1] = Math.sin(theta) * radius + centerY;
+
+        return point;
+    }
 }

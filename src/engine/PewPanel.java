@@ -68,9 +68,9 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
         if(SKIP_TO_GAME) {
             ArrayList<Integer> threePlayers = new ArrayList<Integer>() {{
+                add(0);
+                add(1);
                 add(2);
-                add(4);
-                add(5);
             }};
 
             swapSubpanel(new GameSubpanel(sWidth, sHeight, this,threePlayers));

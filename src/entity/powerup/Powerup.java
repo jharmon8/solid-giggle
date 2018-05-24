@@ -25,6 +25,8 @@ public abstract class Powerup extends EntityCartesian {
     public ArrayList<Entity> ignoreList = new ArrayList<>();
     public boolean dead = false;
 
+    private double drawTheta = 0;
+
     public Powerup(double x, double y, double vx, double vy) {
         this.x = x;
         this.y = y;
@@ -35,12 +37,17 @@ public abstract class Powerup extends EntityCartesian {
         this.ignoreList.add(parent);
 
         this.dead = false;
+
+        this.size = 1;
+        this.speed = 0.2;
     }
 
     @Override
     public void update() {
         x += vx;
         y += vy;
+
+        drawTheta += 0.05;
     }
 
     public void playerUpdate() {
@@ -77,7 +84,7 @@ public abstract class Powerup extends EntityCartesian {
     @Override
     public void draw(GraphicsWrapper gw) {
         gw.setColor(getStatusColor());
-        gw.fillCircle(x - size, y - size, size * 2);
+        gw.drawPolygon(x, y, size, 6, drawTheta);
     }
 
     public boolean isDead() {
@@ -104,5 +111,9 @@ public abstract class Powerup extends EntityCartesian {
 
     public Color getStatusColor() {
         return color;
+    }
+
+    public int getHeal() {
+        return 0;
     }
 }
