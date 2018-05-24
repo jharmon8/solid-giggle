@@ -5,10 +5,14 @@ import entity.Player;
 import entity.projectile.Projectile;
 import entity.projectile.SlowBullet;
 import engine.util.GraphicsWrapper;
+import entity.projectile.TrackingLaser;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Vector;
+
+import static engine.util.GameUtils.distance;
+import static engine.util.GameUtils.flipAngle;
 
 public class Kraken extends Boss {
     private int frame;
@@ -23,30 +27,22 @@ public class Kraken extends Boss {
 
     private Color highlite;
 
-    private int aimLaserCooldown;
-    private int laserVomitCooldown;
-    private int interlockArcCooldown;
-    private int bulletPieCooldown;
-    private int spawnEnemyCooldown;
-    private int fireNormalShotCooldown;
+    private int[] maxCooldown = {0,0,0,0,0,0};
+    private int[] attackLength = {0,0,0,0,0,0};
+    private int[] currentCooldown = {0,0,0,0,0,0};
 
-    private int aimLaserLength;
-    private int laserVomitLength;
-    private int interlockArcLength;
-    private int bulletPieLength;
-    private int spawnEnemyLength;
-    private int fireNormalShotLength;
+    private int numbAttack = 6;
+    private int wepToFire;
 
-    private double shootChance;
+    private double initialThetaRange = Math.PI * 2;
+    private double[] lastPlayerPx;
+    private double[] lastPlayerPy;
 
-    private Vector<Integer> attackTimer = new Vector<>();
-    private Vector<Integer> attackLength = new Vector<>();
+    private ArrayList<Projectile> projAdded = new ArrayList<>();
 
     public Kraken(int escapeRadius, int spawnRadius) {
         this.x = 0;
         this.y = 0;
-
-        shootChance = 0.33;
 
         this.size = 3.5;
         this.speed = 0.25;
@@ -60,35 +56,30 @@ public class Kraken extends Boss {
         this.escapeRadius = escapeRadius;
         this.spawnRadius = spawnRadius;
 
-        aimLaserCooldown = 200;
-        laserVomitCooldown = 80;
-        interlockArcCooldown = 100;
-        bulletPieCooldown = 200;
-        spawnEnemyCooldown = 150;
-        fireNormalShotCooldown = 10;
+        this.wepToFire = -1;
 
-        aimLaserLength = 200;
-        laserVomitLength = 100;
-        interlockArcLength = 80;
-        bulletPieLength = 400;
-        spawnEnemyLength = 100;
-        fireNormalShotLength = 1;
+        maxCooldown[0] = 200;
+        maxCooldown[1] = 80;
+        maxCooldown[2] = 100;
+        maxCooldown[3] = 200;
+        maxCooldown[4] = 150;
+        maxCooldown[5] = 10;
+
+        attackLength[0] = 5;
+        attackLength[1] = 100;
+        attackLength[2] = 80;
+        attackLength[3] = 400;
+        attackLength[4] = 100;
+        attackLength[5] = 25;
+
+        currentCooldown[0] = -1 * maxCooldown[0];
+        currentCooldown[1] = -1 * maxCooldown[1];
+        currentCooldown[2] = -1 * maxCooldown[2];
+        currentCooldown[3] = -1 * maxCooldown[3];
+        currentCooldown[4] = -1 * maxCooldown[4];
+        currentCooldown[5] = -1 * maxCooldown[5];
 
         damageTick = 8;
-
-        attackTimer.add(aimLaserCooldown);
-        attackTimer.add(laserVomitCooldown);
-        attackTimer.add(interlockArcCooldown);
-        attackTimer.add(bulletPieCooldown);
-        attackTimer.add(spawnEnemyCooldown);
-        attackTimer.add(fireNormalShotCooldown);
-
-        attackLength.add(aimLaserLength);
-        attackLength.add(laserVomitLength);
-        attackLength.add(interlockArcLength);
-        attackLength.add(bulletPieLength);
-        attackLength.add(spawnEnemyLength);
-        attackLength.add(fireNormalShotLength);
 
         direction = computeTrajectory(x,y);
         vx = Math.cos(direction) * speed;
@@ -99,29 +90,38 @@ public class Kraken extends Boss {
     public void update() {
         frame++;
         damageTick++;
+        wepToFire = -1;
 
         boolean doMove = true;
-        for (int i = 0; i < attackLength.size(); i++) {
-            if (attackLength.get(i) > 0) {
-                attackLength.set(i, attackLength.get(i) - 1);
+        for (int i = 0; i < numbAttack; i++) {
+            if (currentCooldown[i] > 0) {
+                currentCooldown[i] = currentCooldown[i] - 1;
                 doMove = false;
-            } else {
-                attackTimer.set(i, attackTimer.get(i) - 1);
+
+                if(i == 0){
+                    if (currentCooldown[i] >= (attackLength[i] - 100)){
+                        wepToFire = i;
+                    }
+                }
+            } else if (Math.abs(currentCooldown[i]) < maxCooldown[i]){
+                currentCooldown[i] = currentCooldown[i] - 1;
             }
         }
 
         if (doMove) {
-            if (x == 0 && y == 0) {
-                direction = computeTrajectory(x, y);
-                vx = Math.cos(direction) * speed;
-                vy = Math.sin(direction) * speed;
-            } else if ((int) getR() == spawnRadius) {
-                direction = direction - Math.PI;
-                vx = -vx;
-                vy = -vy;
-            }
             x += vx;
             y += vy;
+            if ((int) getR() == spawnRadius) {
+                direction = flipAngle(direction);
+                vx = -vx;
+                vy = -vy;
+            } else if (distance(this.x, this.y) < spawnRadius*0.01){
+                double thetaOffset = (Math.random() - 0.5) * initialThetaRange;
+                double thetaCenter = Math.atan2(-y, -x);
+                direction = thetaCenter + thetaOffset;
+                vx = Math.cos(direction) * speed;
+                vy = Math.sin(direction) * speed;
+            }
         }
     }
 
@@ -146,64 +146,98 @@ public class Kraken extends Boss {
             }
         }
     }
-
+/*
     @Override
-    public int selectShoot (Vector<Integer> availWep){
-        if (Math.random() < shootChance && availWep != null) {
-            int wepToFire = (int) (Math.random() * availWep.size());
-            return availWep.get(wepToFire);
+    public int selectShoot (int[] availWep){
+        int[] working = {0};
+        for(int i = 0; i < availWep.length; i ++) {
+            if (availWep[i] > 0) {
+                working[working.length] = i;
+            }
         }
-        return -1;
+        int toFire = working[1 + (int) (Math.random() * (working.length-1))];
+        return toFire;
     }
-
-    /*
+*/
     public ArrayList<Projectile> laserTrack (ArrayList<Player> players){
         ArrayList<Projectile> projToAdd = new ArrayList<>();
         for(Player play : players) {
             Projectile p = new TrackingLaser(x, y, play.getX(), play.getY(), this);
             projToAdd.add(p);
         }
+
         return projToAdd;
     }
-    */
 
     public ArrayList<Projectile> simpleShot (ArrayList<Player> players){
         Player weakPlayer = targetWeakPlayer(players);
         Projectile p = new SlowBullet(x, y, weakPlayer.getX() - x, weakPlayer.getY() - y,this);
         ArrayList<Projectile> projToAdd = new ArrayList<>();
         projToAdd.add(p);
-        attackTimer.set(attackTimer.size()-1, fireNormalShotCooldown);
+        currentCooldown[5] = currentCooldown[5] - 1;
         return projToAdd;
     }
 
-    public ArrayList<Projectile> attemptShootKraken (ArrayList<Player> players, int wepToFire){
-        ArrayList<Projectile> projAdded = new ArrayList<>();
+    @Override
+    public ArrayList<Projectile> attemptShoot (ArrayList<Player> players){
+        projAdded.clear();
+        if (wepToFire < 0) {
+            int[] canShootArray = canShoot(currentCooldown, maxCooldown);
 
-        if (wepToFire == 0) {
-            //projAdded = laserTrack();
-        } else if (wepToFire == 1){
-            //projAdded = laserVomit();
-        } else if (wepToFire == 2){
-            //projAdded = interArc();
-        } else if (wepToFire == 3){
-            //projAdded = waveArc();
-        } else if (wepToFire == 4) {
-            projAdded = simpleShot(players);
-        } else {
-            projAdded = null;
-        }
-
-        if (wepToFire >= 0 && wepToFire != 4) {
-            for (int i = 0; i < (attackTimer.size() - 1); i ++) {
-                attackTimer.set(i, attackTimer.get(i) + 20);
+            if (canShootArray != null) {
+                wepToFire = selectShoot(canShootArray);
             }
         }
-        return projAdded;
+
+         if (wepToFire == 0) {
+            projAdded = laserTrack(players);
+            if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
+                currentCooldown[wepToFire] = attackLength[wepToFire];
+            }
+            return projAdded;
+        } else if (wepToFire == 1){
+            //projAdded = laserVomit();
+
+             if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
+                 currentCooldown[wepToFire] = attackLength[wepToFire];
+             }
+             return null;
+        } else if (wepToFire == 2){
+            //projAdded = interArc();
+
+             if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
+                 currentCooldown[wepToFire] = attackLength[wepToFire];
+             }
+             return null;
+        } else if (wepToFire == 3){
+            //projAdded = waveArc();
+
+             if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
+                 currentCooldown[wepToFire] = attackLength[wepToFire];
+             }
+             return null;
+        } else if (wepToFire == 4) {
+            projAdded = simpleShot(players);
+             if (currentCooldown[wepToFire] == -1* maxCooldown[wepToFire]) {
+                 currentCooldown[wepToFire] = attackLength[wepToFire];
+             }
+             return projAdded;
+        }
+        return null;
     }
 
     @Override
     public void takeDamage(int dmg) {
         health -= dmg;
         damageTick = 0;
+    }
+
+    @Override
+    public boolean collides(Projectile proj) {
+        if(proj.ignoreList.contains(this)) {
+            return false;
+        }
+
+        return collides(proj.getX(), proj.getY(), proj.getSize());
     }
 }

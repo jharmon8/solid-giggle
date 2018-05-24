@@ -1,13 +1,15 @@
 package engine.stage;
 
+import entity.Boss.Kraken;
 import entity.enemy.BasicEnemy;
 import entity.enemy.Enemy;
+import entity.enemy.ShootEnemy;
 
 import java.util.ArrayList;
 
 public class StageOne extends Stage {
     private int scoreThreshold = 1000;
-    private int maxEnemies = 10;
+    private int maxEnemies = 1;
 
     private int spawnRadius = 16;
     private int escapeRadius = 48;
@@ -35,15 +37,14 @@ public class StageOne extends Stage {
         ArrayList<Enemy> output = new ArrayList<>();
 
         spawnTick--;
-
         if(currentEnemies.size() < maxEnemies && spawnTick <= 0 && frame > initialSpawnDelay) {
             spawnTick = spawnDelay;
 
-            Enemy newEnemy = spawn(BasicEnemy.class, currentEnemies, spawnRadius, escapeRadius);
+            //Enemy newEnemy = spawn(BasicEnemy.class, currentEnemies, spawnRadius, escapeRadius);
+            Enemy newEnemy = spawn(Kraken.class, currentEnemies, spawnRadius, escapeRadius);
             output.add(newEnemy);
             return output;
         }
-
         return null;
     }
 

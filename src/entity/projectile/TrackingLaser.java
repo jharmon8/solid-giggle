@@ -1,15 +1,20 @@
-/*
+
 package entity.projectile;
 
+import engine.util.GameUtils;
+import engine.util.GraphicsWrapper;
 import entity.Entity;
-import graphics.GraphicsWrapper;
-import util.GameUtils;
+import entity.Player;
+import entity.enemy.Enemy;
 
 import java.awt.Color;
 
 public class TrackingLaser extends Projectile {
 
     private double thick;
+    public double tx, ty;
+
+    private int lifetime = 2;
 
     public TrackingLaser(double px, double py, double tx, double ty, Entity parent)  {
         super(px, py, tx, ty, parent);
@@ -22,18 +27,32 @@ public class TrackingLaser extends Projectile {
 
         // We don't care about the magnitude of the velocity vector passed in
         // We keep its direction and scale it to speed, defined above
-        double velocityMag = GameUtils.distance(vx, vy);
         this.vx = 0;
         this.vy = 0;
+        this.x = px;
+        this.y = py;
 
-        //tx = px;
-        //ty = py;
+        this.tx = tx;
+        this.ty = ty;
+
+    }
+
+    @Override
+    public void update() {
+        this.lifetime--;
+        if (this.lifetime == 0) {
+            this.dead = true;
+        }
     }
 
     @Override
     public void draw(GraphicsWrapper gw) {
         gw.setColor(color);
-        gw.drawLine(x, y, tx, ty, thick);
+        gw.drawLine(x, y, tx, ty, this.thick);
     }
+
+    @Override
+    public void onCollide(Enemy e) {    }
+
+    public void onCollide(Player p) {    }
 }
-*/

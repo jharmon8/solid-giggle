@@ -24,7 +24,7 @@ public class Player extends EntityPolar {
 
     private boolean dead = false;
 
-    private double speed = 0.06;
+    private double speed = 0.04;
 
     private Color shieldColor;
 

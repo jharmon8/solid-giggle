@@ -10,6 +10,8 @@ import java.util.Vector;
 
 public abstract class Boss extends Enemy {
 
+    private double initialThetaRange = Math.PI / 2;
+
     public int chooseAttack(int numbAttack) {
         return (int)Math.round(Math.random()*numbAttack);
     }
@@ -42,27 +44,33 @@ public abstract class Boss extends Enemy {
         return players.get(target);
     }
 
-    public Vector<Integer> canShoot (Vector<Integer> cooldown){
-        Vector<Integer> canShoot = new Vector<>();
-        for (int v : cooldown) {
-            if (v == 0){
-                canShoot.add(v);
+    public int[] canShoot (int[] cooldown, int[] maxCooldown){
+        int totalShoot = 0;
+        //System.arraycopy(cooldown, 0, canShoot, 0, cooldown.length);
+
+        for (int i = 0; i < cooldown.length; i++) {
+            if (cooldown[i] < 0 && cooldown[i] <= -1*maxCooldown[i]) {
+                totalShoot += 1;
             }
         }
 
-        if (canShoot.size()  == 0) {
-            return null;
-        } else {
-            return canShoot;
+        int[] canShoot = new int[totalShoot];
+        int index = 0;
+
+        for (int i = 0; i < cooldown.length; i++) {
+            if (cooldown[i] < 0 && cooldown[i] <= -1*maxCooldown[i]) {
+                canShoot[index] = i;
+                index ++;
+            }
         }
+
+        return canShoot;
     }
 
-    public int selectShoot (Vector<Integer> availWep){
-        if (availWep == null) {
-            return -1;
-        } else {
-            int wepToFire = (int) Math.random() * availWep.size();
-            return availWep.get(wepToFire);
-        }
+    public int selectShoot (int[] availWep){
+
+        int toFire = (int) (Math.random() * availWep.length);
+        return availWep[toFire];
+
     }
 }
