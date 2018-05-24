@@ -26,8 +26,6 @@ public class GameSubpanel implements Subpanel {
 
     private boolean GODMODE = false;
 
-    private int numPlayers = 1;
-
     ArrayList<Player> players = new ArrayList<>();
     ArrayList<Enemy> enemies = new ArrayList<>();
     ArrayList<Projectile> projectiles = new ArrayList<>();
@@ -58,16 +56,19 @@ public class GameSubpanel implements Subpanel {
 
     private DecimalFormat scoreFormatter = new DecimalFormat("###,###");
 
-    public GameSubpanel(int sWidth, int sHeight, PewPanel parent, int numPlayers) {
+    // are playerNums 0 or 1 indexed?
+    // It is 0 right now, but player.playerNum needs to be 1 indexed
+    public GameSubpanel(int sWidth, int sHeight, PewPanel parent, ArrayList<Integer> playerNums) {
         this.parent = parent;
 
-        for(int i = 0; i < numPlayers; i++) {
-            double rads = 6.28 / numPlayers * i;
+        for(int i = 0; i < playerNums.size(); i++) {
+            int playerNumMinusOne = playerNums.get(i);
+            double rads = 6.28 / playerNums.size() * i;
 
-            Player p = new Player(rads, GameUtils.playerColors[i], railRadius, i + 1);
+            Player p = new Player(rads, GameUtils.playerColors[playerNumMinusOne], railRadius, playerNumMinusOne + 1);
 
             players.add(p);
-            playersToKeys.put(p, GameUtils.getControls()[i]);
+            playersToKeys.put(p, GameUtils.getControls()[playerNumMinusOne]);
         }
 
         graphicsWrapper = new GraphicsWrapper(sWidth, sHeight, gameWidth, gameHeight);

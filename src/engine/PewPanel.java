@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
@@ -41,9 +42,10 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     private boolean currentSubpanelFinished = false; // when this is true, we'll swap to a new panel on the next tick
     private Class nextSubpanelClass;
 
-    private int extraDummy = -1;
+    private Object extraDummy = new Integer(-1);
+//    private int extraDummy = -1;
 
-    private final boolean SKIP_TO_GAME = true;
+    private final boolean SKIP_TO_GAME = false;
 
     public PewPanel () {
         if(simulateProjectorAspectRatio) {
@@ -65,7 +67,13 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
         currentSubpanelFinished = false;
 
         if(SKIP_TO_GAME) {
-            swapSubpanel(new GameSubpanel(sWidth, sHeight, this,3));
+            ArrayList<Integer> threePlayers = new ArrayList<Integer>() {{
+                add(2);
+                add(4);
+                add(5);
+            }};
+
+            swapSubpanel(new GameSubpanel(sWidth, sHeight, this,threePlayers));
         }
 
         setFocusable(true);
@@ -92,7 +100,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
         declareSubpanelFinished(nextSubpanelClass, -1);
     }
 
-    public void declareSubpanelFinished(Class nextSubpanelClass, int extraNum) {
+    public void declareSubpanelFinished(Class nextSubpanelClass, Object extraNum) {
         this.extraDummy = extraNum;
         currentSubpanelFinished = true;
         this.nextSubpanelClass = nextSubpanelClass;
@@ -135,14 +143,20 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
                 swapSubpanel(new LobbySubpanel(sWidth, sHeight, this));
             } else
             if(nextSubpanelClass.equals(GameSubpanel.class)) {
+                ArrayList<Integer> threePlayers = new ArrayList<Integer>() {{
+                    add(1);
+                    add(2);
+                    add(3);
+                }};
+
                 // pass in the number of players to this one
-                swapSubpanel(new GameSubpanel(sWidth, sHeight, this, extraDummy == -1 ? 3 : extraDummy));
+                swapSubpanel(new GameSubpanel(sWidth, sHeight, this, extraDummy.equals(-1) ? threePlayers : (ArrayList<Integer>) extraDummy));
             } else
             if(nextSubpanelClass.equals(LoseSubpanel.class)) {
                 swapSubpanel(new LoseSubpanel(sWidth, sHeight, this));
             } else
             if(nextSubpanelClass.equals(WinSubpanel.class)) {
-                swapSubpanel(new WinSubpanel(sWidth, sHeight, extraDummy, this));
+                swapSubpanel(new WinSubpanel(sWidth, sHeight, (Integer)extraDummy, this));
             } else
             if(nextSubpanelClass.equals(MenuSubpanel.class)) {
                 swapSubpanel(new MenuSubpanel(sWidth, sHeight, this));

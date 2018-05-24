@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LobbySubpanel implements Subpanel {
@@ -94,17 +95,17 @@ public class LobbySubpanel implements Subpanel {
         currentTicks--;
 
         if(currentTicks <= 0) {
-            int numPlayers = 0;
+            ArrayList<Integer> playerList = new ArrayList<>();
             for(int i = 0; i < joined.length; i++) {
                 if(joined[i]) {
-                    numPlayers++;
+                    playerList.add(i);
                 }
             }
 
-            if(numPlayers == 0) {
+            if(playerList.size() == 0) {
                 parent.declareSubpanelFinished(MenuSubpanel.class);
             } else {
-                parent.declareSubpanelFinished(GameSubpanel.class, numPlayers);
+                parent.declareSubpanelFinished(GameSubpanel.class, playerList);
             }
         }
     }
