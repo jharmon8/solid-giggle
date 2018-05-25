@@ -26,4 +26,7 @@ public interface Entity {
     // drawing avatars and stuff
     public int getHealth();
     public int getMaxHealth();
+
+    // last minute enemy collision hack
+    public boolean isPlayer();
 }

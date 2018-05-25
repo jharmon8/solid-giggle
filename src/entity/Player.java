@@ -262,6 +262,11 @@ public class Player extends EntityPolar {
         return collides(proj.getX(), proj.getY(), proj.getSize());
     }
 
+    @Override
+    public boolean isPlayer() {
+        return true;
+    }
+
     private boolean collides(double x, double y, double targetSize) {
         double dx = getX() - x;
         double dy = getY() - y;

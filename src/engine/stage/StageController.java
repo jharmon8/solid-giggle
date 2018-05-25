@@ -23,7 +23,7 @@ public class StageController {
         if(DEBUG_STAGE) {
             currentStage = new StageKraken();
         } else {
-            currentStage = new StageOne(score);
+            currentStage = new StageThree(score);
         }
     }
 

@@ -3,6 +3,7 @@ package engine.stage;
 import engine.util.GameUtils;
 import entity.Boss.Kraken;
 import entity.enemy.ArcEnemy;
+import entity.enemy.ArcShootEnemy;
 import entity.enemy.BasicEnemy;
 import entity.enemy.BombEnemy;
 import entity.enemy.Enemy;
@@ -48,6 +49,9 @@ public abstract class Stage {
         } else if (enemyClass == ArcEnemy.class) {
             int rotateSide = (int)Math.round(Math.random());
             newEnemy = new ArcEnemy(p.x, p.y, escapeRadius, rotateSide);
+        } else if (enemyClass == ArcShootEnemy.class) {
+            int rotateSide = (int)Math.round(Math.random());
+            newEnemy = new ArcShootEnemy(p.x, p.y, escapeRadius, rotateSide);
         }
 
         if(newEnemy == null) {

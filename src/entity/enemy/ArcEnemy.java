@@ -100,15 +100,6 @@ public class ArcEnemy extends Enemy {
     }
 
     @Override
-    public boolean collides(Projectile proj) {
-        if(proj.ignoreList.contains(this)) {
-            return false;
-        }
-
-        return collides(proj.getX(), proj.getY(), proj.getSize());
-    }
-
-    @Override
     public  ArrayList<Projectile> attemptShoot(ArrayList<Player> players) {
         return null;
     }

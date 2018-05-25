@@ -62,4 +62,9 @@ public abstract class EntityPolar implements Entity {
     public int getMaxHealth() {
         return maxHealth;
     }
+
+    @Override
+    public boolean isPlayer() {
+        return false;
+    }
 }
