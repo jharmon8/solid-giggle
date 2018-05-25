@@ -12,8 +12,8 @@ public class LightLaser extends Projectile {
 
         this.color = Color.red;
         this.damage = 1;
-        this.size = 1;
-        this.speed = 1; // AHA! With graphics wrappers, speeds no longer must scale to the window size
+        this.size = 0.6;
+        this.speed = 0.7; // AHA! With graphics wrappers, speeds no longer must scale to the window size
 
         // We don't care about the magnitude of the velocity vector passed in
         // We keep its direction and scale it to speed, defined above

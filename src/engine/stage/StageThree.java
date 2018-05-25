@@ -40,11 +40,11 @@ public class StageThree extends Stage {
             int spawnEnemy = (int) (Math.random() * 100);
             int countArc = 0;
             for (Enemy e : currentEnemies) {
-                if (e.getClass() == ArcShootEnemy.class){
+                if (e.getClass() == ArcEnemy.class){
                     countArc++;
                 }
             }
-            if (spawnEnemy < 40 && countArc < maxEnemies/4) {
+            if (spawnEnemy < 40 && countArc <= maxEnemies/4) {
                 Enemy newEnemy = spawn(ArcShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
             } else if (spawnEnemy < 80) {

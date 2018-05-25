@@ -76,7 +76,7 @@ public class GameUtils {
      */
     // if this is true, keyboard control mapping will be used
     // otherwise, joypad mapping will be used
-    public static final boolean KEYBOARD_CONTROLS = true;
+    public static final boolean KEYBOARD_CONTROLS = false;
 
     // These are the default controls for each player
     // I guess right now the order is shoot, swap, left, right
