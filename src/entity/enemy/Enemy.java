@@ -37,9 +37,9 @@ public abstract class Enemy extends EntityCartesian {
     // The types is self explanator
     protected Class[] powerupTypes = {RevivePowerup.class, RegenPowerup.class, LaserPowerup.class, SplitshotPowerup.class};
     // The chances is the chance (out of 1) that each of the types is spawned, respectively
-    // Only one can spawn at a time (unless you override dropPowerup())
+    // Only one can spawn at a time (unlesvs you override dropPowerup())
     // These should spawn to less than one
-    protected Double[] powerupChances = {0.1, 0.1, 0.08, 0.08};
+    protected Double[] powerupChances = {0.05, 0.05, 0.04, 0.04};
 
     public int getScoreValue() {
         return scoreValue;

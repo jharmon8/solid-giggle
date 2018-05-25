@@ -91,7 +91,7 @@ public class Minotaur extends Boss {
         this.color = Color.orange;
         this.highlite = Color.black;
 
-        this.maxHealth = 100;
+        this.maxHealth = 250;
         this.health = maxHealth;
     }
 

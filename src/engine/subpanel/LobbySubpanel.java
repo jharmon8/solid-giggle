@@ -22,7 +22,7 @@ public class LobbySubpanel implements Subpanel {
 
     PewPanel parent;
 
-    private int numSecondsToWait = 10;
+    private int numSecondsToWait = 15;
     public int ticksUntilNextGame;
     public int currentTicks;
 

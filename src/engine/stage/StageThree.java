@@ -19,7 +19,7 @@ public class StageThree extends Stage {
     private int frame = 0;
 
     StageThree(int score) {
-        scoreThreshold = 1500 +  score; displayName = "- Stage 3 -";
+        scoreThreshold = 2000 +  score; displayName = "- Stage 3 -";
     }
 
     @Override

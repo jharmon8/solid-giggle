@@ -5,13 +5,13 @@ import entity.enemy.*;
 import java.util.ArrayList;
 
 public class StageFour extends Stage {
-    private int scoreThreshold = 10000;
+    private int scoreThreshold;
     private int maxEnemies = 12;
 
     private int spawnRadius = 16;
     private int escapeRadius = 48;
 
-    private int initialSpawnDelay = 150;
+    private int initialSpawnDelay = 120;
 
     private int spawnDelay = 15;
     private int spawnTick = 0;
@@ -19,12 +19,12 @@ public class StageFour extends Stage {
     private int frame = 0;
 
     StageFour(int score) {
-        scoreThreshold = 5000 +  score; displayName = "- Stage 4 -";
+        scoreThreshold = 3500 +  score; displayName = "- Stage 4 -";
     }
 
     @Override
     public boolean isFinished(final int score, final ArrayList<Enemy> currentEnemies) {
-        scoreThreshold = 2000 +  score; return score > scoreThreshold;
+        return score > scoreThreshold;
     }
 
     @Override

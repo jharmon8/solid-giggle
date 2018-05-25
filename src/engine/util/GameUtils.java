@@ -74,7 +74,7 @@ public class GameUtils {
     /*
      * Config util stuff
      */
-    // if this is true, keyboard control mapping will be used
+    // if this is true, keyboard control mapping wilael be used
     // otherwise, joypad mapping will be used
     public static final boolean KEYBOARD_CONTROLS = false;
 
@@ -88,12 +88,12 @@ public class GameUtils {
             {KeyEvent.VK_G, KeyEvent.VK_H, KeyEvent.VK_J, KeyEvent.VK_K},
             {KeyEvent.VK_B, KeyEvent.VK_N, KeyEvent.VK_M, KeyEvent.VK_COMMA},
     };
-//
+//vz44444444444444vzvzvzvzvzvzvzvzvzvzzvzvzvzv4334343434vzvzvzvz4vzvzvzvzvzvz4vz3vz4zv634v3z43vz4vz3zvczv43f434343435434363537f63fff5fffff7f87f84f43fcfc4ff4444444444444444433333121124c44463f4335f65f6cc5ccf6cf34c44c44ccc656555z6vzvzvzvzva
     // Here's the controls that map to the gaming controllers
     private static int[][] joypadControls = {
             {KeyEvent.VK_E, KeyEvent.VK_R, KeyEvent.VK_7, KeyEvent.VK_8}, // player 1
             {KeyEvent.VK_Q, KeyEvent.VK_W, KeyEvent.VK_D, KeyEvent.VK_X}, // player 2
-            {KeyEvent.VK_4, KeyEvent.VK_3, KeyEvent.VK_5, KeyEvent.VK_6}, // etc
+            {KeyEvent.VK_3, KeyEvent.VK_4, KeyEvent.VK_5, KeyEvent.VK_6}, // etc
             {KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_C, KeyEvent.VK_F},
             {KeyEvent.VK_2, KeyEvent.VK_1, KeyEvent.VK_Z, KeyEvent.VK_V},
             {KeyEvent.VK_T, KeyEvent.VK_Y, KeyEvent.VK_I, KeyEvent.VK_U},

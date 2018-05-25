@@ -46,7 +46,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     private Object extraDummy = new Integer(-1);
 //    private int extraDummy = -1;
 
-    public boolean instructionsHasRun = false;
+    public boolean instructionsHasRun =  false;
 
     private final boolean SKIP_TO_GAME = false;
 

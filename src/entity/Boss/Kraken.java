@@ -67,10 +67,10 @@ public class Kraken extends Boss {
         maxCooldown[0] = 475; //purple interlock
         maxCooldown[1] = 525; //green wave
         maxCooldown[2] = 325; //lasertrack
-        maxCooldown[3] = 20; // cimpleshot
+        maxCooldown[3] = 15; // cimpleshot
 
         attackLength[0] = 400;
-        attackLength[1] = 500;
+        attackLength[1] = 600;
         attackLength[2] = 200;
         attackLength[3] = -1;
 

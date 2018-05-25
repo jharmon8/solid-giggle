@@ -23,7 +23,7 @@ public class SplitshotPowerup extends Powerup {
         this.vx = vx / velocityMag * speed;
         this.vy = vy / velocityMag * speed;
 
-        this.timeToLive = 600;
+        this.timeToLive = 175;
     }
 
     @Override
