@@ -23,7 +23,7 @@ public abstract class Stage {
     }
 
     // if this returns null, the next stage will be the victory screen
-    public abstract Stage getNextStage();
+    public abstract Stage getNextStage(int score);
 
     // the ubiquitous helper method that creates an enemy of a given class in the circle
     protected Enemy spawn(Class enemyClass, final ArrayList<Enemy> enemies, final int spawnRadius, final int escapeRadius) {

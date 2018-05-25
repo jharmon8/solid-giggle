@@ -1,28 +1,25 @@
 package engine.stage;
 
-import entity.enemy.ArcEnemy;
-import entity.enemy.BasicEnemy;
-import entity.enemy.Enemy;
-import entity.enemy.ShootEnemy;
+import entity.enemy.*;
 
 import java.util.ArrayList;
 
 public class StageThree extends Stage {
     private int scoreThreshold = 5000;
-    private int maxEnemies = 10;
+    private int maxEnemies = 15;
 
     private int spawnRadius = 16;
     private int escapeRadius = 48;
 
     private int initialSpawnDelay = 150;
 
-    private int spawnDelay = 30;
+    private int spawnDelay = 15;
     private int spawnTick = 0;
 
     private int frame = 0;
 
-    StageThree() {
-        displayName = "- Stage 3 -";
+    StageThree(int score) {
+        scoreThreshold = 3000 +  score; displayName = "- Stage 3 -";
     }
 
     @Override
@@ -40,15 +37,21 @@ public class StageThree extends Stage {
 
         if(currentEnemies.size() < maxEnemies && spawnTick <= 0 && frame > initialSpawnDelay) {
             spawnTick = spawnDelay;
-            int spawnEnemy = (int) (Math.random() * 10);
-            if (spawnEnemy <= -3) {
-                Enemy newEnemy = spawn(BasicEnemy.class, currentEnemies, spawnRadius, escapeRadius);
+            int spawnEnemy = (int) (Math.random() * 100);
+            int countArc = 0;
+            for (Enemy e : currentEnemies) {
+                if (e.getClass() == ArcShootEnemy.class){
+                    countArc++;
+                }
+            }
+            if (spawnEnemy < 40 && countArc <= maxEnemies/3) {
+                Enemy newEnemy = spawn(ArcShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
-            } else if (spawnEnemy <= -7) {
-                Enemy newEnemy = spawn(ArcEnemy.class, currentEnemies, spawnRadius, escapeRadius);
+            } else if (spawnEnemy < 80) {
+                Enemy newEnemy = spawn(ShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
             } else {
-                Enemy newEnemy = spawn(ShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
+                Enemy newEnemy = spawn(LaserEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
             }
             return output;
@@ -58,7 +61,7 @@ public class StageThree extends Stage {
     }
 
     @Override
-    public Stage getNextStage() {
-        return new StageMinotaur();
+    public Stage getNextStage(int score) {
+        return new StageFour(score);
     }
 }

@@ -20,6 +20,11 @@ public class StageKraken extends Stage {
         displayName = "- Kraken -";
     }
 
+    public int computeScore (int score) {
+        int bossScore = 5000;
+        return score + bossScore;
+    }
+
     @Override
     public boolean isFinished(final int score, final ArrayList<Enemy> currentEnemies) {
         return spawned && currentEnemies.isEmpty();
@@ -45,7 +50,8 @@ public class StageKraken extends Stage {
     }
 
     @Override
-    public Stage getNextStage() {
+    public Stage getNextStage(int score) {
+        //score += computeScore(score);
         return null;
     }
 }

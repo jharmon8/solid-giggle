@@ -1,4 +1,6 @@
+/*
 package engine.stage;
+
 
 import entity.enemy.*;
 
@@ -62,3 +64,4 @@ public class StageFive extends Stage {
         return null;
     }
 }
+*/

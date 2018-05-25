@@ -8,9 +8,8 @@ import entity.enemy.ShootEnemy;
 import java.util.ArrayList;
 
 public class StageOne extends Stage {
-//    private int scoreThreshold = 1000;
-    private int scoreThreshold = 1;
-    private int maxEnemies = 10;
+    private int scoreThreshold;
+    private int maxEnemies = 8;
 
     private int spawnRadius = 16;
     private int escapeRadius = 48;
@@ -22,8 +21,8 @@ public class StageOne extends Stage {
 
     private int frame = 0;
 
-    StageOne() {
-        displayName = "- Stage 1 -";
+    StageOne(int score) {
+        scoreThreshold = 1500 +  score; displayName = "- Stage 1 -";
     }
 
     @Override
@@ -40,8 +39,6 @@ public class StageOne extends Stage {
         spawnTick--;
         if(currentEnemies.size() < maxEnemies && spawnTick <= 0 && frame > initialSpawnDelay) {
             spawnTick = spawnDelay;
-
-            //Enemy newEnemy = spawn(BasicEnemy.class, currentEnemies, spawnRadius, escapeRadius);
             Enemy newEnemy = spawn(BasicEnemy.class, currentEnemies, spawnRadius, escapeRadius);
             output.add(newEnemy);
             return output;
@@ -50,7 +47,7 @@ public class StageOne extends Stage {
     }
 
     @Override
-    public Stage getNextStage() {
-        return new StageMinotaur();
+    public Stage getNextStage(int score) {
+        return new StageTwo(score);
     }
 }
