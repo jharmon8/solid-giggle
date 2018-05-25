@@ -39,8 +39,11 @@ public class StageFour extends Stage {
             spawnTick = spawnDelay;
             int spawnEnemy = (int) (Math.random() * 10);
             int countArc = 0;
+            int countBomb = 0;
             for (Enemy e : currentEnemies) {
-                if (e.getClass() == ArcShootEnemy.class){
+                if (e.getClass() == ArcEnemy.class){
+                    countArc++;
+                } else if (e.getClass() == BombEnemy.class) {
                     countArc++;
                 }
             }
@@ -50,8 +53,11 @@ public class StageFour extends Stage {
             } else if (spawnEnemy < 50) {
                 Enemy newEnemy = spawn(BombEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
-            } else {
+            } else if(spawnEnemy < 75) {
                 Enemy newEnemy = spawn(LaserEnemy.class, currentEnemies, spawnRadius, escapeRadius);
+                output.add(newEnemy);
+            } else {
+                Enemy newEnemy = spawn(ShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
             }
             return output;
