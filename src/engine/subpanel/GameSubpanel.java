@@ -177,13 +177,26 @@ public class GameSubpanel implements Subpanel {
         }
 
         // check powerup collision with players & player projectiles
+        ArrayList<Player> playersToAdd = new ArrayList<>();
         for (Powerup pup : powerups) {
             for (Player p : players) {
                 if (pup.collides(p)) {
+                    if(pup.isRevive()) {
+                        Player revivedPlayer = getRandomDeadPlayerToRevive();
+                        if(revivedPlayer != null) {
+                            playersToAdd.add(revivedPlayer);
+                        }
+                    }
+
                     pup.onCollide(p);
                 }
             }
         }
+
+        if(!playersToAdd.isEmpty()) {
+            AudioManager.playSound("res/revive.wav", -12f);
+        }
+        players.addAll(playersToAdd);
 
 
         // Take player input
@@ -571,18 +584,36 @@ public class GameSubpanel implements Subpanel {
     }
 
     private void reviveAllPlayers() {
-        ArrayList<Integer> temp = new ArrayList<Integer>();
+        ArrayList<Integer> deadPlayerNums = getDeadPlayerNums();
+
+        for(Integer i : deadPlayerNums) {
+            players.add(createPlayer(i));
+        }
+    }
+
+    private ArrayList<Integer> getDeadPlayerNums() {
+        ArrayList<Integer> output = new ArrayList<Integer>();
         for(Integer i : originalPlayerNums) {
-            temp.add(i);
+            output.add(i);
         }
 
         for(Player p : players) {
-            temp.remove(new Integer(p.playerNum - 1));
+            output.remove(new Integer(p.playerNum - 1));
         }
 
-        for(Integer i : temp) {
-            players.add(createPlayer(i));
+        return output;
+    }
+
+    private Player getRandomDeadPlayerToRevive() {
+        ArrayList<Integer> deadPlayerNums = getDeadPlayerNums();
+
+        if(getDeadPlayerNums().isEmpty()) {
+            return null;
         }
+
+        int playerNumToRevive = deadPlayerNums.get((int)(Math.random() * deadPlayerNums.size()));
+
+        return createPlayer(playerNumToRevive);
     }
 
     private Player createPlayer(int playerNumMinusOne) {

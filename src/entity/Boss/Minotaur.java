@@ -209,6 +209,7 @@ public class Minotaur extends Boss {
             GameUtils.Position end = getChargeTarget();
 
             currentPath = GameUtils.interpolate(start, end, chargeTime);
+            direction = GameUtils.flipAngle(Math.atan2(start.y - end.y, start.x - end.x));
         } else if(pathFrame == currentPath.length) { // last tick
             changeState(nextState);
         } else {
@@ -227,6 +228,7 @@ public class Minotaur extends Boss {
             GameUtils.Position end = getWanderTarget();
 
             currentPath = GameUtils.interpolate(start, end, wanderTime);
+            direction = GameUtils.flipAngle(Math.atan2(start.y - end.y, start.x - end.x));
         } else if(pathFrame == currentPath.length) { // last tick
             currentPath = null;
             pathFrame = -1;
@@ -260,6 +262,7 @@ public class Minotaur extends Boss {
             }
 
             spiralTheta += spiralThetaChange;
+            direction += spiralThetaChange;
         }
 
         if(totalFrame > spiralShootDuration) {
@@ -276,6 +279,7 @@ public class Minotaur extends Boss {
             GameUtils.Position end = new GameUtils.Position(0,0);
 
             currentPath = GameUtils.interpolate(start, end, chargeTime);
+            direction = GameUtils.flipAngle(Math.atan2(start.y - end.y, start.x - end.x));
         } else if(pathFrame == currentPath.length) { // last tick
             changeState(nextState);
         } else {
