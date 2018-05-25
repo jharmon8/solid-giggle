@@ -48,7 +48,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     public boolean instructionsHasRun = false;
 
-    private final boolean SKIP_TO_GAME = true;
+    private final boolean SKIP_TO_GAME = false;
 
     public PewPanel () {
 
