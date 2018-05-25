@@ -29,7 +29,7 @@ public class LoseSubpanel implements Subpanel {
     public int ticksUntilNextGame;
     public int currentTicks;
 
-    private int numbBackground = 4;
+    private int numbBackground = 7;
 
     private int hint;
 
