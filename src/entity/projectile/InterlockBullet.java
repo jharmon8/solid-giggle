@@ -17,7 +17,9 @@ public class InterlockBullet extends Projectile {
 
     private double radius = 1;
     private double thetaSpeed = 0.0075;
-    private double radiusSpeed = 0.5;
+    private double radiusSpeed = 0.4;
+    private int tick;
+    private double accelFactor = 0.05;
 
     public InterlockBullet(double px, double py, double vx, double vy, Entity parent, int rotationSide, double theta) {
         super(px, py, vx, vy, parent);
@@ -32,23 +34,29 @@ public class InterlockBullet extends Projectile {
         this.startY = py;
 
         this.rotationSide = rotationSide;
+        this.tick = 0;
     }
 
     ///Math.cos(speed)
     @Override
     public void update() {
+        tick++;
         if (rotationSide == 1) {
             theta += thetaSpeed;
             GameUtils.Position pos = radialLocation(radius, theta);
             x = pos.x+startX;
             y = pos.y+startY;
-            radius+=radiusSpeed;
+            if (tick%40 < 19) {
+                radius = radius + (1 + accelFactor*(tick%40 - 9)) * radiusSpeed;
+            }
         } else {
             theta -= thetaSpeed;
             GameUtils.Position pos = radialLocation(radius, theta);
             x = pos.x+startX;
             y = pos.y+startY;
-            radius+=radiusSpeed;
+            if (tick%40 < 19) {
+                radius = radius + (1 + accelFactor*(tick%40 - 9)) * radiusSpeed;
+            }
         }
     }
 }

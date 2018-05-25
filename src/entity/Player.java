@@ -14,6 +14,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import static engine.util.GameUtils.distance;
+import static engine.util.GameUtils.flipAngle;
+import static engine.util.GameUtils.radialLocation;
 
 public class Player extends EntityPolar {
     public int playerNum;
@@ -324,7 +326,7 @@ public class Player extends EntityPolar {
         }
 
         iFramesLeft = iFramesAfterDamage;
-        health -= dmg;
+        //health -= dmg;
         countTick = 0;
 
         AudioManager.playSound("res/hit_0" + (int)(Math.random()*3 + 1) + ".wav", -20f);
@@ -370,17 +372,33 @@ public class Player extends EntityPolar {
         try {
             if (ammoType == Splitshot.class){
                 double theta = Math.atan(vec.vy/vec.vx);
-                double thetaTop = theta + Math.PI/72;
-                double thetaBot = theta - Math.PI/72;
+                double thetaTop = theta + Math.PI/36;
+                double thetaBot = theta - Math.PI/36;
 
-                double botVX = distance(0.0, 0.0, vec.vx, vec.vy) * Math.cos(distance(1.0,thetaBot)) - vec.vx;
-                double botVY = distance(0.0, 0.0, vec.vx, vec.vy) * Math.sin(distance(1.0,thetaBot)) - vec.vy;
+                double botVX = radialLocation(distance(0.0, 0.0, vec.vx, vec.vy), thetaBot).x ;
+                double botVY = radialLocation(distance(0.0, 0.0, vec.vx, vec.vy), thetaBot).y ;
 
-                double topVX = distance(0.0, 0.0, vec.vx, vec.vy) * Math.cos(distance(1.0,thetaTop)) - vec.vx;
-                double topVY = distance(0.0, 0.0, vec.vx, vec.vy) * Math.sin(distance(1.0,thetaTop)) - vec.vy;
-                outputArray.add(new LightBullet(vec.px, vec.py, vec.vx, vec.vy, this));
-                outputArray.add(new LightBullet(vec.px, vec.py, botVX, botVY, this));
-                outputArray.add(new LightBullet(vec.px, vec.py, topVX, topVY, this));
+                //double botVX = -1 * distance(distance(0.0, 0.0, vec.vx, vec.vy), (theta)) * Math.cos(thetaBot) ;
+                //double botVY = -1 * distance(distance(0.0, 0.0, vec.vx, vec.vy), (theta)) * Math.sin(thetaBot) ;
+
+                //double topVX = distance(0.0, 0.0, vec.vx, vec.vy) * Math.cos(distance(1.0,thetaTop)) - vec.vx;
+                //double topVY = distance(0.0, 0.0, vec.vx, vec.vy) * Math.sin(distance(1.0,thetaTop)) - vec.vy;
+
+                double topVX = radialLocation(distance(0.0, 0.0, vec.vx, vec.vy), thetaTop).x ;
+                double topVY = radialLocation(distance(0.0, 0.0, vec.vx, vec.vy), thetaTop).y ;
+
+                if (vec.px > 0){
+                    topVX = -1 * topVX;
+                    topVY = -1 * topVY;
+                    botVX = -1 * botVX;
+                    botVY = -1 * botVY;
+                }
+                //double topVX = -1 * distance(distance(0.0, 0.0, vec.vx, vec.vy), (theta)) * Math.sin(thetaTop) ;
+                //double topVY = -1 * distance(distance(0.0, 0.0, vec.vx, vec.vy), (theta)) * Math.cos(thetaTop) ;
+
+                outputArray.add(new MediumBullet(vec.px, vec.py, vec.vx, vec.vy, this));
+                outputArray.add(new MediumBullet(vec.px, vec.py, botVX, botVY, this));
+                outputArray.add(new MediumBullet(vec.px, vec.py, topVX, topVY, this));
             } else {
                 Constructor constructor = ammoType.getConstructor(new Class[]{Double.TYPE, Double.TYPE, Double.TYPE, Double.TYPE, Entity.class});
                 output = (Projectile) constructor.newInstance(vec.px, vec.py, vec.vx, vec.vy, this);

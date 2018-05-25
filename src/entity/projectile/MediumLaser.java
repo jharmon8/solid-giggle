@@ -12,7 +12,7 @@ public class MediumLaser extends Projectile {
 
         this.color = Color.red;
         this.damage = 2;
-        this.size = 0.5;
+        this.size = 1;
         this.speed = 2; // AHA! With graphics wrappers, speeds no longer must scale to the window size
 
         // We don't care about the magnitude of the velocity vector passed in

@@ -42,6 +42,8 @@ public class Kraken extends Boss {
 
     private double safeThetaCenter  = (2*Math.PI*Math.random());
 
+    private double safeThetaIncrement = (Math.PI/4*(Math.random()-0.5));
+
     public Kraken(int escapeRadius, int spawnRadius) {
         this.x = 0;
         this.y = 0;
@@ -65,7 +67,7 @@ public class Kraken extends Boss {
         maxCooldown[0] = 350; //trackLaser
         maxCooldown[1] = 1000; //laser vomit <- remove
         maxCooldown[2] = 800; //interlock arc
-        maxCooldown[3] = 15; // wave arc
+        maxCooldown[3] = 5; // wave arc
 
         attackLength[0] = 400;
         attackLength[1] = 800;
@@ -82,6 +84,7 @@ public class Kraken extends Boss {
         direction = computeTrajectory(x,y);
         vx = Math.cos(direction) * speed;
         vy = Math.sin(direction) * speed;
+
     }
 
     @Override
@@ -192,10 +195,10 @@ public class Kraken extends Boss {
 
     public ArrayList<Projectile> interArc (ArrayList<Player> players) {
         ArrayList<Projectile> projToAdd = new ArrayList<>();
-        int numberAroundCircumference = 8;
+        int numberAroundCircumference = 6;
         double randomComponent = (2*Math.PI*Math.random());
 
-        if (currentCooldown[0] % 50 == 0 && currentCooldown[0] > 0){
+        if (currentCooldown[0] % 100 == 0 && currentCooldown[0] > 0){
             for (int i = 0; i < numberAroundCircumference; i++) {
                 double theta = i * 2 * Math.PI / numberAroundCircumference + randomComponent;
                 double spawnX = x + size * Math.cos(theta);
@@ -212,11 +215,15 @@ public class Kraken extends Boss {
 
     public ArrayList<Projectile> selectArc (){ // select two random enemies to shoot
         ArrayList<Projectile> projToAdd = new ArrayList<>();
-        int numberAroundCircumference = 60;
+        int numberAroundCircumference = 90;
 
-        if (currentCooldown[1] % 75 == 0 && currentCooldown[1] > 0 && currentCooldown[1] < attackLength[1]){
-            safeThetaCenter = safeThetaCenter + (Math.PI/2*Math.random());
-            double safeThetaFactor = Math.PI/4;
+        if (currentCooldown[1] % 10 == 0 && currentCooldown[1] > 0 && currentCooldown[1] < attackLength[1]){
+            double changeDirect = Math.random();
+            if (changeDirect <= 0.15) {
+                safeThetaIncrement = (Math.PI/8*(Math.random()-0.5));
+            }
+            safeThetaCenter = safeThetaCenter + safeThetaIncrement;
+            double safeThetaFactor = Math.PI/6;
             int flag = 0;
             if (safeThetaCenter < safeThetaFactor) {
                 safeThetaCenter += 2*Math.PI;
