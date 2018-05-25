@@ -11,7 +11,7 @@ public class LightLaser extends Projectile {
         super(px, py, vx, vy, parent);
 
         this.color = Color.red;
-        this.damage = 1;
+        this.damage = 2;
         this.size = 0.6;
         this.speed = 0.7; // AHA! With graphics wrappers, speeds no longer must scale to the window size
 

@@ -64,13 +64,13 @@ public class Kraken extends Boss {
 
         this.attackChance = 0.1;
 
-        maxCooldown[0] = 350; //purple interlock
-        maxCooldown[1] = 1000; //green wave
-        maxCooldown[2] = 800; //lasertrack
+        maxCooldown[0] = 475; //purple interlock
+        maxCooldown[1] = 525; //green wave
+        maxCooldown[2] = 325; //lasertrack
         maxCooldown[3] = 20; // cimpleshot
 
-        attackLength[0] = 500;
-        attackLength[1] = 600;
+        attackLength[0] = 400;
+        attackLength[1] = 500;
         attackLength[2] = 200;
         attackLength[3] = -1;
 
@@ -216,6 +216,7 @@ public class Kraken extends Boss {
     public ArrayList<Projectile> selectArc (){ // select two random enemies to shoot
         ArrayList<Projectile> projToAdd = new ArrayList<>();
         int numberAroundCircumference = 90;
+        double safeThetaFactor = Math.PI/4.5;
 
         if (currentCooldown[1] % 10 == 0 && currentCooldown[1] > 0 && currentCooldown[1] < attackLength[1]){
             double changeDirect = Math.random();
@@ -223,7 +224,6 @@ public class Kraken extends Boss {
                 safeThetaIncrement = (Math.PI/8*(Math.random()-0.5));
             }
             safeThetaCenter = safeThetaCenter + safeThetaIncrement;
-            double safeThetaFactor = Math.PI/6;
             int flag = 0;
             if (safeThetaCenter < safeThetaFactor) {
                 safeThetaCenter += 2*Math.PI;

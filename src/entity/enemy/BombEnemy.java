@@ -38,7 +38,7 @@ public class BombEnemy extends Enemy {
         this.maxHealth = 5;
         this.health = maxHealth;
 
-        this.shotInterval = 133;
+        this.shotInterval = 100;
         this.shotTick = 0;
 
         this.powerupChance = 1;

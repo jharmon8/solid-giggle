@@ -17,12 +17,12 @@ public class InstructionsSubpanel implements Subpanel {
 
     PewPanel parent;
 
-    private int numSecondsToWait = 30;
+    private int numSecondsToWait = 15;
     public int ticksUntilNextGame;
     public int currentTicks;
 
     public InstructionsSubpanel(int sWidth, int sHeight, PewPanel parent) {
-
+        parent.instructionsHasRun = true;
         this.parent = parent;
 
         ticksUntilNextGame = numSecondsToWait * 1000 / PewPanel.timerDelay;

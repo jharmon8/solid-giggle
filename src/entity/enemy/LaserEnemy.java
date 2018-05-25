@@ -35,7 +35,7 @@ public class LaserEnemy extends Enemy {
         this.color = Color.red.darker();
         this.highlite = Color.red;
 
-        this.maxHealth = 5;
+        this.maxHealth = 4;
         this.health = maxHealth;
 
         this.shotInterval = 55;

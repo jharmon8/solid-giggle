@@ -21,7 +21,7 @@ public abstract class Enemy extends EntityCartesian {
     protected boolean dead = false;
     protected int collisionDamage;
 
-    protected double powerupChance;
+    public int powerupChance;
 
     // just used for graphics
     protected double direction;

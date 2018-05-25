@@ -76,7 +76,7 @@ public class GameUtils {
      */
     // if this is true, keyboard control mapping will be used
     // otherwise, joypad mapping will be used
-    public static final boolean KEYBOARD_CONTROLS = true;
+    public static final boolean KEYBOARD_CONTROLS = false;
 
     // These are the default controls for each player
     // I guess right now the order is shoot, swap, left, right
@@ -88,7 +88,7 @@ public class GameUtils {
             {KeyEvent.VK_G, KeyEvent.VK_H, KeyEvent.VK_J, KeyEvent.VK_K},
             {KeyEvent.VK_B, KeyEvent.VK_N, KeyEvent.VK_M, KeyEvent.VK_COMMA},
     };
-
+//
     // Here's the controls that map to the gaming controllers
     private static int[][] joypadControls = {
             {KeyEvent.VK_E, KeyEvent.VK_R, KeyEvent.VK_7, KeyEvent.VK_8}, // player 1

@@ -11,7 +11,7 @@ public class HeavyBullet extends Projectile {
         super(px, py, vx, vy, parent);
 
         this.color = new Color(200,220,220);
-        this.damage = 5;
+        this.damage = 3;
         this.size = 1.5;
         this.speed = 0.25; // AHA! With graphics wrappers, speeds no longer must scale to the window size
 
