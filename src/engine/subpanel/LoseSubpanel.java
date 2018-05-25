@@ -14,6 +14,9 @@ import java.util.HashMap;
 /*
  * Ahhh... Ye ol' game over screen
  */
+
+//
+
 public class LoseSubpanel implements Subpanel {
     public GraphicsWrapper graphicsWrapper;
 
@@ -26,6 +29,10 @@ public class LoseSubpanel implements Subpanel {
     public int ticksUntilNextGame;
     public int currentTicks;
 
+    private int numbBackground = 4;
+
+    private int hint;
+
     public LoseSubpanel(int sWidth, int sHeight, PewPanel parent) {
 
         this.parent = parent;
@@ -37,13 +44,17 @@ public class LoseSubpanel implements Subpanel {
 
         AudioManager.stopAllSounds();
         AudioManager.playSound("res/lose.wav", -8f);
+
+        hint = (int) (Math.random() * numbBackground) + 1;
     }
 
     @Override
     public void paintComponent(Graphics g) {
         graphicsWrapper.setGraphics(g);
 
-        graphicsWrapper.drawImage("res/you_died.jpg", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
+        graphicsWrapper.drawImage("res/loss screen blank.png", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
+
+        graphicsWrapper.drawImage("res/hint " + hint + ".png", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
 
         String time = (currentTicks * PewPanel.timerDelay / 1000) + "";
         graphicsWrapper.setColor(Color.white);
