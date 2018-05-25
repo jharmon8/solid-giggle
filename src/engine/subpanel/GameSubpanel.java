@@ -193,6 +193,9 @@ public class GameSubpanel implements Subpanel {
             }
         }
 
+        if(!playersToAdd.isEmpty()) {
+            AudioManager.playSound("res/revive.wav", -12f);
+        }
         players.addAll(playersToAdd);
 
 
