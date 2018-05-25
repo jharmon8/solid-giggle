@@ -55,7 +55,7 @@ public class Kraken extends Boss {
         this.color = Color.lightGray;
         this.highlite = Color.white;
 
-        this.maxHealth = 450;
+        this.maxHealth = 300;
         this.health = maxHealth;
         this.spawnRadius = spawnRadius;
         this.escapeRadius = escapeRadius;
