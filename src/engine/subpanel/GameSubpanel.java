@@ -101,6 +101,11 @@ public class GameSubpanel implements Subpanel {
         graphicsWrapper.setColor(Color.darkGray);
         graphicsWrapper.drawCircle(-escapeRadius, -escapeRadius, escapeRadius * 2);
 
+        // Draw powerups
+        for(Powerup pup : powerups) {
+            pup.draw(graphicsWrapper);
+        }
+
         // Draw Player
         for(Player p : players) {
             p.draw(graphicsWrapper);
@@ -114,11 +119,6 @@ public class GameSubpanel implements Subpanel {
         // Draw enemies
         for(Entity e : enemies) {
             e.draw(graphicsWrapper);
-        }
-
-        // Draw powerups
-        for(Powerup pup : powerups) {
-            pup.draw(graphicsWrapper);
         }
 
         // side panels

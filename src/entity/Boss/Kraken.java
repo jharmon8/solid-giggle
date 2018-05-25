@@ -52,8 +52,8 @@ public class Kraken extends Boss {
         this.speed = 0.08;
         this.collisionDamage = 3;
 
-        this.color = Color.lightGray;
-        this.highlite = Color.white;
+        this.color = new Color(91, 0, 153);
+        this.highlite = new Color(125, 33, 186);
 
         this.maxHealth = 300;
         this.health = maxHealth;
@@ -144,23 +144,29 @@ public class Kraken extends Boss {
 
     @Override
     public void draw(GraphicsWrapper gw) {
+        int numFaces = 6;
+        double highlightRadius = size * 0.8;
+        double highlightSize = size * 0.4;
+
+        Color base = color;
+        Color top = highlite;
         if (Math.ceil(damageTick / 3) == 0 || Math.ceil(damageTick / 3) == 2) {
-            gw.setColor(color.darker().darker());
-            gw.fillCircle(getX() - size, getY() - size, size * 2);
-
-            if (!Double.isNaN(direction)) {
-                gw.setColor(highlite.darker().darker());
-                gw.fillTriangle(x, y, direction, size);
-            }
+            base = base.darker().darker();
+            top = highlite.darker().darker();
         }
-        else {
-            gw.setColor(color);
-            gw.fillCircle(getX() - size, getY() - size, size * 2);
 
-            if (!Double.isNaN(direction)) {
-                gw.setColor(highlite);
-                gw.fillTriangle(x, y, direction, size);
-            }
+        gw.setColor(base);
+        gw.fillPolygon(getX(), getY(), size, numFaces, direction);
+
+        gw.setColor(top);
+        for(int i = 0; i < numFaces; i++) {
+            double triangleDirection = direction + 6.28/numFaces * i;
+            GameUtils.Position triangleVec = GameUtils.radialLocation(highlightRadius, triangleDirection);
+
+            double triangleCenterX = triangleVec.x + getX();
+            double triangleCenterY = triangleVec.y + getY();
+
+            gw.fillPolygon(triangleCenterX, triangleCenterY, highlightSize, 3, triangleDirection);
         }
     }
 

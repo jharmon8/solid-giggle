@@ -1,6 +1,7 @@
 package entity.Boss;
 
 import engine.util.GameUtils;
+import engine.util.GraphicsWrapper;
 import entity.Player;
 import entity.projectile.HeavyBullet;
 import entity.projectile.LightBullet;
@@ -74,6 +75,8 @@ public class Minotaur extends Boss {
 
     private ArrayList<Projectile> projToFire = new ArrayList<>();
 
+    private Color hornColor = Color.orange;
+
     public Minotaur() {
         this.scoreValue = 10000;
 
@@ -105,6 +108,8 @@ public class Minotaur extends Boss {
 
     @Override
     public void update() {
+        damageTick++;
+
         if(health <= 0) {
             dead = true;
         }
@@ -300,4 +305,40 @@ public class Minotaur extends Boss {
     private GameUtils.Position getWanderTarget() {
         return GameUtils.radialLocation(wanderRadius, Math.random() * 6.28);
     };
+
+    @Override
+    public void draw(GraphicsWrapper gw) {
+        double hornOffset = 0.8;
+
+        double highlightRadius = size;
+        double highlightSize = size * 0.5;
+
+        // damage ticks
+        Color base = color;
+        Color top = highlite;
+        if (damageTick == 0 || damageTick == 1 || damageTick == 4 || damageTick == 5) {
+            base = base.darker().darker();
+            top = highlite.darker().darker();
+        }
+
+        // normal enemy part
+        gw.setColor(base);
+        gw.fillCircle(getX() - size, getY() - size, size * 2);
+
+        gw.setColor(top);
+        gw.fillTriangle(x, y, direction, size);
+
+        // horns
+        gw.setColor(base);
+        GameUtils.Position leftHornVec = GameUtils.radialLocation(highlightRadius, direction - hornOffset);
+        gw.fillTriangle(x + leftHornVec.x, y + leftHornVec.y, direction - hornOffset, highlightSize);
+
+        GameUtils.Position rightHornVec = GameUtils.radialLocation(highlightRadius, direction + hornOffset);
+        gw.fillTriangle(x + rightHornVec.x, y + rightHornVec.y, direction + hornOffset, highlightSize);
+
+        if(shielded) {
+            gw.setColor(new Color(140,150,240,85));
+            gw.fillCircle(x - size * 1.1, y - size * 1.1, size * 2.2);
+        }
+    }
 }

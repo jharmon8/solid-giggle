@@ -144,8 +144,8 @@ public abstract class Enemy extends EntityCartesian {
         }
 
         if(fadeInTick < maxFadeIn) {
-            color = setAlpha(color, (int)(255 * (double) fadeInTick / maxFadeIn));
-            highlite = setAlpha(highlite, (int)(255 * (double) fadeInTick / maxFadeIn));
+            circleColor = setAlpha(color, (int)(255 * (double) fadeInTick / maxFadeIn));
+            triangleColor = setAlpha(highlite, (int)(255 * (double) fadeInTick / maxFadeIn));
         }
 
         gw.setColor(circleColor);
