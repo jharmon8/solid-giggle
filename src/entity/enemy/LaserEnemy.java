@@ -38,7 +38,7 @@ public class LaserEnemy extends Enemy {
         this.maxHealth = 5;
         this.health = maxHealth;
 
-        this.shotInterval = 75;
+        this.shotInterval = 55;
         this.shotTick = 0;
 
         this.powerupChance = 1;

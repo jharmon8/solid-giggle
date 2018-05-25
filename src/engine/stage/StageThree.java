@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 public class StageThree extends Stage {
     private int scoreThreshold = 5000;
-    private int maxEnemies = 15;
+    private int maxEnemies = 12;
 
     private int spawnRadius = 16;
     private int escapeRadius = 48;
 
     private int initialSpawnDelay = 150;
 
-    private int spawnDelay = 15;
+    private int spawnDelay = 20;
     private int spawnTick = 0;
 
     private int frame = 0;
@@ -44,7 +44,7 @@ public class StageThree extends Stage {
                     countArc++;
                 }
             }
-            if (spawnEnemy < 40 && countArc <= maxEnemies/3) {
+            if (spawnEnemy < 40 && countArc < maxEnemies/4) {
                 Enemy newEnemy = spawn(ArcShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
             } else if (spawnEnemy < 80) {
@@ -62,6 +62,6 @@ public class StageThree extends Stage {
 
     @Override
     public Stage getNextStage(int score) {
-        return new StageFour(score);
+        return new StageMinotaur();
     }
 }

@@ -16,14 +16,14 @@ public class StageController {
     // this should be more than fade in + fade out
     private int lastDisplayFrame = 140;
 
-    private boolean DEBUG_STAGE = false;
+    private boolean DEBUG_STAGE = true;
 
     public StageController() {
         int score = 0;
         if(DEBUG_STAGE) {
-            currentStage = new StageKraken();
-        } else {
             currentStage = new StageThree(score);
+        } else {
+            currentStage = new StageOne(score);
         }
     }
 

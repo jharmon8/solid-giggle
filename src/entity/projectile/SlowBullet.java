@@ -13,7 +13,7 @@ public class SlowBullet extends Projectile {
         this.color = new Color(200,200,200);
         this.damage = 1;
         this.size = 0.5;
-        this.speed = 0.1; // AHA! With graphics wrappers, speeds no longer must scale to the window size
+        this.speed = 0.4; // AHA! With graphics wrappers, speeds no longer must scale to the window size
 
         // We don't care about the magnitude of the velocity vector passed in
         // We keep its direction and scale it to speed, defined above
