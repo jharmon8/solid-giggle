@@ -41,13 +41,13 @@ public class ExploderBullet extends Projectile {
            //for (int x = 0; x < 4; x ++) {
                ArrayList<Projectile> projToAdd = new ArrayList<>();
                Projectile p;
-               p = new MediumBullet(x, y, vx, vy, this);
+               p = new SlowBullet(x, y, vx, vy, this);
                projToAdd.add(p);
-               p = new MediumBullet(x, y, -vx, -vy, this);
+               p = new SlowBullet(x, y, -vx, -vy, this);
                projToAdd.add(p);
-               p = new MediumBullet(x, y, -vx, vy, this);
+               p = new SlowBullet(x, y, -vx, vy, this);
                projToAdd.add(p);
-               p = new MediumBullet(x, y, vx, -vy, this);
+               p = new SlowBullet(x, y, vx, -vy, this);
                projToAdd.add(p);
                return projToAdd;
            //}

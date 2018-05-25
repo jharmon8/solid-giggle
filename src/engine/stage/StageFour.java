@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class StageFour extends Stage {
     private int scoreThreshold = 10000;
-    private int maxEnemies = 18;
+    private int maxEnemies = 12;
 
     private int spawnRadius = 16;
     private int escapeRadius = 48;
@@ -19,7 +19,7 @@ public class StageFour extends Stage {
     private int frame = 0;
 
     StageFour(int score) {
-        scoreThreshold = 5000 +  score; displayName = "- Stage 3 -";
+        scoreThreshold = 5000 +  score; displayName = "- Stage 4 -";
     }
 
     @Override
@@ -37,27 +37,27 @@ public class StageFour extends Stage {
 
         if(currentEnemies.size() < maxEnemies && spawnTick <= 0 && frame > initialSpawnDelay) {
             spawnTick = spawnDelay;
-            int spawnEnemy = (int) (Math.random() * 10);
+            int spawnEnemy = (int) (Math.random() * 100);
             int countArc = 0;
             int countBomb = 0;
             for (Enemy e : currentEnemies) {
-                if (e.getClass() == ArcEnemy.class){
+                if (e.getClass() == ArcShootEnemy.class){
                     countArc++;
                 } else if (e.getClass() == BombEnemy.class) {
-                    countArc++;
+                    countBomb++;
                 }
             }
-            if (spawnEnemy < 25 && countArc <= maxEnemies/4) {
-                Enemy newEnemy = spawn(ArcShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
-                output.add(newEnemy);
-            } else if (spawnEnemy < 50) {
+            if (spawnEnemy < 10 && countBomb < maxEnemies / 6) {
                 Enemy newEnemy = spawn(BombEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
-            } else if(spawnEnemy < 75) {
-                Enemy newEnemy = spawn(LaserEnemy.class, currentEnemies, spawnRadius, escapeRadius);
+            } else if (spawnEnemy < 50 && countArc <= maxEnemies/4) {
+                Enemy newEnemy = spawn(ArcShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
+                output.add(newEnemy);
+            } else if(spawnEnemy < 85) {
+                Enemy newEnemy = spawn(ShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
             } else {
-                Enemy newEnemy = spawn(ShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
+                Enemy newEnemy = spawn(LaserEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
             }
             return output;

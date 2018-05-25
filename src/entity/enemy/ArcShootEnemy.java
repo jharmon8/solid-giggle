@@ -33,7 +33,7 @@ public class ArcShootEnemy extends Enemy {
         this.y = y;
 
         this.size = 1.75;
-        this.speed = 0.25;
+        this.speed = 0.5;
         this.collisionDamage = 3;
 
         this.countTick = 0;
