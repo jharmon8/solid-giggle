@@ -19,8 +19,8 @@ public class DamageLaser extends Projectile {
     public DamageLaser(double tx, double ty, double px, double py, Entity parent)  {
         super(px, py, tx, ty, parent);
 
-        this.color = Color.green;
-        this.damage = 999999;
+        this.color = Color.red;
+        this.damage = 9999999;
         this.size = 0.5;
         this.speed = 2; // AHA! With graphics wrappers, speeds no longer must scale to the window size
         this.thick = this.size;

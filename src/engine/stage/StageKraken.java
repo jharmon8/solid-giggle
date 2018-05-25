@@ -37,6 +37,7 @@ public class StageKraken extends Stage {
 
         if(frame > initialSpawnDelay && !spawned) {
             output.add(new Kraken(escapeRadius, spawnRadius));
+            spawned = true;
             return output;
         }
 

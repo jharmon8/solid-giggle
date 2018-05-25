@@ -59,6 +59,6 @@ public class StageThree extends Stage {
 
     @Override
     public Stage getNextStage() {
-        return new StageFour();
+        return new StageMinotaur();
     }
 }

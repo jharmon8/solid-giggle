@@ -324,6 +324,13 @@ public class GameSubpanel implements Subpanel {
             for(Enemy enemy : enemies) {
                 if (enemy.collides(proj)) {
                     proj.onCollide(enemy);
+                    if (enemy.bossHealth() > 0){
+                        ArrayList<Powerup> powerupDrop;
+                        powerupDrop = enemy.dropPowerup();
+                        if (powerupDrop != null){
+                            powerupToAdd.addAll(powerupDrop);
+                        }
+                    }
                 }
             }
 
