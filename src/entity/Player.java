@@ -356,7 +356,7 @@ public class Player extends EntityPolar {
 
     private ArrayList<Projectile> createBullet (){
         Projectile output = null;
-        ArrayList<Projectile> outputArray = null;
+        ArrayList<Projectile> outputArray = new ArrayList<>();
         Class ammoType = getAmmoType();
 
         GameUtils.BulletVector vec = GameUtils.bulletVector(
@@ -373,17 +373,18 @@ public class Player extends EntityPolar {
                 double thetaTop = theta + Math.PI/72;
                 double thetaBot = theta - Math.PI/72;
 
-                double botVX = distance(0.0, 0.0, vec.vx, vec.vy) * Math.cos(distance(1.0,thetaBot)) + vec.vx;
-                double botVY = distance(0.0, 0.0, vec.vx, vec.vy) * Math.sin(distance(1.0,thetaBot)) + vec.vy;
+                double botVX = distance(0.0, 0.0, vec.vx, vec.vy) * Math.cos(distance(1.0,thetaBot)) - vec.vx;
+                double botVY = distance(0.0, 0.0, vec.vx, vec.vy) * Math.sin(distance(1.0,thetaBot)) - vec.vy;
 
-                double topVX = distance(0.0, 0.0, vec.vx, vec.vy) * Math.cos(distance(1.0,thetaTop)) + vec.vx;
-                double topVY = distance(0.0, 0.0, vec.vx, vec.vy) * Math.sin(distance(1.0,thetaTop)) + vec.vy;
-                outputArray.add(new SlowBullet(vec.px, vec.py, vec.vx, vec.vy, this));
-                outputArray.add(new SlowBullet(vec.px, vec.py, botVX, botVY, this));
-                outputArray.add(new SlowBullet(vec.px, vec.py, topVX, topVY, this));
+                double topVX = distance(0.0, 0.0, vec.vx, vec.vy) * Math.cos(distance(1.0,thetaTop)) - vec.vx;
+                double topVY = distance(0.0, 0.0, vec.vx, vec.vy) * Math.sin(distance(1.0,thetaTop)) - vec.vy;
+                outputArray.add(new LightBullet(vec.px, vec.py, vec.vx, vec.vy, this));
+                outputArray.add(new LightBullet(vec.px, vec.py, botVX, botVY, this));
+                outputArray.add(new LightBullet(vec.px, vec.py, topVX, topVY, this));
             } else {
                 Constructor constructor = ammoType.getConstructor(new Class[]{Double.TYPE, Double.TYPE, Double.TYPE, Double.TYPE, Entity.class});
-                outputArray.add((Projectile) constructor.newInstance(vec.px, vec.py, vec.vx, vec.vy, this));
+                output = (Projectile) constructor.newInstance(vec.px, vec.py, vec.vx, vec.vy, this);
+                outputArray.add(output);
             }
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             System.err.println("Player cannot create bullet of type " + ammoType);
