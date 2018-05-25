@@ -44,6 +44,6 @@ public class StageMinotaur extends Stage {
 
     @Override
     public Stage getNextStage() {
-        return null;
+        return new StageFour();
     }
 }

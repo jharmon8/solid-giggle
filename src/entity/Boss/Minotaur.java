@@ -105,6 +105,9 @@ public class Minotaur extends Boss {
 
     @Override
     public void update() {
+        if(health <= 0) {
+            dead = true;
+        }
 
         // this should be quite the ugly monster of a switch statement
         switch(state) {

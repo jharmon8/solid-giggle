@@ -43,7 +43,7 @@ public class WinSubpanel implements Subpanel {
     public void paintComponent(Graphics g) {
         graphicsWrapper.setGraphics(g);
 
-        graphicsWrapper.drawImage("res/chicken.jpg", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
+        graphicsWrapper.drawImage("res/new_victory.png", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
 
         graphicsWrapper.setColor(Color.white);
         graphicsWrapper.drawText("Score: " + scoreFormatter.format(score), -gameWidth*0.49, gameHeight * 0.48, 4, false);

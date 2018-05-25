@@ -5,15 +5,15 @@ import engine.util.GameUtils;
 
 import java.awt.Color;
 
-public class MediumLaser extends Projectile {
+public class KrakenBullet extends Projectile {
 
-    public MediumLaser(double px, double py, double vx, double vy, Entity parent) {
+    public KrakenBullet(double px, double py, double vx, double vy, Entity parent) {
         super(px, py, vx, vy, parent);
 
-        this.color = Color.red;
-        this.damage = 2;
-        this.size = 1;
-        this.speed = 2; // AHA! With graphics wrappers, speeds no longer must scale to the window size
+        this.color = new Color(200,220,220);
+        this.damage = 5;
+        this.size = 1.5;
+        this.speed = 0.25; // AHA! With graphics wrappers, speeds no longer must scale to the window size
 
         // We don't care about the magnitude of the velocity vector passed in
         // We keep its direction and scale it to speed, defined above

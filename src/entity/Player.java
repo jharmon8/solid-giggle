@@ -3,9 +3,7 @@ package entity;
 import engine.util.AudioManager;
 import entity.powerup.Powerup;
 import entity.powerup.LaserPowerup;
-import entity.projectile.LightBullet;
-import entity.projectile.MediumLaser;
-import entity.projectile.Projectile;
+import entity.projectile.*;
 import engine.util.GraphicsWrapper;
 import engine.util.GameUtils;
 import javafx.scene.effect.Light;
@@ -13,6 +11,11 @@ import javafx.scene.effect.Light;
 import java.awt.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+
+import static engine.util.GameUtils.distance;
+import static engine.util.GameUtils.flipAngle;
+import static engine.util.GameUtils.radialLocation;
 
 public class Player extends EntityPolar {
     public int playerNum;
@@ -144,7 +147,7 @@ public class Player extends EntityPolar {
 
     // returns a projectile to be added to the projectiles array
     // null if I can't fire
-    public Projectile firePressed() {
+    public ArrayList<Projectile> firePressed() {
         if(reloading) {
             // if reloading and upward edge, speed the reload
             if (!previousFire) {
@@ -158,7 +161,7 @@ public class Player extends EntityPolar {
                 if(ammo > 0) {
                     int fireSound = (int)(Math.random() * 6);
                     AudioManager.playSound("res/shoot0" + fireSound + ".wav", -15f);
-                    Projectile p = createBullet();
+                    ArrayList<Projectile> p = createBullet();
 
                     fireDelayTimer = fireDelay;
                     ammo--;
@@ -323,7 +326,7 @@ public class Player extends EntityPolar {
         }
 
         iFramesLeft = iFramesAfterDamage;
-        health -= dmg;
+        //health -= dmg;
         countTick = 0;
 
         AudioManager.playSound("res/hit_0" + (int)(Math.random()*3 + 1) + ".wav", -20f);
@@ -353,8 +356,9 @@ public class Player extends EntityPolar {
         return defaultAmmoType;
     }
 
-    private Projectile createBullet (){
+    private ArrayList<Projectile> createBullet (){
         Projectile output = null;
+        ArrayList<Projectile> outputArray = new ArrayList<>();
         Class ammoType = getAmmoType();
 
         GameUtils.BulletVector vec = GameUtils.bulletVector(
@@ -366,14 +370,46 @@ public class Player extends EntityPolar {
         // I know it's gross, but if it works, it should make our lives easy
         // in particular, this will break if we change the way projectile constructors work.
         try {
-            Constructor constructor = ammoType.getConstructor(new Class[]{Double.TYPE, Double.TYPE, Double.TYPE, Double.TYPE, Entity.class});
-            output = (Projectile) constructor.newInstance(vec.px, vec.py, vec.vx, vec.vy, this);
+            if (ammoType == Splitshot.class){
+                double theta = Math.atan(vec.vy/vec.vx);
+                double thetaTop = theta + Math.PI/36;
+                double thetaBot = theta - Math.PI/36;
+
+                double botVX = radialLocation(distance(0.0, 0.0, vec.vx, vec.vy), thetaBot).x ;
+                double botVY = radialLocation(distance(0.0, 0.0, vec.vx, vec.vy), thetaBot).y ;
+
+                //double botVX = -1 * distance(distance(0.0, 0.0, vec.vx, vec.vy), (theta)) * Math.cos(thetaBot) ;
+                //double botVY = -1 * distance(distance(0.0, 0.0, vec.vx, vec.vy), (theta)) * Math.sin(thetaBot) ;
+
+                //double topVX = distance(0.0, 0.0, vec.vx, vec.vy) * Math.cos(distance(1.0,thetaTop)) - vec.vx;
+                //double topVY = distance(0.0, 0.0, vec.vx, vec.vy) * Math.sin(distance(1.0,thetaTop)) - vec.vy;
+
+                double topVX = radialLocation(distance(0.0, 0.0, vec.vx, vec.vy), thetaTop).x ;
+                double topVY = radialLocation(distance(0.0, 0.0, vec.vx, vec.vy), thetaTop).y ;
+
+                if (vec.px > 0){
+                    topVX = -1 * topVX;
+                    topVY = -1 * topVY;
+                    botVX = -1 * botVX;
+                    botVY = -1 * botVY;
+                }
+                //double topVX = -1 * distance(distance(0.0, 0.0, vec.vx, vec.vy), (theta)) * Math.sin(thetaTop) ;
+                //double topVY = -1 * distance(distance(0.0, 0.0, vec.vx, vec.vy), (theta)) * Math.cos(thetaTop) ;
+
+                outputArray.add(new MediumBullet(vec.px, vec.py, vec.vx, vec.vy, this));
+                outputArray.add(new MediumBullet(vec.px, vec.py, botVX, botVY, this));
+                outputArray.add(new MediumBullet(vec.px, vec.py, topVX, topVY, this));
+            } else {
+                Constructor constructor = ammoType.getConstructor(new Class[]{Double.TYPE, Double.TYPE, Double.TYPE, Double.TYPE, Entity.class});
+                output = (Projectile) constructor.newInstance(vec.px, vec.py, vec.vx, vec.vy, this);
+                outputArray.add(output);
+            }
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             System.err.println("Player cannot create bullet of type " + ammoType);
             e.printStackTrace();
         }
 
-        return output;
+        return outputArray;
     }
 
     public Powerup getPowerup() {

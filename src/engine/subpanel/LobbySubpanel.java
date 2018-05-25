@@ -48,10 +48,10 @@ public class LobbySubpanel implements Subpanel {
     public void paintComponent(Graphics g) {
         graphicsWrapper.setGraphics(g);
 
-        graphicsWrapper.drawImage("res/lobby.png", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
+        graphicsWrapper.drawImage("res/new_lobby.png", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
 
         String time = (currentTicks * PewPanel.timerDelay / 1000) + "";
-        graphicsWrapper.setColor(Color.black);
+        graphicsWrapper.setColor(Color.white);
         graphicsWrapper.drawText(time, -4, 5, 8);
 
         double checkmarkWidth = gameWidth * 0.25;

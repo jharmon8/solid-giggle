@@ -4,6 +4,7 @@ package entity.Boss;
 import engine.util.GraphicsWrapper;
 import entity.Player;
 import entity.enemy.Enemy;
+import entity.powerup.Powerup;
 import entity.projectile.Projectile;
 
 import java.awt.Color;
