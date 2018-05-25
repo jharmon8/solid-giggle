@@ -27,7 +27,7 @@ public abstract class Enemy extends EntityCartesian {
     protected double direction;
     protected Color highlite;
 
-    protected int damageTick;
+    protected int damageTick = 6;
     protected int countTick;
 
     protected int fadeInTick = 0;
@@ -147,10 +147,10 @@ public abstract class Enemy extends EntityCartesian {
             highlite = setAlpha(highlite, (int)(255 * (double) fadeInTick / maxFadeIn));
         }
 
-        gw.setColor(color);
+        gw.setColor(circleColor);
         gw.fillCircle(getX() - size, getY() - size, size * 2);
 
-        gw.setColor(highlite);
+        gw.setColor(triangleColor);
         gw.fillTriangle(x, y, direction, size);
     }
 
