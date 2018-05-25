@@ -153,6 +153,28 @@ public class GraphicsWrapper {
         g.drawPolygon(xPoints, yPoints, faces);
     }
 
+    public void fillPolygon(double centerX, double centerY, double radius, int faces, double thetaStart) {
+        int[] xPoints = new int[faces];
+        int[] yPoints = new int[faces];
+
+        double theta = thetaStart;
+        double dTheta = 6.28 / faces;
+
+        for(int i = 0; i < faces; i++) {
+            // find current point
+            double[] currentPoint = getRadialPoint(centerX, centerY, radius, theta);
+
+            // put point in arrays
+            xPoints[i] = (int)(currentPoint[0] * rWidth);
+            yPoints[i] = (int)(currentPoint[1] * rHeight);
+
+            // rotate by one face
+            theta += dTheta;
+        }
+
+        g.fillPolygon(xPoints, yPoints, faces);
+    }
+
     public void fillPowerup(double centerX, double centerY, double radius, int faces, double thetaStart, Color outside, Color inside) {
         int[] xPointsOutside = new int[faces];
         int[] yPointsOutside = new int[faces];
