@@ -115,10 +115,10 @@ public abstract class Boss extends Enemy {
             highlite = setAlpha(highlite, (int)(255 * (double) fadeInTick / maxFadeIn));
         }
 
-        gw.setColor(color);
+        gw.setColor(circleColor);
         gw.fillCircle(getX() - size, getY() - size, size * 2);
 
-        gw.setColor(highlite);
+        gw.setColor(triangleColor);
         gw.fillTriangle(x, y, direction, size);
 
         if(shielded) {
