@@ -59,11 +59,14 @@ public class GameSubpanel implements Subpanel {
     private DecimalFormat scoreFormatter = new DecimalFormat("###,###");
     private DecimalFormat ammoFormatter = new DecimalFormat("00");
 
+    ArrayList<Integer> originalPlayerNums;
+
     // are playerNums 0 or 1 indexed?
     // It is 0 right now, but player.playerNum needs to be 1 indexed
     public GameSubpanel(int sWidth, int sHeight, PewPanel parent, ArrayList<Integer> playerNums) {
         this.parent = parent;
 
+        this.originalPlayerNums = playerNums;
         for(int i = 0; i < playerNums.size(); i++) {
             int playerNumMinusOne = playerNums.get(i);
             double rads = 6.28 / playerNums.size() * i;
@@ -373,6 +376,10 @@ public class GameSubpanel implements Subpanel {
         // remove enemies
         for(Enemy deleteMe : enemyToRemove) {
             enemies.remove(deleteMe);
+
+            if(deleteMe.isBoss()) {
+                reviveAllPlayers();
+            }
         }
 
         // remove players
@@ -561,5 +568,27 @@ public class GameSubpanel implements Subpanel {
         gw.drawLine(minX, maxY, maxX, maxY, 0.3);
         gw.drawLine(maxX, maxY, maxX, minY, 0.3);
         gw.drawLine(maxX, minY, minX, minY, 0.3);
+    }
+
+    private void reviveAllPlayers() {
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        for(Integer i : originalPlayerNums) {
+            temp.add(i);
+        }
+
+        for(Player p : players) {
+            temp.remove(new Integer(p.playerNum - 1));
+        }
+
+        for(Integer i : temp) {
+            players.add(createPlayer(i));
+        }
+    }
+
+    private Player createPlayer(int playerNumMinusOne) {
+        Player output = new Player(Math.random() * 6.28, GameUtils.playerColors[playerNumMinusOne], railRadius, playerNumMinusOne + 1);
+        playersToKeys.put(output, GameUtils.getControls()[playerNumMinusOne]);
+
+        return output;
     }
 }

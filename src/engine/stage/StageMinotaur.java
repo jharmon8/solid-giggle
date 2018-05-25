@@ -41,6 +41,7 @@ public class StageMinotaur extends Stage {
 
         if(frame > initialSpawnDelay && !spawned) {
             output.add(new Minotaur());
+            spawned = true;
             return output;
         }
 

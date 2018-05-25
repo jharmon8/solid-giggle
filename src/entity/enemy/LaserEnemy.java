@@ -71,15 +71,6 @@ public class LaserEnemy extends Enemy {
     }
 
     @Override
-    public boolean collides(Projectile proj) {
-        if(proj.ignoreList.contains(this)) {
-            return false;
-        }
-
-        return collides(proj.getX(), proj.getY(), proj.getSize());
-    }
-
-    @Override
     public ArrayList<Projectile> attemptShoot(ArrayList<Player> players) {
         if (shotTick % shotInterval == 0 && shotTick > 0) {
             double minDist = -1;

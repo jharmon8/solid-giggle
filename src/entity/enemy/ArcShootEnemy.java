@@ -109,15 +109,6 @@ public class ArcShootEnemy extends Enemy {
     }
 
     @Override
-    public boolean collides(Projectile proj) {
-        if(proj.ignoreList.contains(this)) {
-            return false;
-        }
-
-        return collides(proj.getX(), proj.getY(), proj.getSize());
-    }
-
-    @Override
     public void takeDamage(int dmg) {
         health -= dmg;
         damageTick = 0;

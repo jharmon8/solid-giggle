@@ -67,9 +67,9 @@ public class Minotaur extends Boss {
     private double spiralShootDuration = 700;
     private int spiralShootDelay = 6;
 
-    private int spiralBeams = 6;
+    private int spiralBeams = 5;
     private double spiralTheta = 0;
-    private double spiralThetaChange = 0.2;
+    private double spiralThetaChange = 0.15;
     private double spiralFlipProbability = 0.01;
 
     private ArrayList<Projectile> projToFire = new ArrayList<>();
@@ -88,7 +88,7 @@ public class Minotaur extends Boss {
         this.color = Color.orange;
         this.highlite = Color.black;
 
-        this.maxHealth = 300;
+        this.maxHealth = 10;
         this.health = maxHealth;
     }
 

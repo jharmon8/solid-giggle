@@ -1,5 +1,6 @@
 package entity.enemy;
 
+import engine.util.GameUtils;
 import engine.util.GraphicsWrapper;
 import entity.Entity;
 import entity.EntityCartesian;
@@ -61,6 +62,21 @@ public abstract class Enemy extends EntityCartesian {
 
         // We give a leeway on player size because we are generous gods
         return Math.sqrt(dx * dx + dy * dy) < (size+targetSize) * 0.9;
+    }
+
+    @Override
+    public boolean collides(Projectile p) {
+        // enemies only collide with player projectiles now
+        if(!p.parent.isPlayer()) {
+            return false;
+        }
+
+        // ensure we aren't to be ignored
+        if(p.ignoreList.contains(this)) {
+            return false;
+        }
+
+        return collides(p.getX(), p.getY(), p.getSize());
     }
 
     public void onCollide(Player p) {
@@ -153,4 +169,7 @@ public abstract class Enemy extends EntityCartesian {
     public double bossHealth() {
         return -1;
     }
+
+    // Guess we'll need this after all for reviving
+    public boolean isBoss() {return false;}
 }

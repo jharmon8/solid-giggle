@@ -61,4 +61,9 @@ public abstract class EntityCartesian implements Entity {
     public int getMaxHealth() {
         return maxHealth;
     }
+
+    @Override
+    public boolean isPlayer() {
+        return false;
+    }
 }
