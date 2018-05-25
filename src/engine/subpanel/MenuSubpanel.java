@@ -38,7 +38,7 @@ public class MenuSubpanel implements Subpanel {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        parent.declareSubpanelFinished(LobbySubpanel.class);
+        parent.declareSubpanelFinished(InstructionsSubpanel.class);
     }
 
     @Override

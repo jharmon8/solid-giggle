@@ -2,6 +2,7 @@ package engine;
 
 import engine.subpanel.ErrorSubpanel;
 import engine.subpanel.GameSubpanel;
+import engine.subpanel.InstructionsSubpanel;
 import engine.subpanel.LobbySubpanel;
 import engine.subpanel.LoseSubpanel;
 import engine.subpanel.MenuSubpanel;
@@ -45,7 +46,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     private Object extraDummy = new Integer(-1);
 //    private int extraDummy = -1;
 
-    private final boolean SKIP_TO_GAME = true;
+    private final boolean SKIP_TO_GAME = false;
 
     public PewPanel () {
         if(simulateProjectorAspectRatio) {
@@ -160,6 +161,9 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
             } else
             if(nextSubpanelClass.equals(MenuSubpanel.class)) {
                 swapSubpanel(new MenuSubpanel(sWidth, sHeight, this));
+            } else
+            if(nextSubpanelClass.equals(InstructionsSubpanel.class)) {
+                swapSubpanel(new InstructionsSubpanel(sWidth, sHeight, this));
             } else {
                 swapSubpanel(new ErrorSubpanel());
             }
