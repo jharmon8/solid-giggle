@@ -140,4 +140,9 @@ public abstract class Boss extends Enemy {
     public double bossHealth() {
         return health / (double) maxHealth;
     }
+
+    @Override
+    public boolean isBoss() {
+        return true;
+    }
 }

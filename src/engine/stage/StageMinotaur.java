@@ -36,6 +36,7 @@ public class StageMinotaur extends Stage {
 
         if(frame > initialSpawnDelay && !spawned) {
             output.add(new Minotaur());
+            spawned = true;
             return output;
         }
 
@@ -44,6 +45,6 @@ public class StageMinotaur extends Stage {
 
     @Override
     public Stage getNextStage() {
-        return new StageFour();
+        return new StageOne();
     }
 }

@@ -8,7 +8,8 @@ import entity.enemy.ShootEnemy;
 import java.util.ArrayList;
 
 public class StageOne extends Stage {
-    private int scoreThreshold = 1000;
+//    private int scoreThreshold = 1000;
+    private int scoreThreshold = 1;
     private int maxEnemies = 10;
 
     private int spawnRadius = 16;
@@ -50,6 +51,6 @@ public class StageOne extends Stage {
 
     @Override
     public Stage getNextStage() {
-        return new StageTwo();
+        return new StageMinotaur();
     }
 }

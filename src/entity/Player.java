@@ -326,7 +326,7 @@ public class Player extends EntityPolar {
         }
 
         iFramesLeft = iFramesAfterDamage;
-        //health -= dmg;
+        health -= dmg;
         countTick = 0;
 
         AudioManager.playSound("res/hit_0" + (int)(Math.random()*3 + 1) + ".wav", -20f);

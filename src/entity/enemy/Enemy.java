@@ -153,4 +153,7 @@ public abstract class Enemy extends EntityCartesian {
     public double bossHealth() {
         return -1;
     }
+
+    // Guess we'll need this after all for reviving
+    public boolean isBoss() {return false;}
 }

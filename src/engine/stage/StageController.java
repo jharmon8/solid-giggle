@@ -16,7 +16,7 @@ public class StageController {
     // this should be more than fade in + fade out
     private int lastDisplayFrame = 140;
 
-    private boolean DEBUG_STAGE = true;
+    private boolean DEBUG_STAGE = false;
 
     public StageController() {
         if(DEBUG_STAGE) {
