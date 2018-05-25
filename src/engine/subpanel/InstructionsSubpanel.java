@@ -37,7 +37,7 @@ public class InstructionsSubpanel implements Subpanel {
     public void paintComponent(Graphics g) {
         graphicsWrapper.setGraphics(g);
 
-        graphicsWrapper.drawImage("res/new_instructions.png", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
+        graphicsWrapper.drawImage("res/instructions.png", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
 
         String time = (currentTicks * PewPanel.timerDelay / 1000) + "";
         graphicsWrapper.setColor(Color.white);

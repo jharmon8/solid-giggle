@@ -19,7 +19,7 @@ public class StageThree extends Stage {
     private int frame = 0;
 
     StageThree(int score) {
-        scoreThreshold = 3000 +  score; displayName = "- Stage 3 -";
+        scoreThreshold = 1500 +  score; displayName = "- Stage 3 -";
     }
 
     @Override
@@ -40,11 +40,11 @@ public class StageThree extends Stage {
             int spawnEnemy = (int) (Math.random() * 100);
             int countArc = 0;
             for (Enemy e : currentEnemies) {
-                if (e.getClass() == ArcEnemy.class){
+                if (e.getClass() == ArcShootEnemy.class){
                     countArc++;
                 }
             }
-            if (spawnEnemy < 40 && countArc <= maxEnemies/4) {
+            if (spawnEnemy < 40 && countArc < maxEnemies/4) {
                 Enemy newEnemy = spawn(ArcShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
             } else if (spawnEnemy < 80) {

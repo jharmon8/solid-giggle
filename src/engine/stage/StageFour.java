@@ -24,7 +24,7 @@ public class StageFour extends Stage {
 
     @Override
     public boolean isFinished(final int score, final ArrayList<Enemy> currentEnemies) {
-        scoreThreshold = 5000 +  score; return score > scoreThreshold;
+        scoreThreshold = 2000 +  score; return score > scoreThreshold;
     }
 
     @Override
