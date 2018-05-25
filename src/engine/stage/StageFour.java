@@ -37,23 +37,23 @@ public class StageFour extends Stage {
 
         if(currentEnemies.size() < maxEnemies && spawnTick <= 0 && frame > initialSpawnDelay) {
             spawnTick = spawnDelay;
-            int spawnEnemy = (int) (Math.random() * 10);
+            int spawnEnemy = (int) (Math.random() * 100);
             int countArc = 0;
             int countBomb = 0;
             for (Enemy e : currentEnemies) {
                 if (e.getClass() == ArcEnemy.class){
                     countArc++;
                 } else if (e.getClass() == BombEnemy.class) {
-                    countArc++;
+                    countBomb++;
                 }
             }
-            if (spawnEnemy < 25 && countArc <= maxEnemies/4) {
-                Enemy newEnemy = spawn(ArcShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
-                output.add(newEnemy);
-            } else if (spawnEnemy < 50) {
+            if (spawnEnemy < 10) {
                 Enemy newEnemy = spawn(BombEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
-            } else if(spawnEnemy < 75) {
+            } else if (spawnEnemy < 50 && countArc <= maxEnemies/4) {
+                Enemy newEnemy = spawn(ArcShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
+                output.add(newEnemy);
+            } else if(spawnEnemy < 65) {
                 Enemy newEnemy = spawn(LaserEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
             } else {
