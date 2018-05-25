@@ -16,13 +16,14 @@ public class StageController {
     // this should be more than fade in + fade out
     private int lastDisplayFrame = 140;
 
-    private boolean DEBUG_STAGE = true;
+    private boolean DEBUG_STAGE = false;
 
     public StageController() {
+        int score = 0;
         if(DEBUG_STAGE) {
-            currentStage = new StageKraken();
+            currentStage = new StageMinotaur();
         } else {
-            currentStage = new StageOne();
+            currentStage = new StageOne(score);
         }
     }
 
@@ -35,7 +36,7 @@ public class StageController {
         frame ++;
 
         if(currentStage.isFinished(score, enemies)) {
-            currentStage = currentStage.getNextStage();
+            currentStage = currentStage.getNextStage(score);
             frame = 0;
             return null;
         }

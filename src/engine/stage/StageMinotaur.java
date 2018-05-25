@@ -1,6 +1,7 @@
 package engine.stage;
 
 import entity.Boss.Minotaur;
+import entity.Player;
 import entity.enemy.BasicEnemy;
 import entity.enemy.Enemy;
 
@@ -19,6 +20,10 @@ public class StageMinotaur extends Stage {
         displayName = "- Minotaur -";
     }
 
+    public int computeScore (int score) {
+        int bossScore = 2000;
+        return score + bossScore;
+    }
     @Override
     public boolean isFinished(final int score, final ArrayList<Enemy> currentEnemies) {
         return spawned && currentEnemies.isEmpty();
@@ -43,7 +48,8 @@ public class StageMinotaur extends Stage {
     }
 
     @Override
-    public Stage getNextStage() {
-        return new StageFour();
+    public Stage getNextStage(int score) {
+        //score += computeScore(score);
+        return new StageThree(score);
     }
 }

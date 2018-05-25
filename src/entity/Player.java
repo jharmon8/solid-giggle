@@ -326,7 +326,7 @@ public class Player extends EntityPolar {
         }
 
         iFramesLeft = iFramesAfterDamage;
-        //health -= dmg;
+        health -= dmg;
         countTick = 0;
 
         AudioManager.playSound("res/hit_0" + (int)(Math.random()*3 + 1) + ".wav", -20f);
@@ -378,12 +378,6 @@ public class Player extends EntityPolar {
                 double botVX = radialLocation(distance(0.0, 0.0, vec.vx, vec.vy), thetaBot).x ;
                 double botVY = radialLocation(distance(0.0, 0.0, vec.vx, vec.vy), thetaBot).y ;
 
-                //double botVX = -1 * distance(distance(0.0, 0.0, vec.vx, vec.vy), (theta)) * Math.cos(thetaBot) ;
-                //double botVY = -1 * distance(distance(0.0, 0.0, vec.vx, vec.vy), (theta)) * Math.sin(thetaBot) ;
-
-                //double topVX = distance(0.0, 0.0, vec.vx, vec.vy) * Math.cos(distance(1.0,thetaTop)) - vec.vx;
-                //double topVY = distance(0.0, 0.0, vec.vx, vec.vy) * Math.sin(distance(1.0,thetaTop)) - vec.vy;
-
                 double topVX = radialLocation(distance(0.0, 0.0, vec.vx, vec.vy), thetaTop).x ;
                 double topVY = radialLocation(distance(0.0, 0.0, vec.vx, vec.vy), thetaTop).y ;
 
@@ -393,8 +387,6 @@ public class Player extends EntityPolar {
                     botVX = -1 * botVX;
                     botVY = -1 * botVY;
                 }
-                //double topVX = -1 * distance(distance(0.0, 0.0, vec.vx, vec.vy), (theta)) * Math.sin(thetaTop) ;
-                //double topVY = -1 * distance(distance(0.0, 0.0, vec.vx, vec.vy), (theta)) * Math.cos(thetaTop) ;
 
                 outputArray.add(new MediumBullet(vec.px, vec.py, vec.vx, vec.vy, this));
                 outputArray.add(new MediumBullet(vec.px, vec.py, botVX, botVY, this));

@@ -64,7 +64,7 @@ public class StageDebug extends Stage {
     }
 
     @Override
-    public Stage getNextStage() {
-        return new StageTwo();
+    public Stage getNextStage(int score) {
+        return new StageTwo(score);
     }
 }
