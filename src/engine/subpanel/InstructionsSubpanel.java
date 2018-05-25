@@ -17,12 +17,12 @@ public class InstructionsSubpanel implements Subpanel {
 
     PewPanel parent;
 
-    private int numSecondsToWait = 30;
+    private int numSecondsToWait = 15;
     public int ticksUntilNextGame;
     public int currentTicks;
 
     public InstructionsSubpanel(int sWidth, int sHeight, PewPanel parent) {
-
+        parent.instructionsHasRun = true;
         this.parent = parent;
 
         ticksUntilNextGame = numSecondsToWait * 1000 / PewPanel.timerDelay;
@@ -37,7 +37,7 @@ public class InstructionsSubpanel implements Subpanel {
     public void paintComponent(Graphics g) {
         graphicsWrapper.setGraphics(g);
 
-        graphicsWrapper.drawImage("res/new_instructions.png", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
+        graphicsWrapper.drawImage("res/instructions.png", -gameWidth/2, -gameHeight/2, gameWidth, gameHeight);
 
         String time = (currentTicks * PewPanel.timerDelay / 1000) + "";
         graphicsWrapper.setColor(Color.white);

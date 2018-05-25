@@ -46,9 +46,12 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
     private Object extraDummy = new Integer(-1);
 //    private int extraDummy = -1;
 
+    public boolean instructionsHasRun = false;
+
     private final boolean SKIP_TO_GAME = true;
 
     public PewPanel () {
+
         if(simulateProjectorAspectRatio) {
             sWidth = screenSize.height * 4 / 3;
             sMargin = (screenSize.width - sWidth) / 2;
@@ -143,7 +146,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
             if(nextSubpanelClass.equals(LobbySubpanel.class)) {
                 swapSubpanel(new LobbySubpanel(sWidth, sHeight, this));
             } else
-            if(nextSubpanelClass.equals(GameSubpanel.class)) {
+                if(nextSubpanelClass.equals(GameSubpanel.class)) {
                 ArrayList<Integer> threePlayers = new ArrayList<Integer>() {{
                     add(1);
                     add(2);
@@ -163,7 +166,11 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
                 swapSubpanel(new MenuSubpanel(sWidth, sHeight, this));
             } else
             if(nextSubpanelClass.equals(InstructionsSubpanel.class)) {
-                swapSubpanel(new InstructionsSubpanel(sWidth, sHeight, this));
+                if (instructionsHasRun == true){
+                    swapSubpanel(new LobbySubpanel(sWidth, sHeight, this));
+                } else {
+                    swapSubpanel(new InstructionsSubpanel(sWidth, sHeight, this));
+                }
             } else {
                 swapSubpanel(new ErrorSubpanel());
             }

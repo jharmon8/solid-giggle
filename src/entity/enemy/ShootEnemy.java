@@ -38,7 +38,7 @@ public class ShootEnemy extends Enemy {
         this.color = Color.blue;
         this.highlite = Color.cyan;
 
-        this.maxHealth = 5;
+        this.maxHealth = 3;
         this.health = maxHealth;
         
         this.shotInterval = 75;

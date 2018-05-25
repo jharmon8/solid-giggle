@@ -6,6 +6,9 @@ import engine.util.GameUtils;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import static engine.util.GameUtils.distance;
+import static engine.util.GameUtils.radialLocation;
+
 public class ExploderBullet extends Projectile {
 
     private int ticksAlive;
@@ -38,19 +41,24 @@ public class ExploderBullet extends Projectile {
     @Override
     public ArrayList<Projectile> attemptExplode(double x, double y, double vx, double vy){
        if (ticksAlive > bombLife) {
-           //for (int x = 0; x < 4; x ++) {
-               ArrayList<Projectile> projToAdd = new ArrayList<>();
-               Projectile p;
-               p = new SlowBullet(x, y, vx, vy, this);
+           ArrayList<Projectile> projToAdd = new ArrayList<>();
+           Projectile p;
+           double theta = parent.getTheta();
+           double thetaNew;
+           int numbProj = 6;
+           for (int i = 0; i < numbProj; i++) {
+               thetaNew = theta + i*Math.PI*2/numbProj;
+               double vxNew = radialLocation(distance(0.0, 0.0, vx, vy), thetaNew).x;
+               double vyNew = radialLocation(distance(0.0, 0.0, vx, vy), thetaNew).y;
+               if (x > 0){
+                   vxNew = -1 * vxNew;
+                   vyNew = -1 * vyNew;
+               }
+               p = new SlowBullet(x, y, vxNew, vyNew, this);
+
                projToAdd.add(p);
-               p = new SlowBullet(x, y, -vx, -vy, this);
-               projToAdd.add(p);
-               p = new SlowBullet(x, y, -vx, vy, this);
-               projToAdd.add(p);
-               p = new SlowBullet(x, y, vx, -vy, this);
-               projToAdd.add(p);
-               return projToAdd;
-           //}
+           }
+           return projToAdd;
        } else {
            return null;
        }
