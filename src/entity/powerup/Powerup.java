@@ -87,8 +87,8 @@ public abstract class Powerup extends EntityCartesian {
 
     @Override
     public void draw(GraphicsWrapper gw) {
-        gw.setColor(getStatusColor());
-        gw.drawPolygon(x, y, size, 6, drawTheta);
+//        gw.setColor(getStatusColor());
+        gw.fillPowerup(x, y, size, 6, drawTheta, getStatusColor(), Color.gray);
     }
 
     public boolean isDead() {
