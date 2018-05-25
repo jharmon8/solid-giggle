@@ -71,10 +71,13 @@ public abstract class Powerup extends EntityCartesian {
     }
 
     public void onCollide(Player p) {
-        // prevents us from hitting p on every tick
+        // Why does powerup have an ignore list???
         ignoreList.add(p);
         this.dead = true;
-        p.givePowerup(this);
+
+        if(!isRevive()) {
+            p.givePowerup(this);
+        }
     }
 
     public boolean onScreen(int gameWidth, int gameHeight) {
@@ -132,5 +135,9 @@ public abstract class Powerup extends EntityCartesian {
     // for drawing on status panels
     public double percentLeft() {
         return (double) (timeToLive - frame) / timeToLive;
+    }
+
+    public boolean isRevive() {
+        return false;
     }
 }
