@@ -21,7 +21,7 @@ public class StageController {
     public StageController() {
         int score = 0;
         if(DEBUG_STAGE) {
-            currentStage = new StageFour(score);
+            currentStage = new StageMinotaur();
         } else {
             currentStage = new StageOne(score);
         }
