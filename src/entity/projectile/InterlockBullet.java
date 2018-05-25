@@ -51,22 +51,4 @@ public class InterlockBullet extends Projectile {
             radius+=radiusSpeed;
         }
     }
-
-/*
-    public void updateVel() {
-        if (rotationSide == 0) {
-            thetaCenter = Math.atan2(-y, -x);
-            //thetaCenter = 0;
-            direction = thetaCenter + Math.PI / 2 + arcFactor;
-        } else {
-            thetaCenter = Math.atan2(y, x);
-            //thetaCenter = 0;
-            direction = thetaCenter + Math.PI / 2 - arcFactor;
-        }
-
-        double radialScale = 0.33 + Math.pow(getR() / escapeRadius, 2);
-        vx = Math.cos(direction) * (speed*radialScale);
-        vy = Math.sin(direction) * (speed*radialScale);
-    }
-    */
 }

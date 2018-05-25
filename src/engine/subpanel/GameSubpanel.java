@@ -221,10 +221,10 @@ public class GameSubpanel implements Subpanel {
             }
 
             if(shouldFire) {
-                Projectile newP = p.firePressed();
+                ArrayList<Projectile> newP = p.firePressed();
 
                 if(newP != null) {
-                    projectiles.add(newP);
+                    projectiles.addAll(newP);
                 }
             } else {
                 // this is for reload logic

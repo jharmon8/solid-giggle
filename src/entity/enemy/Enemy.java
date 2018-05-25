@@ -7,6 +7,7 @@ import entity.Player;
 import entity.powerup.LaserPowerup;
 import entity.powerup.Powerup;
 import entity.powerup.RegenPowerup;
+import entity.powerup.SplitshotPowerup;
 import entity.projectile.Projectile;
 
 import java.awt.Color;
@@ -32,11 +33,11 @@ public abstract class Enemy extends EntityCartesian {
     protected int maxFadeIn = 16;
 
     // The types is self explanator
-    protected Class[] powerupTypes = {RegenPowerup.class, LaserPowerup.class};
+    protected Class[] powerupTypes = {RegenPowerup.class, LaserPowerup.class, SplitshotPowerup.class};
     // The chances is the chance (out of 1) that each of the types is spawned, respectively
     // Only one can spawn at a time (unless you override dropPowerup())
     // These should spawn to less than one
-    protected Double[] powerupChances = {0.05, 0.025};
+    protected Double[] powerupChances = {0.05, 0.025, 0.025};
 
     public int getScoreValue() {
         return scoreValue;
