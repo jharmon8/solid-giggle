@@ -41,7 +41,7 @@ public class ShootEnemy extends Enemy {
         this.maxHealth = 5;
         this.health = maxHealth;
         
-        this.shotInterval = 40;
+        this.shotInterval = 75;
         this.shotTick = 0;
 
         this.powerupChance = 1;

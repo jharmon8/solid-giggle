@@ -14,7 +14,7 @@ public class StageTwo extends Stage {
     private int spawnRadius = 16;
     private int escapeRadius = 48;
 
-    private int initialSpawnDelay = 30;
+    private int initialSpawnDelay = 150;
 
     private int spawnDelay = 30;
     private int spawnTick = 0;
@@ -62,6 +62,6 @@ public class StageTwo extends Stage {
 
     @Override
     public Stage getNextStage(int score) {
-        return new StageMinotaur();
+        return new StageThree(score);
     }
 }

@@ -44,7 +44,7 @@ public class StageFour extends Stage {
                     countArc++;
                 }
             }
-            if (spawnEnemy < 25 && countArc <= maxEnemies/3) {
+            if (spawnEnemy < 25 && countArc <= maxEnemies/4) {
                 Enemy newEnemy = spawn(ArcShootEnemy.class, currentEnemies, spawnRadius, escapeRadius);
                 output.add(newEnemy);
             } else if (spawnEnemy < 50) {

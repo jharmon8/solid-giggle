@@ -46,7 +46,7 @@ public class ArcShootEnemy extends Enemy {
         this.health = maxHealth;
         this.rotationSide = rotationSide;
 
-        this.shotInterval = 40;
+        this.shotInterval = 50;
         this.shotTick = 0;
 
         this.powerupChance = 1;

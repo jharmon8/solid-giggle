@@ -50,6 +50,6 @@ public class StageMinotaur extends Stage {
     @Override
     public Stage getNextStage(int score) {
         //score += computeScore(score);
-        return new StageThree(score);
+        return new StageFour(score);
     }
 }

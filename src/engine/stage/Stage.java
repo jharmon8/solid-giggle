@@ -2,12 +2,7 @@ package engine.stage;
 
 import engine.util.GameUtils;
 import entity.Boss.Kraken;
-import entity.enemy.ArcEnemy;
-import entity.enemy.BasicEnemy;
-import entity.enemy.BombEnemy;
-import entity.enemy.Enemy;
-import entity.enemy.LaserEnemy;
-import entity.enemy.ShootEnemy;
+import entity.enemy.*;
 
 import java.util.ArrayList;
 
@@ -47,6 +42,9 @@ public abstract class Stage {
             newEnemy = new Kraken(escapeRadius, spawnRadius);
         } else if (enemyClass == ArcEnemy.class) {
             int rotateSide = (int)Math.round(Math.random());
+            newEnemy = new ArcEnemy(p.x, p.y, escapeRadius, rotateSide);
+        }else if (enemyClass == ArcShootEnemy.class) {
+            int rotateSide = (int) Math.round(Math.random());
             newEnemy = new ArcEnemy(p.x, p.y, escapeRadius, rotateSide);
         }
 
