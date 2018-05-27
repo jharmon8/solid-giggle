@@ -15,7 +15,7 @@ public class StageOne extends Stage {
     private int escapeRadius = 48;
 
     private int initialSpawnDelay = 150;
-
+//ttyyyyttytt
     private int spawnDelay = 30;
     private int spawnTick = 0;
 

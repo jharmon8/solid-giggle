@@ -1,3 +1,9 @@
+
+/*
+FOR DITCH DAY 2018 PAGE STACK
+WRITTEN BY: Jake Harmon, Joel Kosmatka
+ */
+
 package engine;
 
 import engine.subpanel.ErrorSubpanel;
@@ -48,7 +54,7 @@ public class PewPanel extends JPanel implements KeyListener, ActionListener {
 
     public boolean instructionsHasRun =  false;
 
-    private final boolean SKIP_TO_GAME = false;
+    private final boolean SKIP_TO_GAME = true;
 
     public PewPanel () {
 

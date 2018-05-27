@@ -82,8 +82,8 @@ public class Player extends EntityPolar {
 
         this.size = 2.0;
         this.color = color;
-
-        this.maxHealth = 20;
+//v
+        this.maxHealth = 10;
         this.health = maxHealth;
 
         this.shieldColor = new Color(180,200,255);

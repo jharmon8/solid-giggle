@@ -126,7 +126,7 @@ public class GameSubpanel implements Subpanel {
         double sidePanelHeight = gameHeight * .49;
 //        double sidePanelYOffset = gameHeight / 3.0;
 
-        graphicsWrapper.setColor(Color.white);
+        graphicsWrapper.setColor(Color.white); //change so it draws player color
         graphicsWrapper.fillRect(-gameWidth / 2.0, -sidePanelHeight / 2.0, sidePanelWidth, sidePanelHeight);
         graphicsWrapper.fillRect(gameWidth / 2.0 - sidePanelWidth, -sidePanelHeight / 2.0, sidePanelWidth, sidePanelHeight);
 

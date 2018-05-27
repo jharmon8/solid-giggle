@@ -25,8 +25,8 @@ public class ArcShootEnemy extends Enemy {
     private double thetaCenter;
     private double arcFactor;
 
-    private int shotTick;
     private int shotInterval;
+    private int shootTick;
 
     public ArcShootEnemy(double x, double y, int escapeRadius, int rotationSide) {
         this.x = x;
@@ -38,6 +38,7 @@ public class ArcShootEnemy extends Enemy {
 
         this.countTick = 0;
         this.damageTick = 8;
+        this.shootTick = 0;
 
         this.highlite = new Color(0, 200, 0);
         this.color = highlite.darker();
@@ -47,7 +48,6 @@ public class ArcShootEnemy extends Enemy {
         this.rotationSide = rotationSide;
 
         this.shotInterval = 50;
-        this.shotTick = 0;
 
         this.powerupChance = 1;
 
@@ -76,6 +76,7 @@ public class ArcShootEnemy extends Enemy {
 
         countTick++;
         damageTick++;
+        shootTick++;
 
         x += vx;
         y += vy;
@@ -116,7 +117,7 @@ public class ArcShootEnemy extends Enemy {
 
     @Override
     public ArrayList<Projectile> attemptShoot(ArrayList<Player> players) {
-        if (shotTick % shotInterval == 0 && shotTick > 0) {
+        if (shootTick % shotInterval == 0 && shootTick > 0) {
             double minDist = -1;
             Player closestPlayer = null;
             for (Player p : players) {
